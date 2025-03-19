@@ -17,30 +17,40 @@ namespace practicum_server.Controllers
         {
             _programFileService = programFileService;
         }
-        /// <summary>
-        /// יצירת קובץ וקבלת ניתוב להעלאה
-        /// </summary>
         [HttpPost("upload-url")]
-        public async Task<IActionResult> GetUploadUrl(int clientId, int projectId, [FromBody] FileUploadRequestDto request)
+        public async Task<IActionResult> GetUploadUrl(int clientId, int projectId, [FromBody] string name)
         {
-            if (string.IsNullOrEmpty(request.FileName))
+            if (string.IsNullOrEmpty(name))
             {
                 return BadRequest("File name is required.");
             }
 
-            var (uploadUrl, file) = await _programFileService.CreateFileAsync(clientId, projectId, request.FileName, request.Description);
+            var (uploadUrl, filePath) = await _programFileService.CreateFileAsync(clientId, projectId, name);
 
             if (uploadUrl == null)
             {
                 return StatusCode(500, "Failed to generate upload URL.");
             }
 
-            return Ok(new
+            return Ok(new { UploadUrl = uploadUrl, FilePath = filePath });
+        }
+
+        [HttpPost("confirm-upload")]
+        public async Task<IActionResult> ConfirmUpload(int clientId, int projectId, [FromBody] FileUploadRequestDto request)
+        {
+            if (string.IsNullOrEmpty(request.FileName) || string.IsNullOrEmpty(request.FilePath))
             {
-                UploadUrl = uploadUrl,
-                FileId = file.Id,
-                FilePath = file.Path
-            });
+                return BadRequest("File name and path are required.");
+            }
+
+            var file = await _programFileService.ConfirmUploadAsync(clientId, projectId, request.FileName, request.Description, request.FilePath);
+
+            if (file == null)
+            {
+                return StatusCode(500, "Failed to confirm file upload.");
+            }
+
+            return Ok(file);
         }
 
         /// <summary>

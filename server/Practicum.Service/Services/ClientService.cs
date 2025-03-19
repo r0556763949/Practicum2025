@@ -1,4 +1,5 @@
 ﻿using Practicum.Core.IRepositories;
+using Practicum.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace Practicum.Service.Services
         public ClientService(IClientRepository clientRepository)
         {
             _clientRepository = clientRepository;
+        }
+        public IEnumerable<Client> GetAllClients()
+        {
+            // הנחה שיש מתודה בשם GetAll ב-IClientRepository שמחזירה את כל הלקוחות
+            return _clientRepository.GetAll();
         }
     }
 }

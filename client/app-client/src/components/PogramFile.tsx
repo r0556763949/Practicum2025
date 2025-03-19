@@ -23,60 +23,121 @@ const PogramFile = () => {
     setDescription(event.target.value);
   };
 
+  // const handleUpload = async () => {
+  //   if (!file) {
+  //     setMessage("Please select a file first.");
+  //     return;
+  //   }
+
+  //   setUploading(true);
+  //   setMessage("");
+
+  //   try {
+  //     // שלב 1️⃣ - בקשת Presigned URL מהשרת
+  //     const requestBody = {
+  //       fileName: file.name,
+  //       description: description,
+  //     };
+
+  //     const response = await fetch(
+  //       `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/upload-url`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(requestBody),
+  //       }
+  //     );
+
+  //     if (!response.ok) throw new Error("Failed to get upload URL");
+
+  //     const data = await response.json();
+  //     if (!data.uploadUrl) throw new Error("Server did not return an upload URL");
+
+  //     // שלב 2️⃣ - העלאת הקובץ ישירות ל-S3
+  //     const uploadResponse = await fetch(data.uploadUrl, {
+  //       method: "PUT",
+  //       body: file,
+  //       headers: {
+  //         "Content-Type": file.type,
+  //       },
+  //     });
+
+  //     if (uploadResponse.ok) {
+  //       setMessage("File uploaded successfully!");
+  //       fetchFiles(); // אחרי ההעלאה, נטען את הקבצים שוב
+  //     } else {
+  //       throw new Error("Upload failed.");
+  //     }
+  //   } catch (error: any) {
+  //     setMessage(error.message);
+  //   }
+
+  //   setUploading(false);
+  // };
   const handleUpload = async () => {
     if (!file) {
       setMessage("Please select a file first.");
       return;
     }
-
+  
     setUploading(true);
     setMessage("");
-
+  
     try {
-      // שלב 1️⃣ - בקשת Presigned URL מהשרת
-      const requestBody = {
-        fileName: file.name,
-        description: description,
-      };
-
+      // 🔹 שלב 1️⃣: בקשת Presigned URL מהשרת
       const response = await fetch(
         `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/upload-url`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(file.name),
         }
       );
-
-      if (!response.ok) throw new Error("Failed to get upload URL");
-
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error("Failed to get upload URL: " + errorData.message);
+      }
+  
       const data = await response.json();
-      if (!data.uploadUrl) throw new Error("Server did not return an upload URL");
-
-      // שלב 2️⃣ - העלאת הקובץ ישירות ל-S3
-      const uploadResponse = await fetch(data.uploadUrl, {
+      const uploadUrl = data.uploadUrl;
+      const filePath = data.filePath;
+  
+      if (!uploadUrl || !filePath) throw new Error("Server response is missing data.");
+  
+      // 🔹 שלב 2️⃣: העלאת הקובץ ל-S3
+      const uploadResponse = await fetch(uploadUrl, {
         method: "PUT",
         body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
+        headers: { "Content-Type": file.type },
       });
-
-      if (uploadResponse.ok) {
-        setMessage("File uploaded successfully!");
-        fetchFiles(); // אחרי ההעלאה, נטען את הקבצים שוב
-      } else {
-        throw new Error("Upload failed.");
-      }
+  
+      if (!uploadResponse.ok) throw new Error("Upload failed.");
+  
+      // 🔹 שלב 3️⃣: שליחת קריאה נוספת לאישור ההעלאה
+      const confirmResponse = await fetch(
+        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/confirm-upload`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fileName: file.name, description, filePath }),
+        }
+      );
+  
+      if (!confirmResponse.ok) throw new Error("Failed to confirm upload.");
+  
+      setMessage("File uploaded successfully!");
+      fetchFiles(); // רענון רשימת הקבצים
     } catch (error: any) {
+      console.error("Upload error:", error);
       setMessage(error.message);
     }
-
+  
     setUploading(false);
   };
-
+  
+  
   // פונקציה לשליפה של כל הקבצים בפרויקט
   const fetchFiles = async () => {
     try {

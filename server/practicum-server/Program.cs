@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using Practicum.Service;
 using DotNetEnv;
-
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 
 namespace practicum_server
@@ -60,7 +62,20 @@ namespace practicum_server
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<IReMarkRepository, ReMarkRepository>();
             //data
-            builder.Services.AddDbContext<DataContext>();
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<DataContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //try
+            //{
+            //    builder.Services.AddDbContext<DataContext>(options =>
+            //        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Error configuring database: {ex.Message}");
+            //}
+            //builder.Services.AddDbContext<DataContext>();
             //s3
             builder.Services.AddAWSService<IAmazonS3>();
             //cores

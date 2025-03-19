@@ -16,7 +16,7 @@ namespace Practicum.Service
         public S3StorageService(IAmazonS3 s3Client, IConfiguration configuration)
         {
             _s3Client = s3Client;
-            _bucketName = configuration["AWS:BucketName"];
+            _bucketName = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
         }
 
         public string GenerateUploadUrl(string filePath)

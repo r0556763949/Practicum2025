@@ -13,7 +13,7 @@ namespace Practicum.Core.Models
         public string Address { get; set; }
         public Client Client { get; set; }
         public DateOnly StartAt { get; set; }
-        public DateOnly EndtAt { get; set; }
+
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 using Practicum.Service.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,11 +16,11 @@ namespace practicum_server.Controllers
             _clientService = clientService;
         }
         // GET: api/<ClientController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //[HttpGet]
+        //public IEnumerable<Client> Get()
+        //{
+        //    return _clientService.GetAllClients();
+        //}
 
         // GET api/<ClientController>/5
         [HttpGet("{id}")]

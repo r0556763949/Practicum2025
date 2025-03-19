@@ -1,4 +1,5 @@
 ﻿using Practicum.Core.IRepositories;
+using Practicum.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace Practicum.Data.Repositories
         public ClientRepository(DataContext context)
         {
             _context = context;
+        }
+       public IEnumerable<Client> GetAll()
+        {
+          return _context.Clients.ToList<Client>();
         }
     }
 }

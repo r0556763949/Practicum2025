@@ -17,31 +17,59 @@ namespace Practicum.Service.Services
             _programFileRepository = programFileRepository;
             _s3StorageService = s3StorageService;
         }
-        //יצירת קובץ חדש  לטבלה והחזרת הניתוב להעלאה
-        public async Task<(string uploadUrl, ProgramFile file)> CreateFileAsync(int clientId, int projectId, string fileName, string description)
+        // והחזרת הניתוב להעלאה
+        public async Task<(string uploadUrl, string filePath)> CreateFileAsync(int clientId, int projectId, string fileName)
         {
-            // יצירת קובץ מנתונים ידועים 
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException("File name cannot be empty.", nameof(fileName));
+
+            string filePath = $"clients/{clientId}/projects/{projectId}/files/{Guid.NewGuid()}/{fileName}";
+            string uploadUrl = _s3StorageService.GenerateUploadUrl(filePath);
+
+            return (uploadUrl, filePath);
+        }
+
+
+
+        //// יצירת קובץ מנתונים ידועים 
+        //var file = new ProgramFile
+        //{
+        //    Name = fileName,
+        //    Description = description,
+        //    CreateAt = DateOnly.FromDateTime(DateTime.UtcNow),
+        //    ClientId = clientId,
+        //};
+        ////הוספת הקובץ לטבלה
+        //await _programFileRepository.AddAsync(file);
+
+        //// יצירת ניתוב לאחר שID ידוע
+        //file.Path = $"clients/{clientId}/projects/{projectId}/files/{file.Id}/{fileName}";
+
+        //// קבלת הניתוב להעלאת קובץ
+        //string uploadUrl = _s3StorageService.GenerateUploadUrl(file.Path);
+        //if (uploadUrl == null) return (null, null);
+
+        //// עדכון הניתוב הידוע
+        //await _programFileRepository.UpdatePathAsync(file.Id, file.Path);
+
+        //return (uploadUrl, file);
+
+
+
+        // שלב 2️⃣: אישור העלאה והוספה למסד הנתונים
+        public async Task<ProgramFile> ConfirmUploadAsync(int clientId, int projectId, string fileName, string description, string filePath)
+        {
             var file = new ProgramFile
             {
                 Name = fileName,
                 Description = description,
+                Path = filePath,
                 CreateAt = DateOnly.FromDateTime(DateTime.UtcNow),
                 ClientId = clientId,
             };
-            //הוספת הקובץ לטבלה
+
             await _programFileRepository.AddAsync(file);
-
-            // יצירת ניתוב לאחר שID ידוע
-            file.Path = $"clients/{clientId}/projects/{projectId}/files/{file.Id}/{fileName}";
-
-            // קבלת הניתוב להעלאת קובץ
-            string uploadUrl = _s3StorageService.GenerateUploadUrl(file.Path);
-            if (uploadUrl == null) return (null, null);
-
-            // עדכון הניתוב הידוע
-            await _programFileRepository.UpdatePathAsync(file.Id, file.Path);
-
-            return (uploadUrl, file);
+            return file;
         }
         //שליפת קבצים
         public async Task<IEnumerable<ProgramFile>> GetFilesAsync(int clientId, int projectId)
