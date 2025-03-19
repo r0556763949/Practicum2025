@@ -1,24 +1,33 @@
-# שלב 1: בחר את תמונת הבסיס עם .NET
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+# syntax=docker/dockerfile:1
+
+# שלב הבנייה
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+
+WORKDIR /source
+
+COPY . . 
+
+WORKDIR /source/SmartManagement.Api
+
+ARG TARGETARCH
+
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+    dotnet publish -c Release -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
+
+# שלב ההרצה
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
+
 WORKDIR /app
+
+COPY --from=build /app .
+
+# יצירת משתמש לא-שורש
+RUN adduser -D appuser
+USER appuser
+
+# חשיפת הפורט והגדרת ASPNETCORE_URLS ל-HTTP על פורט 80
+ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
-EXPOSE 443
 
-# שלב 2: בניית האפליקציה
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["practicum-server/practicum-server.csproj", "practicum-server/"]
-RUN dotnet restore "YourProject/practicum-server.csproj"
-COPY . .
-WORKDIR "/src/practicum-server"
-RUN dotnet build "practicum-server.csproj" -c Release -o /app/build
-
-# שלב 3: פרסום האפליקציה
-FROM build AS publish
-RUN dotnet publish "practicum-server.csproj" -c Release -o /app/publish
-
-# שלב 4: יצירת התמונה הסופית
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "practicum-server.dll"]
+# קביעת הפקודה להרצה
+ENTRYPOINT ["dotnet", "SmartManagement.Api.dll"]
