@@ -15,9 +15,19 @@ namespace Practicum.Data.Repositories
         {
             _context = context;
         }
-       public IEnumerable<Client> GetAll()
+        public IEnumerable<Client> GetAll()
         {
-          return _context.Clients.ToList<Client>();
+            return _context.Clients.ToList();
+        }
+
+        public async Task AddAsync(Client client)
+        {
+            _context.Clients.Add(client);
+            await _context.SaveChangesAsync(); 
+        }
+        public Client GetByEmail(string email)
+        {
+            return _context.Clients.FirstOrDefault(c => c.Email == email);
         }
     }
 }
