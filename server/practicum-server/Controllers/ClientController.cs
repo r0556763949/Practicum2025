@@ -15,12 +15,13 @@ namespace practicum_server.Controllers
         {
             _clientService = clientService;
         }
-        // GET: api/<ClientController>
-        //[HttpGet]
-        //public IEnumerable<Client> Get()
-        //{
-        //    return _clientService.GetAllClients();
-        //}
+        //GET: api/<ClientController>
+        [HttpGet]
+        public ActionResult<IEnumerable<Client>> GetAllClients()
+        {
+            var clients = _clientService.GetAllClients();
+            return Ok(clients);
+        }
 
         // GET api/<ClientController>/5
         [HttpGet("{id}")]
