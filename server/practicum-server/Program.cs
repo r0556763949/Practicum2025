@@ -15,6 +15,7 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Practicum.Core.DTOs;
 
 
 
@@ -75,7 +76,11 @@ namespace practicum_server
             builder.Services.AddScoped<IProgramFileRepository, ProgramFileRepository>();
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<IReMarkRepository, ReMarkRepository>();
-           
+            //mapping
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>(); 
+            });
 
 
             //data
