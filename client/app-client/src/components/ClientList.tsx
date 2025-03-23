@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import AddProjectModal from "./AddProjectModal";
+import ClientProjects from "./ClientProjects";
+import { useNavigate } from "react-router-dom";
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedClient, setSelectedClient] = useState(null); // לקוח שנבחר להוספת פרויקט
-  const [showModal, setShowModal] = useState(false); // הצגת חלון ההוספה
-
+  const [selectedClient, setSelectedClient] = useState(null); // לקוח שנבחר לרשימת פרויקט
+  const navigate = useNavigate();
   useEffect(() => {
-    // Fetch the list of clients from the server
     const fetchClients = async () => {
       try {
         const response = await fetch("https://localhost:7156/api/Client", {
@@ -34,14 +34,10 @@ const ClientList = () => {
 
     fetchClients();
   }, []);
-  const handleAddProject = (client:any) => {
-    setSelectedClient(client.id); // שמירת הלקוח הנבחר
-    setShowModal(true); // הצגת חלון ההוספה
-  };
-
-  const closeModal = () => {
-    setShowModal(false); // סגירת חלון ההוספה
-    setSelectedClient(null); // ניקוי הלקוח הנבחר
+  const handleProjects = (client:any) => {
+    console.log("ClientList: handleProjects:  client:  ",client);
+    
+    navigate(`/projects/${client.id}`);
   };
 
 
@@ -60,23 +56,14 @@ const ClientList = () => {
               <strong>Email:</strong> {client.email}
             </div>
             <button
-              onClick={() => handleAddProject(client)}
+              onClick={() => handleProjects(client)}
               style={styles.button}
             >
-              Add Project
+               Projects
             </button>
           </li>
         ))}
       </ul>
-      {showModal && (
-        <AddProjectModal
-          client={selectedClient}
-          onClose={closeModal}
-          onSuccess={() => {
-            closeModal(); // סגירת חלון לאחר שמירת הפרויקט
-          }}
-        />
-      )}
     </div>
   );
 };

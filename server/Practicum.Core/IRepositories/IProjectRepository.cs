@@ -11,6 +11,7 @@ namespace Practicum.Core.IRepositories
     {
         Task<Client> GetClientByIdAsync(int clientId);
         Task<Project> GetProjectByIdAsync(int projectId, int clientId);
+        Task<List<Project>> GetProjectsByClientIdAsync(int clientId);
         Task AddProjectAsync(Project project);
         Task SaveChangesAsync();
     }

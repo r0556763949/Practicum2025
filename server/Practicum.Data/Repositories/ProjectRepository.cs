@@ -28,6 +28,12 @@ namespace Practicum.Data.Repositories
             return await _context.Projects
                 .FirstOrDefaultAsync(p => p.Id == projectId && p.Client.Id == clientId);
         }
+        public async Task<List<Project>> GetProjectsByClientIdAsync(int clientId)
+        {
+            return await _context.Projects
+                .Where(p => p.Client.Id == clientId)
+                .ToListAsync();
+        }
 
         public async Task AddProjectAsync(Project project)
         {

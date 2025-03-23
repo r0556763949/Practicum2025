@@ -56,6 +56,24 @@ namespace Practicum.Service.Services
             }
             var projectDto = _mapper.Map<ProjectDto>(project);
             return projectDto;
+
+        }
+        public async Task<List<ProjectDto>> GetProjectsByClientIdAsync(int clientId)
+        {
+            // בדיקה אם הלקוח קיים
+            var client = await _ProjectRepository.GetClientByIdAsync(clientId);
+            if (client == null)
+            {
+                throw new Exception($"Client with ID {clientId} not found.");
+            }
+
+            // קבלת כל הפרויקטים עבור הלקוח
+            var projects = await _ProjectRepository.GetProjectsByClientIdAsync(clientId);
+
+            // מיפוי ל-DTO
+            var projectDtos = _mapper.Map<List<ProjectDto>>(projects);
+
+            return projectDtos;
         }
     }
 }
