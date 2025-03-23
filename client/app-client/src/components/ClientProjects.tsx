@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import AddProjectModal from "./AddProjectModal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ClientProjects = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -60,7 +61,11 @@ const ClientProjects = () => {
       <ul style={styles.list}>
         {projects.length > 0 ? (
           projects.map((project) => (
-            <li key={project.id} style={styles.listItem}>
+            <li
+              key={project.id}
+              style={styles.listItem}
+              onClick={() => navigate(`/clients/${id}/projects/${project.id}`)}
+            >
               <strong>Project:</strong> {project.description}
             </li>
           ))

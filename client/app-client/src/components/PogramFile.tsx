@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FileRemarks from "./FileRemarks";
 import decodeToken from "./authUtils";
 
-const PogramFile = () => {
+const PogramFile = ({clientId,projectId}:{clientId:any,projectId:any}) => {
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -10,9 +10,8 @@ const PogramFile = () => {
   const [files, setFiles] = useState<any[]>([]); // רשימה של קבצים
   const [fileIdToDelete, setFileIdToDelete] = useState<number | null>(null);
   const [selectedFileId, setSelectedFileId] = useState<number | null>(null); // לניהול הערות
-  const [clientId, setClientId] = useState<number | null>(null);
-
-  const projectId = 3;
+  const clientIdFromParams = clientId;
+  const projectIdFromParams = projectId;
 
   const handleFileChange = (event: any) => {
     setFile(event.target.files[0]);
@@ -36,7 +35,7 @@ const PogramFile = () => {
     try {
       // 🔹 שלב 1️⃣: בקשת Presigned URL מהשרת
       const response = await fetch(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/upload-url`,
+        `https://localhost:7156/api/clients/${clientIdFromParams}/projects/${projectIdFromParams}/files/upload-url`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -65,7 +64,7 @@ const PogramFile = () => {
   
       // 🔹 שלב 3️⃣: שליחת קריאה נוספת לאישור ההעלאה
       const confirmResponse = await fetch(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/confirm-upload`,
+        `https://localhost:7156/api/clients/${clientIdFromParams}/projects/${projectIdFromParams}/files/confirm-upload`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -90,7 +89,7 @@ const PogramFile = () => {
   const fetchFiles = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files`
+        `https://localhost:7156/api/clients/${clientIdFromParams}/projects/${projectIdFromParams}/files`
       );
       if (!response.ok) throw new Error("Failed to fetch files");
 
@@ -106,7 +105,7 @@ const PogramFile = () => {
   const handleDelete = async (fileId: number) => {
     try {
       const response = await fetch(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${fileId}`,
+        `https://localhost:7156/api/clients/${clientIdFromParams}/projects/${projectIdFromParams}/files/${fileId}`,
         {
           method: "DELETE",
         }
@@ -127,7 +126,7 @@ const PogramFile = () => {
   const handleDownload = async (fileId: number) => {
     try {
       const response = await fetch(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${fileId}/download`
+        `https://localhost:7156/api/clients/${clientIdFromParams}/projects/${projectIdFromParams}/files/${fileId}/download`
       );
       if (!response.ok) throw new Error("Failed to get download URL");
 
@@ -145,7 +144,7 @@ const PogramFile = () => {
   const handleView = async (fileId: number) => {
     try {
       const response = await fetch(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${fileId}/view`
+        `https://localhost:7156/api/clients/${clientIdFromParams}/projects/${projectIdFromParams}/files/${fileId}/view`
       );
       if (!response.ok) throw new Error("Failed to get view URL");
 
@@ -160,18 +159,18 @@ const PogramFile = () => {
   };
   React.useEffect(() => {
     // הניחי שהטוקן מאוחסן ב-LocalStorage
-    console.log(sessionStorage);
+    // console.log(sessionStorage);
     
-    const token = sessionStorage.getItem("token");
-    console.log("localStorage.getItem: " , token);
+    // const token = sessionStorage.getItem("token");
+    // console.log("localStorage.getItem: " , token);
     
-    const decoded = decodeToken(token!);
-    if (decoded) {
-      const id = Number(decoded.sub);
-      console.log("id: ",id);
+    // const decoded = decodeToken(token!);
+    // if (decoded) {
+    //   const id = Number(decoded.sub);
+    //   console.log("id: ",id);
       
-      setClientId(id);
-    }
+    //   setClientId(id);
+    // }
     fetchFiles();
   }, []);
   // קריאה ל-fetchFiles כשמודול עולה
@@ -234,7 +233,7 @@ const PogramFile = () => {
             <p>No files found.</p>
           )}
           {selectedFileId && (
-        <FileRemarks fileId={selectedFileId} onClose={() => setSelectedFileId(null)} clientId={null}/>
+        <FileRemarks fileId={selectedFileId} onClose={() => setSelectedFileId(null)} clientId={clientIdFromParams}/>
       )}
         </ul>
       </div>
