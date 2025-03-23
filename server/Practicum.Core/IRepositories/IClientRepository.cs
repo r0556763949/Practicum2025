@@ -10,5 +10,9 @@ namespace Practicum.Core.IRepositories
     public interface IClientRepository
     {
         IEnumerable<Client> GetAll();
+        Task AddAsync(Client client);
+
+        Client GetByEmail(string email);
+
     }
 }
