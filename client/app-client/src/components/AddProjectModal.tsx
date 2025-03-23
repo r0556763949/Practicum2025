@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import SuccessPopup from "./SuccessPopupProps";
 
 const AddProjectModal = ({ client, onClose, onSuccess }:{client:any,onClose:any,onSuccess:any}) => {
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
   const [startAt, setStartAt] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleSave = async () => {
     try {
@@ -26,14 +28,20 @@ const AddProjectModal = ({ client, onClose, onSuccess }:{client:any,onClose:any,
         throw new Error("Failed to create project");
       }
   
-      // לאחר יצירת פרויקט בהצלחה, קבלת ה-ProjectDto מהמענה
       const newProject = await response.json();
-      alert(`Project created successfully! ID: ${newProject.id}, Name: ${newProject.description}`);
-      onSuccess(); // הודעה על הצלחה
+     setShowSuccess(true); // הצגת פופאפ של הצלחה
+
     } catch (err) {
       alert(err.message);
     }
+  }; 
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+    onSuccess(); // סגירת הפופאפ של הצלחה
+    onClose(); // סגירת המודל
+    
   };
+
 
   return (
     <div style={styles.overlay}>
@@ -75,6 +83,9 @@ const AddProjectModal = ({ client, onClose, onSuccess }:{client:any,onClose:any,
           </button>
         </div>
       </div>
+      {showSuccess && (
+        <SuccessPopup message="Project created successfully!" onClose={handleCloseSuccess} />
+      )}
     </div>
   );
 };

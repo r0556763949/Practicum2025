@@ -9,7 +9,6 @@ const ClientProjects = () => {
   const [error, setError] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const fetchProjects = async () => {
-    console.log("ClientProjects: fetchProjects: id: ",id);
     try {
       const response = await fetch(
         `https://localhost:7156/api/clients/${id}/projects`,
