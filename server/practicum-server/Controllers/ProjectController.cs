@@ -1,50 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Practicum.Core.DTOs;
 using Practicum.Service.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace practicum_server.Controllers
 {
- 
-    [Route("api/[controller]")]
+
+    [Route("api/clients/{clientId}/projects")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly ProjectService _ProjectService;
+        private readonly ProjectService _projectService;
         public ProjectController(ProjectService projectService)
         {
-            _ProjectService = projectService;
+            _projectService = projectService;
         }
-        // GET: api/<ProjectController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<ProjectController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ProjectController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> CreateProject(int clientId, [FromBody] CreateProjectDto projectDto)
         {
+            try
+            {
+                // קריאה לשירות ליצירת פרויקט
+                var newProject = await _projectService.CreateProjectAsync(clientId, projectDto.Description, projectDto.Address, projectDto.StartAt);
+
+                // יצירת תשובה עם ה-ProjectDto
+                return CreatedAtAction(nameof(GetProject), new { clientId, projectId = newProject.Id }, newProject);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT api/<ProjectController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // עדכון המתודה GetProject כך שתשיב DTO
+        [HttpGet("{projectId}")]
+        public async Task<IActionResult> GetProject(int clientId, int projectId)
         {
-        }
+            try
+            {
+                // קריאה לשירות לקבלת פרויקט
+                var project = await _projectService.GetProjectAsync(clientId, projectId);
 
-        // DELETE api/<ProjectController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+                // החזרת ה-ProjectDto
+                return Ok(project);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetProjectsByClientId(int clientId)
         {
+            try
+            {
+                // קריאה לשירות לקבלת פרויקטים עבור לקוח
+                var projects = await _projectService.GetProjectsByClientIdAsync(clientId);
+
+                // החזרת רשימת ה-ProjectDto
+                return Ok(projects);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }
