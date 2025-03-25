@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import decodeToken from "./authUtils";
 
-const AuthForm = () => {
-const navigate = useNavigate();
+const AuthForm = ({ onClose }: { onClose: any }) => {
+  const navigate = useNavigate();
   const [isRegistering, setIsRegistering] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,17 +11,11 @@ const navigate = useNavigate();
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    console.log("handleSubmit: ",isRegistering);
-    
-    console.log(name);
-    console.log(email);
-    console.log(password);
-    
     e.preventDefault();
+
     const url = isRegistering
       ? "https://localhost:7156/register"
       : "https://localhost:7156/login";
-
     const payload = isRegistering
       ? { name, email, password }
       : { email, password };
@@ -35,20 +30,37 @@ const navigate = useNavigate();
       });
 
       const data = await response.json();
-      console.log(data);
+
       if (!response.ok) {
         throw new Error(data.Message || "An error occurred");
       }
 
       if (isRegistering) {
-        console.log(`Registration successful: ${data.client.email}`);
-        setMessage(`Registration successful: ${data.client.email}`);
+        setMessage("Registration successful! You can now log in.");
+        setTimeout(() => {
+          setIsRegistering(false);
+          setMessage("");
+        }, 2000);
       } else {
         setMessage("Login successful!");
-        // שמירת הטוקן ב-SessionStorage
-        console.log("Login successful!: token: ", data.token);    
         sessionStorage.setItem("token", data.token);
-        navigate("/PogramFile"); 
+        const tokenPayload = decodeToken(data.token);
+        setTimeout(() => {
+          if (!tokenPayload) {
+            console.error("Invalid token payload");
+            return;
+          }
+          const role = tokenPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+          onClose();
+
+          if (role === "Client") {
+            navigate("/Client");
+          } else if (role === "Manager") {
+            navigate("/Manager");
+          } else {
+            console.error("Unknown role:", role);
+          }
+        }, 2000);
       }
     } catch (error) {
       setMessage(error.message);
@@ -56,85 +68,79 @@ const navigate = useNavigate();
   };
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <h1 style={styles.title}>{isRegistering ? "Register" : "Login"}</h1>
-
-        {isRegistering && (
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              style={styles.input}
-              required
-            />
-          </div>
-        )}
-
+    <form onSubmit={handleSubmit} className="medum-form">
+      <h1 style={styles.title} className="big-letter-blue">{isRegistering ? "Register" : "Login"}</h1>
+      {isRegistering && (
         <div style={styles.inputGroup}>
-          <label style={styles.label}>Email</label>
+          <label style={styles.label}>Name</label>
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="input"
             required
           />
         </div>
+      )}
 
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-            required
-          />
-        </div>
+      <div style={styles.inputGroup}>
+        <label style={styles.label}>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="input"
+          required
+        />
+      </div>
 
-        <button type="submit" style={styles.button}>
-          {isRegistering ? "Register" : "Login"}
-        </button>
+      <div style={styles.inputGroup}>
+        <label style={styles.label}>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="input"
+          required
+        />
+      </div>
 
+      <button type="submit" className="primary-button">
+        {isRegistering ? "Register" : "Login"}
+      </button>
+
+      <p
+        className="smaell-letter-blue toggle-Text"
+        onClick={() => {
+          setIsRegistering(!isRegistering);
+          setMessage("");
+        }}
+      >
+        {isRegistering
+          ? "Already have an account? Login"
+          : "Don't have an account? Register"}
+      </p>
+
+      {message && (
         <p
-          style={styles.toggleText}
-          onClick={() => {
-            setIsRegistering(!isRegistering);
-            setMessage("");
+          style={{
+            marginTop: "15px",
+            textAlign: "center",
+            fontSize: "14px",
+            color: isRegistering ? "#28a745" : "#d9534f",
           }}
         >
-          {isRegistering
-            ? "Already have an account? Login"
-            : "Don't have an account? Register"}
+          {message}
         </p>
+      )}
+    </form>
 
-        {message && <p style={styles.message}>{message}</p>}
-      </form>
-    </div>
   );
 };
 
 const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    backgroundColor: "#f7f7f7",
-  },
-  form: {
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    width: "300px",
-  },
   title: {
-    fontSize: "24px",
-    marginBottom: "20px",
+    marginBottom: "15px",
     textAlign: "center",
   },
   inputGroup: {
@@ -145,41 +151,7 @@ const styles = {
     marginBottom: "5px",
     fontSize: "14px",
     color: "#333",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    fontSize: "14px",
-    borderRadius: "4px",
-    border: "1px solid #ddd",
-  },
-  button: {
-    width: "100%",
-    padding: "10px",
-    fontSize: "16px",
-    color: "#fff",
-    backgroundColor: "#007BFF",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  buttonHover: {
-    backgroundColor: "#0056b3",
-  },
-  toggleText: {
-    marginTop: "15px",
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#007BFF",
-    cursor: "pointer",
-  },
-  message: {
-    marginTop: "15px",
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#d9534f",
-  },
+  }
 };
 
 export default AuthForm;
-

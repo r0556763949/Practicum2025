@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%; /* התוכן יתפרס על כל רוחב המסך */
+  margin: 0; /* אין צורך למרכז אם זה 100% */
+  /* padding: 0.5rem; לשיקולך, ניתן להתאים את ה-padding */
   text-align: center;
 }
 

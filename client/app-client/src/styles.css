@@ -1,0 +1,67 @@
+/* styles.css */
+.primary-button {
+    background-color: #ffffff;
+    color: #003366;
+    border: 2px solid #003366;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  
+  .primary-button:hover {
+    background-color: #003366;
+    color: #ffffff;
+    border-color: #ffffff;
+  }
+.big-letter-blue{
+    color: #003366;
+    size: 15px;
+}
+.smaell-letter-blue{
+    color: #003366;
+    size: 4px;
+}
+.medum-form {
+    position: relative;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    max-width: 300px;
+    height: 410px;
+  }
+.toggle-Text {
+    margin-top: 15px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .input {
+    width: 90%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* גובה קבוע */
+    background: linear-gradient(to right, #003366, #66ccff); /* רקע כמו ה-header */
+    display: flex; /* יישור תוכן */
+    justify-content: center; /* יישור אופקי למרכז */
+    align-items: center; /* יישור אנכי למרכז */
+    z-index: 1000;
+  }
+  
+  .footer-image {
+    max-height: 80%; /* התאמת גובה התמונה לפוטר */
+    max-width: auto; /* שמירה על פרופורציות התמונה */
+    object-fit: contain; /* שמירה על יחס התמונה */
+  }

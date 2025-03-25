@@ -1,7 +1,7 @@
 interface TokenPayload {
   sub: string; // ID של המשתמש
   email: string;
-  role: string;
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
   exp: number; // תאריך תפוגה
 }
 
