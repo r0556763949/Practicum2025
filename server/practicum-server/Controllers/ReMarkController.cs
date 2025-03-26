@@ -45,9 +45,9 @@ namespace practicum_server.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] ReMark value)
+        public ActionResult Put(int id, [FromBody] string context)
         {
-            var result = _reMarkService.UpdateReMark(id, value);
+            var result = _reMarkService.UpdateReMark(id, context);
             return Ok(result);
         }
 

@@ -13,6 +13,8 @@ namespace Practicum.Core.DTOs
         public MappingProfile()
         {
             CreateMap<Project, ProjectDto>().ReverseMap();
+            CreateMap<ReMark, ReMarkDto>().ReverseMap();
+            CreateMap<ReMark, AddReMarkDto>().ReverseMap();
 
         }
     }

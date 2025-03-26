@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Practicum.Core.DTOs;
+using AutoMapper;
 
 
 namespace Practicum.Service.Services
@@ -17,24 +18,19 @@ namespace Practicum.Service.Services
     {
         private readonly IReMarkRepository _remarkRepository;
         private readonly IProgramFileRepository _programFileRepository;
-        public ReMarkService(IReMarkRepository reMarkRepository, IProgramFileRepository programFileRepository)
+        private readonly IMapper _mapper;
+        public ReMarkService(IReMarkRepository reMarkRepository, IProgramFileRepository programFileRepository, IMapper mapper)
         {
             _remarkRepository = reMarkRepository;
             _programFileRepository = programFileRepository;
+            _mapper = mapper;
         }
 
         // 🔹 שליפת כל ההערות של קובץ מסוים
         public async Task<IEnumerable<ReMarkDto>> GetReMarksByFileId(int fileId)
         {
-            var remarks = await _remarkRepository.GetReMarksByFileIdAsync(fileId); // await בשורה זו
-            return remarks.Select(r => new ReMarkDto
-            {
-                Id = r.Id,
-                Content = r.Content,
-                CreateAt = r.CreateAt,
-                ClientId = r.ClientId,
-                ProgramFileId = r.ProgramFileId
-            }).ToList();
+            var remarks = await _remarkRepository.GetReMarksByFileIdAsync(fileId);
+            return _mapper.Map<IEnumerable<ReMarkDto>>(remarks);
         }
 
 
@@ -43,57 +39,35 @@ namespace Practicum.Service.Services
         {
             var remark = await _remarkRepository.GetByIdAsync(id);
             if (remark == null)
-            {
-                return null; // או זרוק חריגה אם צריך
-            }
+                return null;
 
-            return new ReMarkDto
-            {
-                Id = remark.Id,
-                Content = remark.Content,
-                CreateAt = remark.CreateAt,
-                // כל שדה שצריך להמיר
-            };
+            return _mapper.Map<ReMarkDto>(remark);
         }
 
         // 🔹 הוספת הערה לפי מזהה קובץ
         public async Task<ReMarkDto> AddReMark(int fileId, AddReMarkDto dto)
         {
-            var programFile = await _programFileRepository.GetFileByIdAsync(fileId);  // שליפת הקובץ
+            var programFile = await _programFileRepository.GetFileByIdAsync(fileId);
             if (programFile == null)
                 throw new ArgumentException("Program file not found.");
 
-            var remark = new ReMark
-            {
-                Content = dto.Content,
-                CreateAt = DateTime.UtcNow,
-                ProgramFileId = fileId,
-                ProgramFile = programFile,
-               ClientId = dto.ClientId // או להגדיר אותו בהנחה שהלקוח נשלח ממקום אחר
-            };
+            var remark = _mapper.Map<ReMark>(dto);
+            remark.ProgramFileId = fileId;
+            remark.ProgramFile = programFile;
+            remark.CreateAt = DateTime.UtcNow;
 
             await _remarkRepository.AddAsync(remark);
 
-            // החזרת DTO עם המידע הדרוש
-            var remarkDto = new ReMarkDto
-            {
-                Id = remark.Id,
-                Content = remark.Content,
-                CreateAt = remark.CreateAt,
-                ClientId = remark.ClientId,
-                ProgramFileId = remark.ProgramFileId
-            };
-
-            return remarkDto;
+            return _mapper.Map<ReMarkDto>(remark);
         }
 
 
-        public async Task<ReMark> UpdateReMark(int id, ReMark updatedRemark)
+        public async Task<ReMark> UpdateReMark(int id, string context)
         {
             var remark = await _remarkRepository.GetByIdAsync(id);
             if (remark == null) return null;
 
-            remark.Content = updatedRemark.Content;
+            remark.Content = context;
             remark.CreateAt = DateTime.UtcNow; 
             await _remarkRepository.UpdateAsync(remark);
             return remark;

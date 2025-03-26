@@ -11,8 +11,7 @@ namespace Practicum.Core.Models
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime CreateAt { get; set; }
-        public int? ClientId { get; set; }
-        public Client? Creator { get; set; }
+        public int ClientId { get; set; }
         public int ProgramFileId { get; set; }
         public ProgramFile ProgramFile { get; set; }
 
