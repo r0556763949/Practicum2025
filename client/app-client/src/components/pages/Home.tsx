@@ -1,14 +1,21 @@
 import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-
+import Header from "../centeral/Header";
+import Footer from "../centeral/Footer";
+import FileUpload from "../File/FileUpload";
+import FileList from "../File/FileList"
+import FileActionsPanel from "../File/FileActionsPanelProps";
+import RemarksComponent from "../File/ReMarks";
 const Home = () => {
     
     return (
         <div className="home-page">
             <div className="home-content">
                 <h1>HOME</h1>
+               {/* <RemarksComponent fileId={16} clientId={1}/>
+               <FileActionsPanel clientId={1} projectId={4} fileId={14} />
+                <FileUpload clientId={1} projectId={4} /> */}
             </div>
+            <FileList clientId={1} projectId={4} />
         </div>
 
     );

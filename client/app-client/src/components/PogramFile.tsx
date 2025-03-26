@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import FileRemarks from "./FileRemarks";
-import decodeToken from "./authUtils";
+import FileRemarks from "./old/FileRemarks";
+import decodeToken from "./centeral/authUtils";
 
 const PogramFile = ({clientId,projectId}:{clientId:any,projectId:any}) => {
   const [file, setFile] = useState(null);
@@ -242,3 +242,7 @@ const PogramFile = ({clientId,projectId}:{clientId:any,projectId:any}) => {
 };
 
 export default PogramFile;
+
+
+
+

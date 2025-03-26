@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import PogramFile from "./PogramFile";
+import PogramFile from "../PogramFile";
 
 const ProjectDetails = () => {
   const { clientId, projectId } = useParams();

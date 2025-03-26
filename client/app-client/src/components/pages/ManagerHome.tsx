@@ -1,5 +1,5 @@
 import React from "react";
-import ClientList from "./ClientList";
+import ClientList from "../manager/ClientList";
 
 const ManagerHome = () => {
   const styles = {

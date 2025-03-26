@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AddProjectModal from "./AddProjectModal";
+import AddProjectModal from "./old/AddProjectModal";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ClientProjects = () => {

@@ -10,6 +10,6 @@ namespace Practicum.Core.DTOs
     {
         public string Content { get; set; }  // תוכן ההערה
         public int FileId { get; set; }
-        //public int? ClientId { get; set; }
+        public int ClientId { get; set; }
     }
 }

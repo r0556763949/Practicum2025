@@ -11,7 +11,8 @@
     transition: all 0.3s ease;
     text-align: center;
   }
-  
+
+
   .primary-button:hover {
     background-color: #003366;
     color: #ffffff;
@@ -64,4 +65,31 @@
     max-height: 80%; /* התאמת גובה התמונה לפוטר */
     max-width: auto; /* שמירה על פרופורציות התמונה */
     object-fit: contain; /* שמירה על יחס התמונה */
+  }
+  .file-button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .file-name-display {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .file-input-wrapper {
+    position: relative;
+    width: 100%;
   }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SuccessPopup from "./SuccessPopupProps";
+import SuccessPopup from "../popaps/SuccessPopupProps";
 
 const AddProjectModal = ({ client, onClose, onSuccess }:{client:any,onClose:any,onSuccess:any}) => {
   const [description, setDescription] = useState("");

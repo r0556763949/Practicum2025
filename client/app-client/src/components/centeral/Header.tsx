@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import AuthForm from "./components/AuthForm";
-import UserProfile from "./components/UserProfile";
+import AuthForm from "../popaps/AuthForm";
+import UserProfile from "./UserProfile";
+
 
 const Header = () => {
   const [showPopupForm, setShowPopupForm] = useState(false);

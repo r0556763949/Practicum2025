@@ -69,7 +69,7 @@ namespace Practicum.Service.Services
                 CreateAt = DateTime.UtcNow,
                 ProgramFileId = fileId,
                 ProgramFile = programFile,
-                //ClientId = dto.ClientId  // או להגדיר אותו בהנחה שהלקוח נשלח ממקום אחר
+               ClientId = dto.ClientId // או להגדיר אותו בהנחה שהלקוח נשלח ממקום אחר
             };
 
             await _remarkRepository.AddAsync(remark);

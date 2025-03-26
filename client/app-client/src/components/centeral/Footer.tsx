@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./images/LOGO1.png"; // עדכני את הנתיב לתמונה שלך
+import logo from "../../images/LOGO1.png"; // עדכני את הנתיב לתמונה שלך
 
 const Footer = () => {
   return (

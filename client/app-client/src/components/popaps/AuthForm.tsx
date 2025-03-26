@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import decodeToken from "./authUtils";
+import decodeToken from "../centeral/authUtils";
 
 const AuthForm = ({ onClose }: { onClose: any }) => {
   const navigate = useNavigate();
