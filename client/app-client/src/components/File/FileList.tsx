@@ -14,7 +14,7 @@ const FileList: React.FC<{ clientId: number; projectId: number }> = ({
     (state: RootState) => state.files
   );
   const handleFileClick = (fileId: number) => {
-    navigate(`Project/${projectId}/File/${fileId}/client/${clientId}`);
+    navigate(`FilePage/${fileId}`);
   };
   useEffect(() => {
     dispatch(fetchFiles({ clientId, projectId }));

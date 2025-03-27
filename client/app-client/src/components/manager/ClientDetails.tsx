@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ProjectList from "../centeral/ProjectList";
+import ProjectList from "../Client/ProjectList";
 
 const ClientDetails = () => {
     const { clientId } = useParams();

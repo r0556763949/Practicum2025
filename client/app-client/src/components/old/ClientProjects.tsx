@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import AddProjectModal from "./old/AddProjectModal";
+import AddProjectModal from "./AddProjectModal";
 import { useNavigate, useParams } from "react-router-dom";
 
-const ClientProjects = () => {
-    const { id } = useParams();
+const ClientProjects = ({clientId}:{clientId:any}) => {
+    // const { id } = useParams();
     const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ const ClientProjects = () => {
   const fetchProjects = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7156/api/clients/${id}/projects`,
+        `https://localhost:7156/api/clients/${clientId}/projects`,
         {
           method: "GET",
           headers: {
@@ -37,7 +37,7 @@ const ClientProjects = () => {
   };
   useEffect(() => {
     fetchProjects();
-  }, [id]);
+  }, [clientId]);
   const handleAddProjectSuccess = () => {
     setShowAddModal(false);
     // רענון רשימת הפרויקטים לאחר הוספה
@@ -50,7 +50,7 @@ const ClientProjects = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.title}>Projects for {id}</h2>
+        <h2 style={styles.title}>Projects for {clientId}</h2>
         <button
           onClick={() => setShowAddModal(true)} // שינוי: פתיחת חלון הוספה
           style={styles.addButton}
@@ -64,7 +64,7 @@ const ClientProjects = () => {
             <li
               key={project.id}
               style={styles.listItem}
-              onClick={() => navigate(`/clients/${id}/projects/${project.id}`)}
+              onClick={() => navigate(`'ProjectPage/${clientId}/${project.id}'`)}
             >
               <strong>Project:</strong> {project.description}
             </li>
@@ -75,7 +75,7 @@ const ClientProjects = () => {
       </ul>
       {showAddModal && (
         <AddProjectModal
-          client={id}
+          client={clientId}
           onClose={() => setShowAddModal(false)}
           onSuccess={handleAddProjectSuccess}
         />

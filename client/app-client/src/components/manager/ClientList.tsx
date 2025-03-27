@@ -35,7 +35,7 @@ const ClientList = () => {
   }, []);
 
   const handleClientClick = (client) => {
-    navigate(`/clientDetails/${client.id}`);
+    navigate(`/ClientPage/${client.id}`);
   };
 
   if (loading) return <p>Loading clients...</p>;

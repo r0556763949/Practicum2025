@@ -19,9 +19,6 @@ const ManagerHome = () => {
 
   return (
     <><ClientList/></>
-    // <div style={styles.container}>
-    //   <p style={styles.text}>Manager Home</p>
-    // </div>
   );
 };
 

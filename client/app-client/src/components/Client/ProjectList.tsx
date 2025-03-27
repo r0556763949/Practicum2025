@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProjectList = ({ clientId}:{ clientId:any }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchClientProjects = async () => {
       try {
@@ -35,8 +36,7 @@ const ProjectList = ({ clientId}:{ clientId:any }) => {
   }, [clientId]);
   const handleViewProject = (projectId: any) => {
     console.log("view: ", projectId);
-
-    // navigate(`/client/${clientId}/project/${projectId}`);
+    navigate(`ProjectPage/${projectId}`)
 };
   if (loading) return <p>Loading projects...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;

@@ -1,5 +1,5 @@
 import React from "react";
-import ProjectList from "../centeral/ProjectList";
+import ProjectList from "../Client/ProjectList";
 import decodeToken from "../centeral/authUtils";
 
 const ClientHome = () => {

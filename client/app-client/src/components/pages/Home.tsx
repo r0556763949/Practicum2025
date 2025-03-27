@@ -11,11 +11,7 @@ const Home = () => {
         <div className="home-page">
             <div className="home-content">
                 <h1>HOME</h1>
-               {/* <RemarksComponent fileId={16} clientId={1}/>
-               <FileActionsPanel clientId={1} projectId={4} fileId={14} />
-                <FileUpload clientId={1} projectId={4} /> */}
             </div>
-            <FileList clientId={1} projectId={4} />
         </div>
 
     );
