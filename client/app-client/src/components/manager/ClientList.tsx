@@ -1,6 +1,6 @@
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ClientDto } from "../interfaces";
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);
@@ -25,7 +25,7 @@ const ClientList = () => {
         const data = await response.json();
         setClients(data);
         setLoading(false);
-      } catch (err) {
+      } catch (err:any) {
         setError(err.message);
         setLoading(false);
       }
@@ -34,94 +34,45 @@ const ClientList = () => {
     fetchClients();
   }, []);
 
-  const handleClientClick = (client) => {
+  const handleClientClick = (client:ClientDto) => {
     navigate(`/ClientPage/${client.id}`);
   };
 
   if (loading) return <p>Loading clients...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p style={{ color: "red", fontSize: "12px" }}>{error}</p>;
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Client List</h1>
-      <div style={styles.listContainer}>
-        <ul style={styles.list}>
-          {clients.map((client) => (
-            <li key={client.id} style={styles.listItem}>
-              <div style={styles.clientInfo}>
-                <strong style={styles.clientName}>{client.name}</strong>
-              </div>
-              <button
-                onClick={() => handleClientClick(client)}
-                className="primary-button"
-              >
-                View Client
-              </button>
-            </li>
-          ))}
-        </ul>
-        {clients.length > 10 && (
-          <div style={styles.scrollContainer}>
-            <p style={styles.scrollText}>Scroll for more...</p>
+<div className="ClientList-container">
+  <h1 className="title">Client List</h1>
+  <div className="listContainer">
+    <ul className="list">
+      {clients.map((client: ClientDto) => (
+        <li key={client.id} className="listItem">
+          <div className="clientInfo">
+            <strong className="clientName">{client.name}</strong>
           </div>
-        )}
+          <button
+            onClick={() => handleClientClick(client)}
+            className="primary-button"
+          >
+            View Client
+          </button>
+        </li>
+      ))}
+    </ul>
+    {clients.length > 10 && (
+      <div className="scrollContainer">
+        <p className="scrollText">Scroll for more...</p>
       </div>
-    </div>
+    )}
+  </div>
+</div>
   );
 };
 
-const styles = {
-  container: {
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
-    backgroundColor: "#f9f9f9",
-    minHeight: "100vh",
-    minWidth:"100vh"
-  },
-  title: {
-    fontSize: "24px",
-    marginBottom: "20px",
-    color: "#003366",
-  },
-  listContainer: {
-    maxHeight: "400px",
-    overflowY: "auto",
-    border: "1px solid #ddd",
-    borderRadius: "12px",
-    padding: "10px",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-  },
-  list: {
-    listStyleType: "none",
-    padding: 0,
-  },
-  listItem: {
-    marginBottom: "15px",
-    padding: "10px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-  },
-  clientInfo: {
-    fontSize: "16px",
-    color: "#003366",
-  },
-  clientName: {
-    fontWeight: "bold",
-  },
-  scrollContainer: {
-    textAlign: "center",
-    marginTop: "10px",
-  },
-  scrollText: {
-    fontSize: "14px",
-    color: "#888",
-  },
-};
+
 
 export default ClientList;
+
 
 

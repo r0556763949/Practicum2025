@@ -10,7 +10,7 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
 
     const url = isRegistering

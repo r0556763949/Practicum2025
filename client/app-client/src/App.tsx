@@ -2,10 +2,11 @@
 import './App.css'
 import {  RouterProvider } from 'react-router-dom'; 
 import { Router } from './Routers'
-import { motion } from 'framer-motion';
 import './styles/styles.css'
 import './styles/load.css'
 import './styles/File.css'
+import "./styles/Client.css";
+import "./styles/Project.css"
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './components/store/Store';

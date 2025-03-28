@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AuthForm from "../popaps/AuthForm";
 import UserProfile from "./UserProfile";
 
@@ -6,24 +6,24 @@ import UserProfile from "./UserProfile";
 const Header = () => {
   const [showPopupForm, setShowPopupForm] = useState(false);
   const token = sessionStorage.getItem("token");
-  
+
   const handleFormClick = () => {
-    setShowPopupForm(true); // להציג את הפופאפ
+    setShowPopupForm(true);
   };
 
   const closePopup = () => {
-    setShowPopupForm(false); // לסגור את הפופאפ
+    setShowPopupForm(false);
   };
 
   return (
     <>
       <header className="header">{token ? (
-          <UserProfile />
-        ) : (
-          <button className="login-button" onClick={handleFormClick}>
-            כניסה למערכת
-          </button>
-        )}
+        <UserProfile />
+      ) : (
+        <button className="login-button" onClick={handleFormClick}>
+          כניסה למערכת
+        </button>
+      )}
       </header>
       {showPopupForm && (
         <div className="popup-overlay" onClick={closePopup}>
@@ -34,7 +34,7 @@ const Header = () => {
             <button className="close-button" onClick={closePopup}>
               סגור
             </button>
-            <AuthForm onClose={closePopup}/>
+            <AuthForm onClose={closePopup} />
           </div>
         </div>
       )}

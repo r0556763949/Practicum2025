@@ -1,0 +1,66 @@
+.ClientList-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    min-width: 100vh;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #003366;
+  }
+  
+  .listContainer {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .listItem {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+  }
+  
+  .clientInfo {
+    font-size: 16px;
+    color: #003366;
+  }
+  
+  .clientName {
+    font-weight: bold;
+  }
+  
+  .scrollContainer {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .scrollText {
+    font-size: 14px;
+    color: #888;
+  }
+  .ClientPage-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}

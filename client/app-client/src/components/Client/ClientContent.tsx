@@ -11,10 +11,10 @@ const ClientContent = () => {
 const styles = {
     centerPanel: {
         width: "60%",
-        padding: "20px",
+        margin: "15px",
         backgroundColor: "#f5f5f5",
         borderRadius: "8px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1), 0 -4px 10px rgba(0, 0, 0, 0.1), 4px 0 10px rgba(0, 0, 0, 0.1), -4px 0 10px rgba(0, 0, 0, 0.1)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

@@ -1,6 +1,6 @@
-import React from "react";
 
-const ClientOptions = ({ clientId }) => {
+
+const ClientOptions = ({ clientId }:{ clientId:number }) => {
     const handleAddProject = () => {
         console.log(`Add project for client: ${clientId}`);
         // Add navigation or functionality for adding a project
@@ -25,7 +25,7 @@ const ClientOptions = ({ clientId }) => {
 
 const styles = {
     rightPanel: {
-        width: "20%",
+        width: "18%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -33,17 +33,7 @@ const styles = {
         padding: "20px",
         backgroundColor: "#f5f5f5",
         borderRadius: "8px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-    },
-    button: {
-        padding: "10px 15px",
-        fontSize: "16px",
-        cursor: "pointer",
-        backgroundColor: "#003366",
-        color: "#fff",
-        border: "none",
-        borderRadius: "4px",
-        width: "100%",
+       // boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
     },
 };
 

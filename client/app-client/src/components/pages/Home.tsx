@@ -1,10 +1,4 @@
-import React from "react";
-import Header from "../centeral/Header";
-import Footer from "../centeral/Footer";
-import FileUpload from "../File/FileUpload";
-import FileList from "../File/FileList"
-import FileActionsPanel from "../File/FileActionsPanelProps";
-import RemarksComponent from "../File/ReMarks";
+
 const Home = () => {
     
     return (

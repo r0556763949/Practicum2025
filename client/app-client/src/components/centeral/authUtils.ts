@@ -1,13 +1,12 @@
 interface TokenPayload {
-  sub: string; // ID של המשתמש
+  sub: string; 
   email: string;
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
-  exp: number; // תאריך תפוגה
+  exp: number; 
 }
 
 export const decodeToken = (token: string): TokenPayload | null => {
   try {
-    // חילוץ החלק של ה-Payload מתוך ה-JWT
     const base64Url = token.split(".")[1];
     if (!base64Url) {
       throw new Error("Invalid token format");

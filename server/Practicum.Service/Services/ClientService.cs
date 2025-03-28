@@ -1,4 +1,6 @@
 ﻿using Amazon.Runtime.Internal;
+using AutoMapper;
+using Practicum.Core.DTOs;
 using Practicum.Core.IRepositories;
 using Practicum.Core.Models;
 using System;
@@ -14,23 +16,23 @@ namespace Practicum.Service.Services
         private readonly IClientRepository _clientRepository;
         private readonly PasswordServicecs _passwordService;
         private readonly JwtService _jwtService;
-        public ClientService(IClientRepository clientRepository, PasswordServicecs passwordService, JwtService jwtService)
+        private readonly IMapper _mapper;
+
+        public ClientService(IClientRepository clientRepository, PasswordServicecs passwordService, JwtService jwtService, IMapper mapper)
         {
             _clientRepository = clientRepository;
             _passwordService = passwordService;
             _jwtService = jwtService;
+            _mapper = mapper;
         }
-        public IEnumerable<Client> GetAllClients()
+        public IEnumerable<ClientDto> GetAllClients()
         {
-            // הנחה שיש מתודה בשם GetAll ב-IClientRepository שמחזירה את כל הלקוחות
-            return _clientRepository.GetAll();
+            var clients = _clientRepository.GetAll();
+
+            return _mapper.Map<IEnumerable<ClientDto>>(clients);
         }
         public async Task<Client> Register(string name, string email, string password)
         {
-            //if (_clientRepository.GetByEmail(email) != null)
-            //{
-            //    throw new Exception("Email already in use"); // אפשר לשנות לשגיאה יותר מתאימה
-            //}
 
             var client = new Client
             {

@@ -1,5 +1,4 @@
-// UserProfile.jsx
-import React from "react";
+
 import decodeToken from "./authUtils"; // ודאי שהנתיב נכון
 
 const UserProfile = () => {
@@ -9,7 +8,7 @@ const UserProfile = () => {
   const payload = decodeToken(token);
   if (!payload) return null;
 
-  // נניח שנרצה את האות הראשונה של האימייל
+
   const initial = payload.email.charAt(0).toUpperCase();
 
   const styles = {
