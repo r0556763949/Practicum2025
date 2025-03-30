@@ -61,5 +61,20 @@ namespace Practicum.Service.Services
            Client result  =  await _clientRepository.GetClientByIdAsync(id);
             return _mapper.Map<ClientDto>(result);
         }
+        public async Task DeleteClientAsync(int clientId)
+        {
+            var client = await _clientRepository.GetByIdAsync(clientId);
+            if (client == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            await _clientRepository.DeleteAsync(client);
+        }
+        public async Task CreateClientAsync(ClientDto clientDto)
+        {
+            Client client = _mapper.Map<Client>(clientDto);
+            await _clientRepository.CreateAsync(client);
+        }
     }
     }

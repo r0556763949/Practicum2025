@@ -16,6 +16,10 @@ namespace Practicum.Core.IRepositories
         Client GetByEmail(string email);
         Task<Client> GetClientByIdAsync(int id);
 
+        Task<Client> GetByIdAsync(int clientId);
 
+         Task DeleteAsync(Client client);
+
+        Task CreateAsync(Client client);
     }
 }

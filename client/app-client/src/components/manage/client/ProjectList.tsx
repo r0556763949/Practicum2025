@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store/Store";
-import { ProjectDto, fetchProjectsByClientId } from "../../store/ProjectSlice";
+import { ProjectDto, deleteProject, fetchProjectsByClientId } from "../../store/ProjectSlice";
 
 const ProjectList = ({ clientId }: { clientId: any }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,6 +18,13 @@ const ProjectList = ({ clientId }: { clientId: any }) => {
   const handleViewProject = (projectId: any) => {
     navigate(`ProjectPage/${projectId}`)
   };
+  
+  const handleDeleteProject = (projectId: any) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      dispatch(deleteProject({ clientId, projectId }));
+    }
+  };
+
   if (loading) return <p>Loading projects...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
@@ -34,6 +41,12 @@ const ProjectList = ({ clientId }: { clientId: any }) => {
                   onClick={() => handleViewProject(project.id)}
                 >
                   {project.description}
+                </button>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteProject(project.id)}
+                >
+                  D
                 </button>
               </li>
             ))

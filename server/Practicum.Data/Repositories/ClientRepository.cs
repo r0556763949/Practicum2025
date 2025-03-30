@@ -37,5 +37,20 @@ namespace Practicum.Data.Repositories
 
             return client;
         }
+        public async Task<Client> GetByIdAsync(int clientId)
+        {
+            return await _context.Clients.FindAsync(clientId);
+        }
+
+        public async Task DeleteAsync(Client client)
+        {
+            _context.Clients.Remove(client);
+            await _context.SaveChangesAsync();
+        }
+        public async Task CreateAsync(Client client)
+        {
+            await _context.Clients.AddAsync(client);
+            await _context.SaveChangesAsync();
+        }
     }
 }

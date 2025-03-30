@@ -75,5 +75,16 @@ namespace Practicum.Service.Services
 
             return projectDtos;
         }
+        public async Task DeleteProjectAsync(int clientId, int projectId)
+        {
+            // לוגיקה למחיקת הפרויקט מהמאגר
+            var project = await _ProjectRepository.GetByIdAsync(clientId, projectId);
+            if (project == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            await _ProjectRepository.DeleteAsync(project);
+        }
     }
 }

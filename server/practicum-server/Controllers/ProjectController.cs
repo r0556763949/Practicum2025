@@ -66,5 +66,25 @@ namespace practicum_server.Controllers
                 return NotFound(ex.Message);
             }
         }
+        [HttpDelete("{projectId}")]
+        public async Task<IActionResult> DeleteProject(int clientId, int projectId)
+        {
+            try
+            {
+                // קריאה לשירות כדי למחוק את הפרויקט
+                await _projectService.DeleteProjectAsync(clientId, projectId);
+
+                // החזרת תשובה עם מצב 204 No Content
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Project with ID {projectId} not found.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

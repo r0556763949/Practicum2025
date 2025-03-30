@@ -44,5 +44,17 @@ namespace Practicum.Data.Repositories
         {
             await _context.SaveChangesAsync();
         }
+        public async Task<Project> GetByIdAsync(int clientId, int projectId)
+        {
+            return await _context.Projects
+                .FirstOrDefaultAsync(p => p.Client.Id == clientId && p.Id == projectId);
+        }
+
+        // יישום של DeleteAsync
+        public async Task DeleteAsync(Project project)
+        {
+            _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
+        }
     }
 }

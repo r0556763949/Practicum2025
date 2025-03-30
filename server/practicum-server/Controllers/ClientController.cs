@@ -35,11 +35,18 @@ namespace practicum_server.Controllers
             return Ok(client);
         }
 
-        // POST api/<ClientController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] ClientDto clientDto)
         {
+            if (clientDto == null)
+            {
+                return BadRequest("Client data is null.");
+            }
+
+            await _clientService.CreateClientAsync(clientDto);
+            return Ok();
         }
+
 
         // PUT api/<ClientController>/5
         [HttpPut("{id}")]
@@ -47,10 +54,25 @@ namespace practicum_server.Controllers
         {
         }
 
-        // DELETE api/<ClientController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{clientId}")]
+        public async Task<IActionResult> Delete(int clientId)
         {
+            try
+            {
+                // קריאה לשירות כדי למחוק את הלקוח
+                await _clientService.DeleteClientAsync(clientId);
+
+                // החזרת תשובה עם מצב 204 No Content
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Client with ID {clientId} not found.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
