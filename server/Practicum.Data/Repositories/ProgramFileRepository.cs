@@ -52,6 +52,12 @@ namespace Practicum.Data.Repositories
         {
             return await _context.ProgramFiles.FindAsync(fileId);
         }
+
+        public async Task<int?> GetFileOwnerIdAsync(int fileId)
+        {
+            var file = await _context.ProgramFiles.FindAsync(fileId);
+            return file.ClientId; // הנח שיש לך שדה OwnerId במודל ProgramFile
+        }
     }
 }
 

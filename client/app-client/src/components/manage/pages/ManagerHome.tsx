@@ -1,5 +1,5 @@
 
-import ClientList from "../manager/ClientList";
+import ClientList from "../home/ClientList";
 
 const ManagerHome = () => {
   return (

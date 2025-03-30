@@ -34,8 +34,20 @@ export const fetchRemarksByFileId = createAsyncThunk<ReMark[], { fileId: number 
     }
   }
 );
-
-
+//creator
+export const fetchFileOwner = createAsyncThunk<number, number>(
+  'remarks/fetchFileOwner',
+  async (fileId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<{ ownerId: number }>(
+        `https://localhost:7156/api/clients/{clientId}/projects/{projectId}/files/${fileId}/owner`
+      );
+      return response.data.ownerId;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch file owner.');
+    }
+  }
+);
 // Add remark
 export const addRemark = createAsyncThunk<ReMark, { fileId: number; content: string; clientId: number }>(
     'remarks/addRemark',
@@ -61,7 +73,7 @@ export const updateRemark = createAsyncThunk<ReMark, { id: number; content: stri
     try {
       const response = await axios.put<ReMark>(
         `https://localhost:7156/api/remark/${id}`,
-        { Content: content },
+         content ,
         { headers: { 'Content-Type': 'application/json' } }
       );
       return response.data;
@@ -71,13 +83,17 @@ export const updateRemark = createAsyncThunk<ReMark, { id: number; content: stri
   }
 );
 
-// Delete remark
+//delete
 export const deleteRemark = createAsyncThunk<number, { id: number }>(
   'remarks/deleteRemark',
   async ({ id }, { rejectWithValue }) => {
     try {
-      await axios.delete(`https://localhost:7156/api/remark/${id}`);
-      return id; // מחזיר את המזהה של ההערה שנמחקה
+      const response = await axios.delete(`https://localhost:7156/api/remark/${id}`);
+      if (response.status === 200) {
+        return id; // מחזיר את המזהה של ההערה שנמחקה
+      }
+      // אם הסטטוס אינו 200, נזרוק שגיאה
+      return rejectWithValue('Failed to delete remark.'); 
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete remark.');
     }

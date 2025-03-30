@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFiles } from "../store/FileSlice";
-import { RootState, AppDispatch } from "../store/Store";
+import { fetchFiles } from "../../store/FileSlice";
+import { RootState, AppDispatch } from "../../store/Store";
 import { useNavigate } from "react-router-dom";
 
 const FileList: React.FC<{ clientId: number; projectId: number }> = ({
@@ -23,7 +23,8 @@ const FileList: React.FC<{ clientId: number; projectId: number }> = ({
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
-  return (
+  return (<>
+    <h2 className="title">Project Files</h2>
     <div className="file-list">
       {files.map((file) => (
         <div
@@ -38,6 +39,7 @@ const FileList: React.FC<{ clientId: number; projectId: number }> = ({
         </div>
       ))}
     </div>
+    </>
   );
 };
 

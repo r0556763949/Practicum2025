@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ClientDto } from "../interfaces";
+import { ClientDto } from "../../store/interfaces";
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);

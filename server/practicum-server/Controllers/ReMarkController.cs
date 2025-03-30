@@ -45,16 +45,21 @@ namespace practicum_server.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] string context)
+        public async Task<ActionResult> Put(int id, [FromBody] string context)
         {
-            var result = _reMarkService.UpdateReMark(id, context);
+            var result = await _reMarkService.UpdateReMark(id, context); // השתמש ב-await
             return Ok(result);
         }
 
+
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _reMarkService.DeleteReMark(id);
+            bool result = await _reMarkService.DeleteReMark(id);
+            if (!result)
+            {
+                return NotFound(); // מחזיר 404 אם ההערה לא נמצאה
+            }
             return Ok();
         }
     }

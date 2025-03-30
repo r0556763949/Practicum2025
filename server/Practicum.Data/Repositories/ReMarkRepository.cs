@@ -27,7 +27,21 @@ namespace Practicum.Data.Repositories
 
         public async Task<ReMark> GetByIdAsync(int id)
         {
-            return await _context.ReMarks.FindAsync(id);
+            if (id <= 0)
+            {
+                throw new ArgumentException("Invalid ID. ID must be greater than zero.", nameof(id));
+            }
+
+            // חפש את ה-ReMark לפי המזהה
+            var remark = await _context.ReMarks.FindAsync(id);
+
+            // אם לא נמצא, ניתן לזרוק שגיאה או להחזיר null
+            if (remark == null)
+            {
+                throw new KeyNotFoundException($"ReMark with ID {id} not found.");
+            }
+
+            return remark;
         }
 
         public async Task AddAsync(ReMark remark)

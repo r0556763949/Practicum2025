@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUploadUrl, confirmUpload } from "../store/FileSlice";
-import { AppDispatch, RootState } from "../store/Store";
+import { getUploadUrl, confirmUpload } from "../../store/FileSlice";
+import { AppDispatch, RootState } from "../../store/Store";
+
 
 const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientId, projectId }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [description, setDescription] = useState("");
+    const [uploadStatus, setUploadStatus] = useState<{ success: boolean | null; message: string }>({
+        success: null,
+        message: "",
+    });
     const dispatch = useDispatch<AppDispatch>();
     const { loading, error } = useSelector((state: RootState) => state.files);
 
@@ -16,13 +21,12 @@ const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientI
     };
 
     const handleUpload = async () => {
-
         if (!selectedFile) {
-            alert("Please select a file!");
+            setUploadStatus({ success: false, message: "Please select a file!" });
             return;
         }
         if (!description.trim()) {
-            alert("Please add a description!");
+            setUploadStatus({ success: false, message: "Please add a description!" });
             return;
         }
 
@@ -56,42 +60,39 @@ const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientI
                 })
             ).unwrap();
 
-            alert("File uploaded successfully!");
+            setUploadStatus({ success: true, message: "File uploaded successfully!" });
             setSelectedFile(null);
             setDescription("");
         } catch (err) {
             console.error("An error occurred:", err);
+            setUploadStatus({ success: false, message: "Failed to upload file. Please try again." });
         }
     };
 
     return (
         <form className="medium-form">
-            <h1 className="big-letter-blue" >
-                Upload File
-            </h1>
+            <h1 className="big-letter-blue">Upload File</h1>
 
-            <div style={styles.inputGroup}>
-                 {selectedFile&&<label className="label">File</label>}
+            <div className="inputGroup">
+                {selectedFile && <label className="label">File</label>}
                 <div className="file-input-wrapper">
                     {!selectedFile ? (
                         <label htmlFor="file" className="primary-button file-button">
                             Choose File
                         </label>
                     ) : (
-                        <div className="input file-name-display">
-                            {selectedFile.name}
-                        </div>
+                        <div className="input file-name-display">{selectedFile.name}</div>
                     )}
                     <input
                         type="file"
                         id="file"
                         onChange={handleFileChange}
-                        style={styles.hiddenInput}
+                       className="hiddenInput"
                     />
                 </div>
             </div>
 
-            <div style={styles.inputGroup}>
+            <div className="inputGroup">
                 <label className="label">Description</label>
                 <input
                     type="text"
@@ -119,8 +120,17 @@ const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientI
                 )}
             </button>
 
+            {/* הודעה למצב העלאה */}
+            {uploadStatus.message && (
+                <p
+                    className={`upload-status ${uploadStatus.success ? "success" : "error"} uploadStatus` }
+                >
+                    {uploadStatus.message}
+                </p>
+            )}
+
             {error && (
-                <p className="small-letter-blue" style={styles.error}>
+                <p className="small-letter-blue error">
                     {error}
                 </p>
             )}
@@ -128,20 +138,6 @@ const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientI
     );
 };
 
-const styles = {
-
-    inputGroup: {
-        marginBottom: "15px",
-    },
-    hiddenInput: {
-        display: "none",
-    },
-    error: {
-        marginTop: "15px",
-        textAlign: "center",
-        color: "#d9534f",
-        fontSize: "14px",
-    },
-};
 
 export default FileUpload;
+

@@ -104,6 +104,10 @@ namespace Practicum.Service.Services
 
             return _s3StorageService.GenerateDownloadUrl(file.Path, true); // צפייה
         }
+        public async Task<int?> GetFileOwnerIdAsync(int fileId)
+        {
+            return await _programFileRepository.GetFileOwnerIdAsync(fileId);
+        }
 
     }
 }

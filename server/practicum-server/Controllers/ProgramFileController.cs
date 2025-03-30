@@ -106,6 +106,20 @@ namespace practicum_server.Controllers
             return Ok(new { ViewUrl = viewUrl });
         }
 
+        /// <summary>
+        /// קבלת מזהה המשתמש של הקובץ לפי מזהה הקובץ
+        /// </summary>
+        [HttpGet("{id}/owner")]
+        public async Task<IActionResult> GetFileOwner( int id)
+        {
+            var ownerId = await _programFileService.GetFileOwnerIdAsync(id);
 
+            if (ownerId == null)
+            {
+                return NotFound("File not found or owner ID could not be retrieved.");
+            }
+
+            return Ok(new { OwnerId = ownerId });
+        }
     }
 }

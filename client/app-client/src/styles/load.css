@@ -29,3 +29,18 @@
       transform: rotate(360deg);
     }
   }
+
+  .inputGroup {
+    margin-bottom: 15px;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.error {
+    margin-top: 15px;
+    text-align: center;
+    color: #d9534f; /* צבע אדום */
+    font-size: 14px;
+}

@@ -15,7 +15,7 @@ namespace Practicum.Core.IRepositories
 
         Task DeleteAsync(int fileId);
 
-
-       Task<ProgramFile> GetFileByIdAsync(int fileId);
+        Task<int?> GetFileOwnerIdAsync(int fileId);
+        Task<ProgramFile> GetFileByIdAsync(int fileId);
     }
 }

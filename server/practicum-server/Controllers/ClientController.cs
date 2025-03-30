@@ -24,11 +24,15 @@ namespace practicum_server.Controllers
             return Ok(clients);
         }
 
-        // GET api/<ClientController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            return "value";
+            var client = await _clientService.GetClientByIdAsync(id);
+            if (client == null)
+            {
+                return NotFound();
+            }
+            return Ok(client);
         }
 
         // POST api/<ClientController>

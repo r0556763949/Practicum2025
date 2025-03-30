@@ -56,5 +56,10 @@ namespace Practicum.Service.Services
 
             return _jwtService.GenerateToken(client.Id, client.Email, client.Role);
         }
+        public async Task<ClientDto> GetClientByIdAsync(int id)
+        {
+           Client result  =  await _clientRepository.GetClientByIdAsync(id);
+            return _mapper.Map<ClientDto>(result);
+        }
     }
     }

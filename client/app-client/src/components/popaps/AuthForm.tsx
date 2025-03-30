@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import decodeToken from "../centeral/authUtils";
 
@@ -62,17 +62,17 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
           }
         }, 2000);
       }
-    } catch (error) {
+    } catch (error:any) {
       setMessage(error.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="medum-form">
-      <h1 style={styles.title} className="big-letter-blue">{isRegistering ? "Register" : "Login"}</h1>
+      <h1 className="big-letter-blue auth-title">{isRegistering ? "Register" : "Login"}</h1>
       {isRegistering && (
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Name</label>
+        <div className="auth-inputGroup">
+          <label className="auth-label">Name</label>
           <input
             type="text"
             value={name}
@@ -83,8 +83,8 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
         </div>
       )}
 
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Email</label>
+      <div className="auth-inputGroup">
+        <label className="auth-label">Email</label>
         <input
           type="email"
           value={email}
@@ -94,8 +94,8 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
         />
       </div>
 
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Password</label>
+      <div className="auth-inputGroup">
+        <label className="auth-label">Password</label>
         <input
           type="password"
           value={password}
@@ -138,20 +138,6 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
   );
 };
 
-const styles = {
-  title: {
-    marginBottom: "15px",
-    textAlign: "center",
-  },
-  inputGroup: {
-    marginBottom: "15px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "5px",
-    fontSize: "14px",
-    color: "#333",
-  }
-};
+
 
 export default AuthForm;

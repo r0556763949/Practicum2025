@@ -1,4 +1,5 @@
-﻿using Practicum.Core.IRepositories;
+﻿using Practicum.Core.DTOs;
+using Practicum.Core.IRepositories;
 using Practicum.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,13 @@ namespace Practicum.Data.Repositories
         public Client GetByEmail(string email)
         {
             return _context.Clients.FirstOrDefault(c => c.Email == email);
+        }
+        public async Task<Client> GetClientByIdAsync(int id)
+        {
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null) return null;
+
+            return client;
         }
     }
 }

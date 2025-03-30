@@ -2,19 +2,22 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // הגדרת סוגי הנתונים
-interface Project {
+export interface Project {
   id: number;
   description: string;
   address: string;
   startAt: string;
 }
-export interface ProjectDto{
-    id: number;
+
+export interface ProjectDto {
+  id: number;
   description: string;
+  address: string;
+  startAt: string;
 }
 
 interface ProjectState {
-  projects: Project[];
+  projects: ProjectDto[];
   loading: boolean;
   error: string | null;
 }
@@ -41,11 +44,11 @@ export const fetchProjectsByClientId = createAsyncThunk<ProjectDto[], number>(
 );
 
 // Fetch a specific project
-export const fetchProject = createAsyncThunk<Project, { clientId: number; projectId: number }>(
+export const fetchProject = createAsyncThunk<ProjectDto, { clientId: number; projectId: number }>(
   'projects/fetchProject',
   async ({ clientId, projectId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get<Project>(
+      const response = await axios.get<ProjectDto>(
         `https://localhost:7156/api/clients/${clientId}/projects/${projectId}`
       );
       return response.data;
@@ -56,11 +59,11 @@ export const fetchProject = createAsyncThunk<Project, { clientId: number; projec
 );
 
 // Create a new project
-export const createProject = createAsyncThunk<Project, { clientId: number; projectData: Omit<Project, 'id'> }>(
+export const createProject = createAsyncThunk<ProjectDto, { clientId: number; projectData: Omit<ProjectDto, 'id'> }>(
   'projects/createProject',
   async ({ clientId, projectData }, { rejectWithValue }) => {
     try {
-      const response = await axios.post<Project>(
+      const response = await axios.post<ProjectDto>(
         `https://localhost:7156/api/clients/${clientId}/projects`,
         projectData,
         {
@@ -85,7 +88,7 @@ const projectsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProjectsByClientId.fulfilled, (state, action: PayloadAction<Project[]>) => {
+      .addCase(fetchProjectsByClientId.fulfilled, (state, action: PayloadAction<ProjectDto[]>) => {
         state.projects = action.payload;
         state.loading = false;
       })
@@ -97,7 +100,7 @@ const projectsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProject.fulfilled, (state, action: PayloadAction<Project>) => {
+      .addCase(fetchProject.fulfilled, (state, action: PayloadAction<ProjectDto>) => {
         const projectIndex = state.projects.findIndex((p) => p.id === action.payload.id);
         if (projectIndex === -1) {
           state.projects.push(action.payload);
@@ -114,7 +117,7 @@ const projectsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createProject.fulfilled, (state, action: PayloadAction<Project>) => {
+      .addCase(createProject.fulfilled, (state, action: PayloadAction<ProjectDto>) => {
         state.projects.push(action.payload);
         state.loading = false;
       })

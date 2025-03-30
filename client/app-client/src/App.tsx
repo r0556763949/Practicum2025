@@ -1,12 +1,13 @@
-
+//style:
 import './App.css'
-import {  RouterProvider } from 'react-router-dom'; 
-import { Router } from './Routers'
 import './styles/styles.css'
 import './styles/load.css'
 import './styles/File.css'
 import "./styles/Client.css";
 import "./styles/Project.css"
+import "./styles/Popaps.css"
+import {  RouterProvider } from 'react-router-dom'; 
+import { Router } from './Routers'
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './components/store/Store';

@@ -1,4 +1,5 @@
-﻿using Practicum.Core.Models;
+﻿using Practicum.Core.DTOs;
+using Practicum.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace Practicum.Core.IRepositories
         Task AddAsync(Client client);
 
         Client GetByEmail(string email);
+        Task<Client> GetClientByIdAsync(int id);
+
 
     }
 }
