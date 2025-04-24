@@ -28,7 +28,6 @@ namespace practicum_server
         {
             //aws
             Env.Load();
-
             var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
             var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
             var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
@@ -71,6 +70,7 @@ namespace practicum_server
             builder.Services.AddScoped<S3StorageService>();
             builder.Services.AddScoped<JwtService>();
             builder.Services.AddScoped<PasswordServicecs>();
+            builder.Services.AddScoped<EmailService>();
             //repositories
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
             builder.Services.AddScoped<IProgramFileRepository, ProgramFileRepository>();

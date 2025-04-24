@@ -52,5 +52,10 @@ namespace Practicum.Data.Repositories
             await _context.Clients.AddAsync(client);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateAsync(Client client)
+        {
+            _context.Clients.Update(client);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -14,21 +14,21 @@ namespace practicum_server.Controllers
             _clientService = clientService;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-        {
-            var client = await _clientService.Register(request.Name, request.Email, request.Password);
+        //[HttpPost("register")]
+        //public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+        //{
+        //    var client = await _clientService.Register(request.Name, request.Email, request.Password);
 
-            // כעת ניתן לגשת לתכונות של client כמו Email
-            return Ok(new
-            {
-                Message = "User registered successfully",
-                Client = new
-                {
-                    Email = client.Email
-                }
-            });
-        }
+        //    // כעת ניתן לגשת לתכונות של client כמו Email
+        //    return Ok(new
+        //    {
+        //        Message = "User registered successfully",
+        //        Client = new
+        //        {
+        //            Email = client.Email
+        //        }
+        //    });
+        //}
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequestDto request)

@@ -50,8 +50,41 @@ namespace practicum_server.Controllers
 
         // PUT api/<ClientController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> UpdateClient(int id, [FromBody] ClientDto dto)
         {
+            Console.WriteLine("Received DTO:");
+            Console.WriteLine($"Id: {dto.Id}, Name: {dto.Name}, Email: {dto.Email}");
+            try
+            {
+                await _clientService.UpdateClientAsync(id, dto);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Client with ID {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}/password")]
+        public async Task<IActionResult> UpdateClientPassword(int id, [FromBody] string newPassword)
+        {
+            try
+            {
+                await _clientService.UpdateClientPasswordAsync(id, newPassword);
+                return Ok();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"Client with ID {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{clientId}")]

@@ -4,8 +4,6 @@ import decodeToken from "../centeral/authUtils";
 
 const AuthForm = ({ onClose }: { onClose: any }) => {
   const navigate = useNavigate();
-  const [isRegistering, setIsRegistering] = useState(true);
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -13,12 +11,8 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
   const handleSubmit = async (e:any) => {
     e.preventDefault();
 
-    const url = isRegistering
-      ? "https://localhost:7156/register"
-      : "https://localhost:7156/login";
-    const payload = isRegistering
-      ? { name, email, password }
-      : { email, password };
+    const url = "https://localhost:7156/login";
+    const payload ={ email, password };
 
     try {
       const response = await fetch(url, {
@@ -34,14 +28,6 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
       if (!response.ok) {
         throw new Error(data.Message || "An error occurred");
       }
-
-      if (isRegistering) {
-        setMessage("Registration successful! You can now log in.");
-        setTimeout(() => {
-          setIsRegistering(false);
-          setMessage("");
-        }, 2000);
-      } else {
         setMessage("Login successful!");
         sessionStorage.setItem("token", data.token);
         const tokenPayload = decodeToken(data.token);
@@ -62,27 +48,14 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
           }
         }, 2000);
       }
-    } catch (error:any) {
+    catch (error:any) {
       setMessage(error.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="medum-form">
-      <h1 className="big-letter-blue auth-title">{isRegistering ? "Register" : "Login"}</h1>
-      {isRegistering && (
-        <div className="auth-inputGroup">
-          <label className="auth-label">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="input"
-            required
-          />
-        </div>
-      )}
-
+      <h1 className="big-letter-blue auth-title"> Login</h1>
       <div className="auth-inputGroup">
         <label className="auth-label">Email</label>
         <input
@@ -104,22 +77,7 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
           required
         />
       </div>
-
-      <button type="submit" className="primary-button">
-        {isRegistering ? "Register" : "Login"}
-      </button>
-
-      <p
-        className="smaell-letter-blue toggle-Text"
-        onClick={() => {
-          setIsRegistering(!isRegistering);
-          setMessage("");
-        }}
-      >
-        {isRegistering
-          ? "Already have an account? Login"
-          : "Don't have an account? Register"}
-      </p>
+      <button type="submit" className="primary-button">Login</button>
 
       {message && (
         <p
@@ -127,7 +85,7 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
             marginTop: "15px",
             textAlign: "center",
             fontSize: "14px",
-            color: isRegistering ? "#28a745" : "#d9534f",
+            color: "#d9534f",
           }}
         >
           {message}

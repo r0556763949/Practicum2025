@@ -6,6 +6,7 @@ import './styles/File.css'
 import "./styles/Client.css";
 import "./styles/Project.css"
 import "./styles/Popaps.css"
+import "./styles/popapPassword.css"
 import {  RouterProvider } from 'react-router-dom'; 
 import { Router } from './Routers'
 import React from 'react';

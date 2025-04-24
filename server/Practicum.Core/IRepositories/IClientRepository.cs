@@ -21,5 +21,6 @@ namespace Practicum.Core.IRepositories
          Task DeleteAsync(Client client);
 
         Task CreateAsync(Client client);
+        Task UpdateAsync(Client client);
     }
 }

@@ -1,40 +1,77 @@
 import { useState } from "react";
 import AuthForm from "../popaps/AuthForm";
 import UserProfile from "./UserProfile";
+import UpdateClientDetailsPopup from "../popaps/UpdateClient";
+import UpdatePasswordPopup from "../popaps/UpdatePasswordClient";
 
 
 const Header = () => {
   const [showPopupForm, setShowPopupForm] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [popupType, setPopupType] = useState<"details" | "password" | null>(null);
   const token = sessionStorage.getItem("token");
 
-  const handleFormClick = () => {
+  const handleAccountClick = () => {
+    if (token) {
+      setShowMenu((prev) => !prev);
+    } else {
+      setShowPopupForm(true);
+    }
+  };
+
+  const handleFormEnterClick = () => {
     setShowPopupForm(true);
   };
 
   const closePopup = () => {
-    setShowPopupForm(false);
+    setPopupForm(false);
+    setPopupType(null);
+    setShowMenu(false);
+  };
+
+  const openPopup = (type: "details" | "password") => {
+    setPopupType(type);
+    setShowMenu(false);
+  };
+
+  const setPopupForm = (value: boolean) => {
+    setShowPopupForm(value);
+    setPopupType(null);
+    setShowMenu(false);
   };
 
   return (
     <>
-      <header className="header">{token ? (
-        <UserProfile />
-      ) : (
-        <button className="login-button" onClick={handleFormClick}>
-          כניסה למערכת
+      <header className="header">
+        <button className="login-button" onClick={handleAccountClick}>
+          {token ? "ניהול חשבון" : "כניסה למערכת"}
         </button>
-      )}
+        {token && <UserProfile />}
       </header>
+      {showMenu && (
+        <div className="dropdown-menu">
+          <div onClick={() => openPopup("details")}>עדכון פרטים אישיים</div>
+          <div onClick={() => openPopup("password")}>שינוי סיסמה</div>
+        </div>
+      )}
       {showPopupForm && (
         <div className="popup-overlay" onClick={closePopup}>
-          <div
-            className="popup-content"
-            onClick={(e) => e.stopPropagation()} // מונע סגירה בלחיצה בתוך הטופס
-          >
-            <button className="close-button" onClick={closePopup}>
-              סגור
-            </button>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={closePopup}>סגור</button>
             <AuthForm onClose={closePopup} />
+
+          </div>
+        </div>
+      )}
+      {popupType && (
+        <div className="popup-overlay" onClick={closePopup}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-button" onClick={closePopup}>סגור</button>
+            {popupType === "details" ? (
+              <UpdateClientDetailsPopup onClose={closePopup} />
+            ) : (
+              <UpdatePasswordPopup onClose={closePopup} />
+            )}
           </div>
         </div>
       )}
@@ -47,8 +84,7 @@ export default Header;
 
 
 
-const styles = `
-/* Header */
+const style = `
 .header {
   position: fixed;
   top: 0;
@@ -134,9 +170,33 @@ const styles = `
   color: #ffffff;
   border-color: #ffffff;
 }
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 30px;
+  background: white;
+  border: 1px solid #003366;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1002;
+  overflow: hidden;
+}
+
+.dropdown-menu div {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #003366;
+}
+
+.dropdown-menu div:hover {
+  background-color: #f0f8ff;
+}
 `;
 
 const styleSheet = document.createElement("style");
 styleSheet.type = "text/css";
-styleSheet.innerText = styles;
+styleSheet.innerText = style;
 document.head.appendChild(styleSheet);
+
+
