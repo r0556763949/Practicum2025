@@ -27,7 +27,7 @@ export const fetchRemarksByFileId = createAsyncThunk<ReMark[], { fileId: number 
   'remarks/fetchRemarksByFileId',
   async ({ fileId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get<ReMark[]>(`https://localhost:7156/api/remark/file/${fileId}`);
+      const response = await axiosInstance.get<ReMark[]>(`/remark/file/${fileId}`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch remarks.');
@@ -39,8 +39,8 @@ export const fetchFileOwner = createAsyncThunk<number, number>(
   'remarks/fetchFileOwner',
   async (fileId, { rejectWithValue }) => {
     try {
-      const response = await axios.get<{ ownerId: number }>(
-        `https://localhost:7156/api/clients/{clientId}/projects/{projectId}/files/${fileId}/owner`
+      const response = await axiosInstance.get<{ ownerId: number }>(
+        `/clients/{clientId}/projects/{projectId}/files/${fileId}/owner`
       );
       return response.data.ownerId;
     } catch (error: any) {
@@ -53,8 +53,8 @@ export const addRemark = createAsyncThunk<ReMark, { fileId: number; content: str
     'remarks/addRemark',
     async ({ fileId, content, clientId }, { rejectWithValue }) => {
       try {
-        const response = await axios.post<ReMark>(
-          `https://localhost:7156/api/remark/file/${fileId}`,
+        const response = await axiosInstance.post<ReMark>(
+          `/remark/file/${fileId}`,
           { Content: content, FileId: fileId, ClientId: clientId }, // הוספת FileId ו-ClientId
           { headers: { 'Content-Type': 'application/json' } }
         );
@@ -71,8 +71,8 @@ export const updateRemark = createAsyncThunk<ReMark, { id: number; content: stri
   'remarks/updateRemark',
   async ({ id, content }, { rejectWithValue }) => {
     try {
-      const response = await axios.put<ReMark>(
-        `https://localhost:7156/api/remark/${id}`,
+      const response = await axiosInstance.put<ReMark>(
+        `/remark/${id}`,
          content ,
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -88,7 +88,7 @@ export const deleteRemark = createAsyncThunk<number, { id: number }>(
   'remarks/deleteRemark',
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`https://localhost:7156/api/remark/${id}`);
+      const response = await axiosInstance.delete(`/remark/${id}`);
       if (response.status === 200) {
         return id; // מחזיר את המזהה של ההערה שנמחקה
       }

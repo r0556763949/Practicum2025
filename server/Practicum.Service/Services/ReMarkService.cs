@@ -62,15 +62,24 @@ namespace Practicum.Service.Services
         }
 
 
-        public async Task<ReMarkDto> UpdateReMark(int id, string context)
+        public async Task<bool> UpdateReMark(int id, string content, int clientId)
         {
             var remark = await _remarkRepository.GetByIdAsync(id);
-            if (remark == null) return null;
+            if (remark == null)
+            {
+                return false;
+            }
 
-            remark.Content = context;
-            remark.CreateAt = DateTime.UtcNow; 
+            if (remark.ClientId != clientId)
+            {
+                return false; // ניסיון לעדכן הערה שלא שלך
+            }
+
+            remark.Content = content;
+            remark.CreateAt = DateTime.UtcNow;
             await _remarkRepository.UpdateAsync(remark);
-            return _mapper.Map<ReMarkDto>(remark); ;
+            //return _mapper.Map<ReMarkDto>(remark);
+            return true;
         }
 
         public async Task<bool> DeleteReMark(int id)
@@ -86,6 +95,23 @@ namespace Practicum.Service.Services
             // שלב 2: מחיקת ההערה
             await _remarkRepository.DeleteAsync(id);
             return true; // מחיקה הצליחה
+        }
+
+        public async Task<bool> DeleteReMark(int id, int clientId)
+        {
+            var remark = await _remarkRepository.GetByIdAsync(id);
+            if (remark == null)
+            {
+                return false;
+            }
+
+            if (remark.ClientId != clientId)
+            {
+                return false; // ניסיון למחוק הערה שלא שלך
+            }
+
+            await _remarkRepository.DeleteAsync(id);
+            return true;
         }
     }
 }

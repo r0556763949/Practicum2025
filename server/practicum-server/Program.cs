@@ -85,10 +85,13 @@ namespace practicum_server
 
             //data
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<DataContext>(options =>
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            //builder.Services.AddDbContext<DataContext>(options =>
+            //    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            builder.Services.AddDbContextPool<DataContext>(options =>
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
             //jwt
-          
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -130,10 +133,10 @@ namespace practicum_server
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
             //cores
             app.UseCors("AllowAllOrigins");
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllers();
 
             app.Run();

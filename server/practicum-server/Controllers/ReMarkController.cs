@@ -2,6 +2,7 @@
 using Practicum.Core.DTOs;
 using Practicum.Core.Models;
 using Practicum.Service.Services;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -47,18 +48,36 @@ namespace practicum_server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] string context)
         {
-            var result = await _reMarkService.UpdateReMark(id, context); // השתמש ב-await
-            return Ok(result);
+            var subClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (subClaim == null)
+            {
+                return Unauthorized(new { message = "לא נמצא מזהה משתמש בטוקן" });
+            }
+            var clientId = int.Parse(subClaim.Value);
+
+            bool result = await _reMarkService.UpdateReMark(id, context, clientId);
+            if (!result)
+            {
+                return BadRequest(new { message = "אין לך אפשרות לעדכן הערה זו" });
+            }
+            return Ok(); 
         }
 
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            bool result = await _reMarkService.DeleteReMark(id);
+            var subClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (subClaim == null)
+            {
+                return Unauthorized(new { message = "לא נמצא מזהה משתמש בטוקן" });
+            }
+            var clientId = int.Parse(subClaim.Value);
+
+            bool result = await _reMarkService.DeleteReMark(id, clientId);
             if (!result)
             {
-                return NotFound(); // מחזיר 404 אם ההערה לא נמצאה
+                return BadRequest(new { message = "אין לך אפשרות למחוק הערה זו" });
             }
             return Ok();
         }
