@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { deleteFile, downloadFile, viewFile } from "../../store/FileSlice"; // ודא שהנתיב נכון
-import {  AppDispatch } from "../../store/Store";  // ודא שהיבוא נכון
+import { AppDispatch } from "../../store/Store";  // ודא שהיבוא נכון
 import { useDispatch } from "react-redux";
 import '../../../styles/Remark.css';
+import decodeToken from "../../centeral/authUtils";
 
 
 interface FileActionsPanelProps {
@@ -20,6 +21,16 @@ const FileActionsPanel: React.FC<FileActionsPanelProps> = ({ clientId, projectId
     success: boolean | null;
     message: string;
   }>({ success: null, message: "" });
+
+  let isManager = false;
+  const token = sessionStorage.getItem("token"); // או מאיפה שאתה שומר את הטוקן
+  if (token) {
+    const decoded = decodeToken(token);
+    if (decoded) {
+      const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      isManager = role === "Manager";
+    }
+  }
 
   // פונקציות לטיפול בכפתורים
   const handleDeleteFile = async () => {
@@ -62,12 +73,16 @@ const FileActionsPanel: React.FC<FileActionsPanelProps> = ({ clientId, projectId
           {actionStatus.message}
         </p>
       )}
-      <button className="primary-button" onClick={handleDeleteFile}>
-        Delete File
-      </button>
-      <button className="primary-button" onClick={handleUpdateFile}>
-        Update File
-      </button>
+      {isManager && (
+        <button className="primary-button" onClick={handleDeleteFile}>
+          Delete File
+        </button>)}
+      {isManager && (
+        <button className="primary-button" onClick={handleUpdateFile}>
+          Update File
+        </button>
+      )}
+
       <button className="primary-button" onClick={handleViewFile}>
         View File
       </button>

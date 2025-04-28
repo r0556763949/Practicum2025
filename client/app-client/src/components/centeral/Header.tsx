@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthForm from "../popaps/AuthForm";
 import UserProfile from "./UserProfile";
 import UpdateClientDetailsPopup from "../popaps/UpdateClient";
 import UpdatePasswordPopup from "../popaps/UpdatePasswordClient";
+import decodeToken from "./authUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/Store";
+import { fetchProjectsByClientId } from "../store/ProjectSlice";
 
 
 const Header = () => {
   const [showPopupForm, setShowPopupForm] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showProjectsMenu, setShowProjectsMenu] = useState(false);
   const [popupType, setPopupType] = useState<"details" | "password" | null>(null);
-  const token = sessionStorage.getItem("token");
 
+  const token = sessionStorage.getItem("token");
+  const payload = token && decodeToken(token);
+  const clientId = payload?.sub;
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { projects, loading, error } = useSelector((state: RootState) => state.projects);
+
+  useEffect(() => {
+    if (clientId) {
+      dispatch(fetchProjectsByClientId(Number(clientId))); // שליפה של פרויקטים עבור הלקוח
+    }
+  }, [clientId, dispatch]);
+  
   const handleAccountClick = () => {
     if (token) {
       setShowMenu((prev) => !prev);
@@ -23,6 +40,10 @@ const Header = () => {
     setShowPopupForm(true);
   };
 
+  const handleProjectsMenuClick = () => {
+    setShowProjectsMenu((prev) => !prev);
+  };
+  
   const closePopup = () => {
     setPopupForm(false);
     setPopupType(null);
@@ -46,7 +67,23 @@ const Header = () => {
         <button className="login-button" onClick={handleAccountClick}>
           {token ? "ניהול חשבון" : "כניסה למערכת"}
         </button>
-        {token && <UserProfile />}
+        {token && (
+          <div>
+            <button className="projects-button" onClick={handleProjectsMenuClick}>
+              פרויקטים שלי
+            </button>
+            {showProjectsMenu && !loading && projects.length > 0 && (
+              <div className="dropdown-menu">
+                {projects.map((project) => (
+                  <div key={project.id}>{project.description}</div>
+                ))}
+              </div>
+            )}
+            {showProjectsMenu && loading && <div>טוען פרויקטים...</div>}
+            {showProjectsMenu && error && <div>שגיאה בהבאת הפרויקטים: {error}</div>}
+            <UserProfile />
+          </div>
+        )}
       </header>
       {showMenu && (
         <div className="dropdown-menu">

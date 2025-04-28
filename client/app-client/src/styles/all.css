@@ -1,0 +1,795 @@
+.ClientList-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    min-width: 100vh;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #003366;
+  }
+  
+  .listContainer {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .listItem {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+  }
+  
+  .clientInfo {
+    font-size: 16px;
+    color: #003366;
+  }
+  
+  .clientName {
+    font-weight: bold;
+  }
+  
+  .scrollContainer {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .scrollText {
+    font-size: 14px;
+    color: #888;
+  }
+  .client-page-container{
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    gap: 20px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    height: 550px;
+  }
+  .client-page-project-list{
+    width: 200px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .client-page-content{
+    flex: 2;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  .client-page-options{
+    width: 200px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .file-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); /* ריבועים קצת יותר קטנים */
+    gap: 20px;
+    padding: 20px;
+    justify-items: center; /* למרכז את הריבועים בשורה */
+  }
+  
+  .file-item {
+    background-color: white;
+    margin: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 130px; /* גובה הריבועים הקטן יותר */
+    width: 130px; /* רוחב הריבועים הקטן יותר */
+  }
+  
+  .file-item:hover {
+    transform: scale(1.05); /* הריבועים יגדלו במעבר עכבר */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #003366; /* כחול */
+  }
+  
+  .file-name {
+    color: #003366; /* כחול */
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .file-description {
+    color: #080000;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  
+  .file-item:active {
+    transform: scale(1); /* בעת לחיצה הריבוע יחזור לגודלו הרגיל */
+  }
+  .file-page-container {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    gap: 20px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    height: 550px;
+  }
+  
+  .file-page-content {
+    flex: 2;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex; /* הפוך את האלמנט ל-flex container */
+    justify-content: center; /* מרכז את הפריטים אופקית */
+    align-items: center; /* מרכז את הפריטים אנכית */
+    text-align: center; 
+  }
+  
+  .file-page-actions {
+    width: 250px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex; /* הפוך את האלמנט ל-flex container */
+    justify-content: center; /* מרכז את הפריטים אופקית */
+    align-items: center; /* מרכז את הפריטים אנכית */
+    text-align: center;
+  }
+
+  .FileActions-rightPanel {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.error {
+  margin-top: 15px;
+  text-align: center;
+  color: #d9534f;
+  font-size: 14px;
+}
+
+.upload-status {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+  /* Loader animation */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .loader {
+    border: 3px solid #f3f3f3; /* Light gray */
+    border-top: 3px solid #007bff; /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 0.8s linear infinite;
+  }
+  .primary-button.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+  }
+  /* Animation keyframes */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .inputGroup {
+    margin-bottom: 15px;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.error {
+    margin-top: 15px;
+    text-align: center;
+    color: #d9534f; /* צבע אדום */
+    font-size: 14px;
+}
+.password-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .password-input {
+    width: 100%;
+    padding-right: 40px; /* מקום לעין */
+    box-sizing: border-box;
+  }
+  
+  .toggle-eye {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #003366;
+    z-index: 2;
+  }
+  
+  .message-text {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    max-width: 100%;
+    word-break: break-word;
+  }
+  
+  .message-text.success {
+    color: #28a745;
+  }
+  
+  .message-text.error {
+    color: #d9534f;
+  }
+  /* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Modal Container */
+  .modal-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Modal Title */
+  .modal-title {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Form Group */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Input Field */
+  .input-field {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Modal Actions */
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Cancel Button */
+  .cancel-button {
+    background-color: #ccc;
+    color: #003366;
+    border: 2px solid #003366;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100px;
+  }
+  
+  /* Save Button */
+  .save-button {
+    background-color: #ffffff;
+    color: #003366;
+    border: 2px solid #003366;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100px;
+  }
+
+
+  .save-button:hover {
+    background-color: #003366;
+    color: #ffffff;
+    border-color: #ffffff;
+  }
+  .cancel-button:hover {
+    background-color:#ffffff;
+    border-color: #ffffff;
+  }
+
+
+
+
+  /* Message (Success or Error) */
+  .message {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .message.success {
+    color: #28a745;
+  }
+  
+  .message.error {
+    color: #d9534f;
+  }
+/* client-details */
+.CLIENTDETAILSmodal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .CLIENTDETAILSmodal-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .CLIENTDETAILSmodal-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .CLIENTDETAILSform-group {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  p {
+    margin-top: 5px;
+    font-size: 16px;
+  }
+  
+  .CLIENTDETAILSmodal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  
+  .CLIENTDETAILSerror {
+    color: red;
+    font-size: 14px;
+  }
+
+  .auth-title {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.auth-input-group {
+    margin-bottom: 15px;
+}
+
+.auth-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333;
+}
+  
+.list-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .list-item {
+    margin-bottom: 15px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+  
+  .project-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 70%;
+    background-color: #003366;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .project-button:hover {
+    background-color:#66ccff ;
+  }
+  .delete-button{
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    width: 20%;
+    background-color: #fff ;
+    color:#003366;
+    border: none;
+    border-radius: 4px;
+  }
+  .delete-button:hover {
+    background-color:#66ccff ;
+  }
+  
+  .title {
+    font-size: 24px;
+    color: #003366;
+    margin-bottom: 20px;
+    text-align: center; /* כותרת במרכז */
+  }
+  /* 
+  project-page 
+  */
+  .project-page-container {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    gap: 20px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    height: 550px;
+  }
+  
+  .project-page-content {
+    flex: 2;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; */
+  }
+  
+  .project-page-actions {
+    width: 250px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .project-actions-rightPanel {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .placeholder {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 20px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+  }
+  .remarks-container {
+    width: 100%;
+    max-width: 800px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow: hidden;
+  }
+  
+  .remarks-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 10px;
+  }
+  
+  .remark-container {
+    width: 66%;
+    min-height: 80px;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid #003366;
+  }
+  
+  .remark-owner {
+    background: none;
+    border: 2px solid #003366;
+    align-self: flex-end;
+    color: #003366;
+  }
+  
+  .remark-client {
+    background: none;
+    border: 2px solid #66ccff;
+    align-self: flex-start;
+    color: #003366;
+  }
+  
+  .remark-content {
+    flex-grow: 1;
+    font-size: 14px;
+    padding-right: 10px;
+  }
+  
+  
+  .remark-date {
+    font-size: 12px;
+    color: #666;
+    position: absolute;
+    bottom: -18px;
+    left: 10px;
+  }
+  
+  .add-remark-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .add-remark-textarea {
+    width: 66%;
+    min-height: 80px;
+    padding: 10px;
+    border: 2px solid #003366;
+    border-radius: 12px;
+    font-size: 14px;
+    resize: none;
+  }
+  
+  .primary-button {
+    margin-top: 10px;
+  }
+  .remark-options {
+    position: absolute;
+    top: 70px; /* הוספתי מרווח כדי שהדרופדאון לא יכסה את הכפתור */
+    right: 10px;
+    background: #ffffff;
+    border: 1px solid #003366;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    padding: 5px 2px;
+    z-index: 10;
+  }
+  
+  .remark-options.open {
+    display: flex;
+  }
+  
+  .remark-options button {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    color: #003366;
+    width: 100%;
+  }
+  
+  .remark-options button:hover {
+    background-color: #f0f0f0;
+    color: #003366;
+  }
+  
+  
+  .action-status {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .success {
+    color: green;
+  }
+  
+  .error {
+    color: red;
+  }
+  /* styles.css */
+.primary-button {
+    background-color: #ffffff;
+    color: #003366;
+    border: 2px solid #003366;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 150px;
+  }
+
+
+  .primary-button:hover {
+    background-color: #003366;
+    color: #ffffff;
+    border-color: #ffffff;
+  }
+.big-letter-blue{
+    color: #003366;
+    size: 15px;
+}
+.smaell-letter-blue{
+    color: #003366;
+    size: 4px;
+}
+.medum-form {
+    position: relative;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    max-width: 300px;
+    height: 320px;
+  }
+.toggle-Text {
+    margin-top: 15px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .input {
+    width: 90%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* גובה קבוע */
+    background: linear-gradient(to right, #003366, #66ccff); /* רקע כמו ה-header */
+    display: flex; /* יישור תוכן */
+    justify-content: center; /* יישור אופקי למרכז */
+    align-items: center; /* יישור אנכי למרכז */
+    z-index: 1000;
+  }
+  
+  .footer-image {
+    max-height: 80%; /* התאמת גובה התמונה לפוטר */
+    max-width: auto; /* שמירה על פרופורציות התמונה */
+    object-fit: contain; /* שמירה על יחס התמונה */
+  }
+  .file-button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .file-name-display {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .file-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  
+   
+  
+  

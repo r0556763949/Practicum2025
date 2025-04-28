@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from "./axiosInstance"
 
 // הגדרת סוגי הנתונים
 interface ReMark {

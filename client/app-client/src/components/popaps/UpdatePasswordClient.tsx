@@ -50,7 +50,7 @@ const UpdatePasswordPopup = ({ onClose }: { onClose: () => void }) => {
             onClose();
           }, 2000);
         } else {
-          setMessage(res.payload || "אירעה שגיאה");
+          setMessage("אופס... יש פה בעיה, תנסה שוב");
           setIsError(true);
         }
       });

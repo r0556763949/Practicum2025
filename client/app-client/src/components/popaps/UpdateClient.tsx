@@ -11,6 +11,7 @@ const UpdateClientDetailsPopup = ({ onClose }: { onClose: () => void }) => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -34,6 +35,7 @@ const UpdateClientDetailsPopup = ({ onClose }: { onClose: () => void }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    
     const token = sessionStorage.getItem("token");
     const payload = token && decodeToken(token); // שימוש בפונקציה שלך  
     const clientId = payload?.sub;
@@ -50,13 +52,15 @@ console.log("before updateClientDetails",clientDto);
     dispatch(updateClientDetails({ id: Number(clientId), data:clientDto }))
       .then((res: any) => {
         if (!res.error) {
-          setMessage("Details updated successfully!");
+          setMessage("הפרטים עודכנו בהצלחה");
+          setIsError(false); 
           setTimeout(() => {
             setMessage("");
             onClose();
           }, 2000);
         } else {
-          setMessage(res.payload);
+          setMessage("אופס... יש פה בעיה, תנסה שוב");
+          setIsError(true); 
         }
       });
   };
@@ -64,28 +68,30 @@ console.log("before updateClientDetails",clientDto);
   return (
     <div className="popup-overlay">
       <div className="popup-content" style={{ height: "460px" }}>
-        <h1 className="big-letter-blue">Update Your Details</h1>
+        <h1 className="big-letter-blue">עדכון פרטים</h1>
         <form onSubmit={handleSubmit} className="medum-form">
           <div className="auth-inputGroup">
-            <label className="auth-label">Name</label>
+            <label className="auth-label">שם</label>
             <input value={name} onChange={(e) => setName(e.target.value)} className="input" required />
           </div>
           <div className="auth-inputGroup">
-            <label className="auth-label">Email</label>
+            <label className="auth-label">מייל</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)} className="input" required />
           </div>
           <div className="auth-inputGroup">
-            <label className="auth-label">Address</label>
+            <label className="auth-label">כתובת</label>
             <input value={address} onChange={(e) => setAddress(e.target.value)} className="input" />
           </div>
           <div className="auth-inputGroup">
-            <label className="auth-label">Phone</label>
+            <label className="auth-label">פלאפון</label>
             <input value={phone} onChange={(e) => setPhone(e.target.value)} className="input" />
           </div>
-          <button type="submit" className="primary-button">Update</button>
-          <button type="button" className="cancel-button" onClick={onClose}>Cancel</button>
+          <button type="submit" className="primary-button">עדכון</button>
+          <button type="button" className="cancel-button" onClick={onClose}>ביטול</button>
         </form>
-        {message && <p className="message-text">{message}</p>}
+        {message && (
+          <p className={`message-text ${isError ? "error" : "success"}`}>{message}</p> // הוספת מחלקת CSS בהתאם למצב
+        )}
       </div>
     </div>
   );
