@@ -39,7 +39,28 @@ namespace Practicum.Service
                 return null;
             }
         }
+        public async Task<string> DownloadFileToLocalAsync(string filePath, string localPath)
+        {
+            try
+            {
+                var request = new GetObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = filePath
+                };
 
+                using var response = await _s3Client.GetObjectAsync(request);
+                await using var fileStream = File.Create(localPath);
+                await response.ResponseStream.CopyToAsync(fileStream);
+
+                return localPath;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error downloading file: {e.Message}");
+                return null;
+            }
+        }
         public async Task DeleteFileAsync(string filePath)
         {
             var deleteRequest = new DeleteObjectRequest

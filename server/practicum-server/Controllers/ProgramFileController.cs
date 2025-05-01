@@ -13,9 +13,11 @@ namespace practicum_server.Controllers
     public class ProgramFileController : ControllerBase
     {
         private readonly ProgramFileService _programFileService;
-        public ProgramFileController(ProgramFileService programFileService)
+        private readonly DiffService _diffService;
+        public ProgramFileController(ProgramFileService programFileService, DiffService diffService)
         {
             _programFileService = programFileService;
+            _diffService = diffService;
         }
         [HttpPost("upload-url")]
         public async Task<IActionResult> GetUploadUrl(int clientId, int projectId, [FromBody] string name)
@@ -120,6 +122,28 @@ namespace practicum_server.Controllers
             }
 
             return Ok(new { OwnerId = ownerId });
+        }
+
+        [HttpGet("compare-plans/{idFile1}/{idFile2}")]
+        public async Task<IActionResult> ComparePlansAsync(string idFile1, string idFile2)
+        {
+
+            if (!int.TryParse(idFile1, out var fileId1) || !int.TryParse(idFile2, out var fileId2))
+                return BadRequest("Invalid file IDs");
+
+            var path1 = await _programFileService.GetFilePathAsync(fileId1);
+            var path2 = await _programFileService.GetFilePathAsync(fileId2);
+
+            if (string.IsNullOrEmpty(path1) || string.IsNullOrEmpty(path2))
+                return NotFound("One or both files not found");
+
+            var diffImagePath = await _diffService.CompareTwoPlansAsync(path1, path2);
+
+            // קריאת התמונה המושוות
+            var diffImageBytes = await System.IO.File.ReadAllBytesAsync(diffImagePath);
+
+            // מחזירים את התמונה המושוות ללקוח
+            return File(diffImageBytes, "image/png");
         }
     }
 }

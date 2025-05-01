@@ -108,6 +108,10 @@ namespace Practicum.Service.Services
         {
             return await _programFileRepository.GetFileOwnerIdAsync(fileId);
         }
-
+        public async Task<string> GetFilePathAsync(int fileId)
+        {
+            var file = await _programFileRepository.GetFileByIdAsync(fileId);
+            return file?.Path;
+        }
     }
 }

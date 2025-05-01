@@ -71,6 +71,8 @@ namespace practicum_server
             builder.Services.AddScoped<JwtService>();
             builder.Services.AddScoped<PasswordServicecs>();
             builder.Services.AddScoped<EmailService>();
+            builder.Services.AddScoped<DiffService>();
+
             //repositories
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
             builder.Services.AddScoped<IProgramFileRepository, ProgramFileRepository>();

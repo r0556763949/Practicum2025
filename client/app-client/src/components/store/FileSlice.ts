@@ -152,6 +152,25 @@ export const viewFile = createAsyncThunk<any, { clientId: number; projectId: num
       }
     }
   );
+  // Compare two plans
+export const comparePlans = createAsyncThunk<
+Blob, 
+{ clientId: number; projectId: number ; fileId1: number; fileId2: number }
+>(
+'files/comparePlans',
+async ({ clientId, projectId, fileId1, fileId2 }, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(
+      `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/compare-plans/${fileId1}/${fileId2}`,
+      { responseType: 'blob' } // כדי לקבל את התמונה כ-Blob
+    );
+    return response.data; // נחזיר Blob
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || 'Comparison failed.');
+  }
+}
+);
+
 
 // Slice
 const filesSlice = createSlice({
