@@ -7,6 +7,7 @@ import decodeToken from "./authUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/Store";
 import { fetchProjectsByClientId } from "../store/ProjectSlice";
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 const Header = () => {
@@ -14,7 +15,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showProjectsMenu, setShowProjectsMenu] = useState(false);
   const [popupType, setPopupType] = useState<"details" | "password" | null>(null);
-
+  const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const payload = token && decodeToken(token);
   const clientId = payload?.sub;
@@ -27,7 +28,7 @@ const Header = () => {
       dispatch(fetchProjectsByClientId(Number(clientId))); // שליפה של פרויקטים עבור הלקוח
     }
   }, [clientId, dispatch]);
-  
+
   const handleAccountClick = () => {
     if (token) {
       setShowMenu((prev) => !prev);
@@ -43,7 +44,7 @@ const Header = () => {
   const handleProjectsMenuClick = () => {
     setShowProjectsMenu((prev) => !prev);
   };
-  
+
   const closePopup = () => {
     setPopupForm(false);
     setPopupType(null);
@@ -75,7 +76,17 @@ const Header = () => {
             {showProjectsMenu && !loading && projects.length > 0 && (
               <div className="dropdown-menu">
                 {projects.map((project) => (
-                  <div key={project.id}>{project.description}</div>
+                  <div
+                    key={project.id}
+                    onClick={() => {
+                      localStorage.setItem("lastVisitedProject", project.id.toString());
+                      navigate(`ClientPage/${clientId}/ProjectPage/${project.id}`);
+                      setShowProjectsMenu(false);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {project.description}
+                  </div>
                 ))}
               </div>
             )}
@@ -87,8 +98,8 @@ const Header = () => {
       </header>
       {showMenu && (
         <div className="dropdown-menu">
-          <div onClick={() => openPopup("details")}>עדכון פרטים אישיים</div>
-          <div onClick={() => openPopup("password")}>שינוי סיסמה</div>
+          <div onClick={() => { openPopup("details"); setShowMenu(false); }}>עדכון פרטים אישיים</div>
+          <div onClick={() => { openPopup("password"); setShowMenu(false); }}>שינוי סיסמה</div>
         </div>
       )}
       {showPopupForm && (

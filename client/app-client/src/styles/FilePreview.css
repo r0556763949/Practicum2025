@@ -1,0 +1,8 @@
+.file-preview-panel {
+    width: 100%;
+    height: 450px; /* או מה שתרצה */
+    /* box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 8px; */
+    overflow: hidden;
+  }
+  

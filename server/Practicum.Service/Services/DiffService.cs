@@ -53,6 +53,7 @@ namespace Practicum.Service.Services
         public async Task<string> CompareTwoPlansAsync(string pathFile1,  string pathFile2)
         {
             var localPath1 = Path.GetTempFileName() + ".pdf";
+            Console.WriteLine("localPath1: " ,localPath1);
             var localPath2 = Path.GetTempFileName() + ".pdf";
 
             await _s3StorageService.DownloadFileToLocalAsync(pathFile1, localPath1);
@@ -64,6 +65,48 @@ namespace Practicum.Service.Services
             var diffImagePath = CompareImagesWithAI(image1, image2); // נכתוב את זה אחר כך
             return diffImagePath;
         }
+        private Mat AlignImages(Mat img1, Mat img2)
+        {
+            // גלאי תכונות ORB
+            var orb = ORB.Create(5000);
+
+            // מצא keypoints ו-descriptors
+            KeyPoint[] keypoints1, keypoints2;
+            Mat descriptors1 = new Mat();
+            Mat descriptors2 = new Mat();
+            orb.DetectAndCompute(img1, null, out keypoints1, descriptors1);
+            orb.DetectAndCompute(img2, null, out keypoints2, descriptors2);
+
+            // matcher בין ה-descriptors
+            var bf = new BFMatcher(NormTypes.Hamming, crossCheck: true);
+            var matches = bf.Match(descriptors1, descriptors2);
+
+            if (matches.Length < 4)
+            {
+                throw new Exception("Not enough matches to compute homography.");
+            }
+
+            // מיין לפי איכות
+            matches = matches.OrderBy(m => m.Distance).ToArray();
+
+            // קח רק את הטובים
+            var numGoodMatches = (int)(matches.Length * 0.15); // 15% מהטובים
+            matches = matches.Take(numGoodMatches).ToArray();
+
+            // הפוך ל-Point2f arrays
+            var points1 = matches.Select(m => keypoints1[m.QueryIdx].Pt).ToArray();
+            var points2 = matches.Select(m => keypoints2[m.TrainIdx].Pt).ToArray();
+
+            // מצא הומוגרפיה
+            var homography = Cv2.FindHomography(InputArray.Create(points2), InputArray.Create(points1), HomographyMethods.Ransac);
+
+            // warp את img2 שתתאים ל-img1
+            Mat aligned = new Mat();
+            Cv2.WarpPerspective(img2, aligned, homography, img1.Size());
+
+            return aligned;
+        }
+
         private string CompareImagesWithAI(string imagePath1, string imagePath2)
         {
             // טען את התמונות
@@ -81,10 +124,12 @@ namespace Practicum.Service.Services
             {
                 throw new Exception("Images are not the same size.");
             }
-
-            // צור תמונה של ההבדלים
+            Mat alignedImg2 = AlignImages(img1, img2);
             Mat diff = new Mat();
-            Cv2.Absdiff(img1, img2, diff);
+            Cv2.Absdiff(img1, alignedImg2, diff);
+            // צור תמונה של ההבדלים
+            //Mat diff = new Mat();
+            //Cv2.Absdiff(img1, img2, diff);
 
             // הפוך את ההבדל ליותר ברור – סף (threshold)
             Mat gray = new Mat();

@@ -71,14 +71,14 @@ const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientI
 
     return (
         <form className="medium-form">
-            <h1 className="big-letter-blue">Upload File</h1>
+            <h1 className="big-letter-blue">העלאת קובץ</h1>
 
             <div className="inputGroup">
-                {selectedFile && <label className="label">File</label>}
+                {selectedFile && <label className="label">קובץ</label>}
                 <div className="file-input-wrapper">
                     {!selectedFile ? (
                         <label htmlFor="file" className="primary-button file-button">
-                            Choose File
+                            בחר קובץ
                         </label>
                     ) : (
                         <div className="input file-name-display">{selectedFile.name}</div>
@@ -93,7 +93,7 @@ const FileUpload: React.FC<{ clientId: number; projectId: number }> = ({ clientI
             </div>
 
             <div className="inputGroup">
-                <label className="label">Description</label>
+                <label className="label">תיאור הקובץ</label>
                 <input
                     type="text"
                     placeholder="Enter a description"

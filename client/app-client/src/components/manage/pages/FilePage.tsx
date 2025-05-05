@@ -3,6 +3,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import FileActionsPanel from "../file/FileActionsPanelProps"
 import RemarksComponent from "../file/ReMarks";
+import FilePreview from "../project/FilePreview";
 
 const FilePage: React.FC = () => {
   const { projectId, fileId, clientId } = useParams<{
@@ -25,6 +26,10 @@ const FilePage: React.FC = () => {
           projectId={Number(projectId)}
           fileId={Number(fileId)}
         />
+        <FilePreview 
+          clientId={parseInt(clientId!)}
+          projectId={parseInt(projectId!)}
+          fileId={Number(fileId)} />
       </div>
     </div>
   );

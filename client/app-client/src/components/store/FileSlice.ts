@@ -10,6 +10,7 @@ interface File {
 }
 
 interface FileState {
+  selectedFileUrl: any;
   files: File[];
   loading: boolean;
   error: string | null;
@@ -152,6 +153,21 @@ export const viewFile = createAsyncThunk<any, { clientId: number; projectId: num
       }
     }
   );
+
+  export const fetchFileUrl  = createAsyncThunk<any, { clientId: number; projectId: number; id: number }>(
+    'files/viewFile',
+    async ({ clientId, projectId, id }, { rejectWithValue }) => {
+      try {
+        const response = await axios.get(`https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${id}/view`);
+        const viewUrl = response.data.viewUrl; // קבלת ה-URL לצפייה
+        console.log(viewUrl);
+        return viewUrl;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data?.message || 'Failed to view file.');
+      }
+    }
+  );
+
   // Compare two plans
 export const comparePlans = createAsyncThunk<
 Blob, 
@@ -228,7 +244,29 @@ const filesSlice = createSlice({
       .addCase(addFile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      }).addCase(deleteFile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteFile.fulfilled, (state, action: PayloadAction<number>) => {
+        state.files = state.files.filter(file => file.id !== action.payload);
+        state.loading = false;
+      })
+      .addCase(deleteFile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      }).addCase(fetchFileUrl.fulfilled, (state, action) => {
+        state.selectedFileUrl = action.payload; // כאן נשמר ה-URL שהגיע
+        state.loading = false;
+      })
+      .addCase(fetchFileUrl.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFileUrl.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });;
   },
 });
 

@@ -118,6 +118,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #003366; /* כחול */
   }
+
+  .file-item.selected {
+    transform: scale(1.05); /* הריבועים יגדלו במעבר עכבר */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #003366; /* כחול */
+  }
   
   .file-name {
     color: #003366; /* כחול */
@@ -167,6 +173,7 @@
     justify-content: center; /* מרכז את הפריטים אופקית */
     align-items: center; /* מרכז את הפריטים אנכית */
     text-align: center;
+    flex-direction: column;
   }
 
   .FileActions-rightPanel {

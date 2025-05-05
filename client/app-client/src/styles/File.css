@@ -27,6 +27,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #003366; /* כחול */
   }
+  .file-item.selected {
+    border: 1px solid #003366; /* כחול */
+  }
   
   .file-name {
     color: #003366; /* כחול */
