@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Practicum.Data;
 
@@ -11,9 +12,11 @@ using Practicum.Data;
 namespace Practicum.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250507224910_AddQuestionnaireTables")]
+    partial class AddQuestionnaireTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,12 +165,14 @@ namespace Practicum.Data.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AiSummary")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("FilledAt")
@@ -180,6 +185,7 @@ namespace Practicum.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RawSummary")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -234,7 +240,9 @@ namespace Practicum.Data.Migrations
                 {
                     b.HasOne("Practicum.Core.Models.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Practicum.Core.Models.Questionnaire", "Questionnaire")
                         .WithMany()
