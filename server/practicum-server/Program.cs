@@ -36,11 +36,11 @@ namespace practicum_server
             var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
             var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 
-            Console.WriteLine("AccessKey: " + awsAccessKey);
-            Console.WriteLine("SecretKey: " + awsSecretKey);
-            Console.WriteLine("Region: " + awsRegion);
-            Console.WriteLine("BucketName: " + awsBucketName);
-            Console.WriteLine("JWT_KEY: " + jwtKey);
+            //Console.WriteLine("AccessKey: " + awsAccessKey);
+            //Console.WriteLine("SecretKey: " + awsSecretKey);
+            //Console.WriteLine("Region: " + awsRegion);
+            //Console.WriteLine("BucketName: " + awsBucketName);
+            //Console.WriteLine("JWT_KEY: " + jwtKey);
 
             var s3Client = new AmazonS3Client(
                 awsAccessKey,
@@ -72,12 +72,16 @@ namespace practicum_server
             builder.Services.AddScoped<PasswordServicecs>();
             builder.Services.AddScoped<EmailService>();
             builder.Services.AddScoped<DiffService>();
-
+            builder.Services.AddScoped<QuestionnaireService>();
+            builder.Services.AddScoped<QuestionnaireFillService>();
+            builder.Services.AddScoped<APIAIService>();
             //repositories
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
             builder.Services.AddScoped<IProgramFileRepository, ProgramFileRepository>();
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<IReMarkRepository, ReMarkRepository>();
+            builder.Services.AddScoped<IQuestionnaireFillRepository, QuestionnaireFillRepository>();
+            builder.Services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
             //mapping
             builder.Services.AddAutoMapper(cfg =>
             {

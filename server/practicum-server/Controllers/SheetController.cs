@@ -88,7 +88,7 @@ namespace practicum_server.Controllers
             Console.WriteLine("prompt: "+ prompt);
 
             // שולחים ל-AI
-            var aiService = new API_AI_Service();
+            var aiService = new APIAIService();
             var aiSummary = await aiService.GetAiSummary(prompt);
 
             return Ok(new { summary = aiSummary });

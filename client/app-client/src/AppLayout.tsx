@@ -5,18 +5,14 @@ const AppLayout = () => {
     return (
 
         <>
-
-            <Header />
-            <main style={{
-                marginTop: "70px", // גובה ההדר
-                marginBottom: "80px", // גובה הפוטר
-                height: "calc(100vh - 70px - 80px)", // חישוב הגובה הפנוי
-                overflow: "hidden", // מונע גלילה פנימית
-            }}>
-                <Outlet />
-            </main>
-            <Footer />
-</>
+            <div className="app-container">
+                <Header />
+                <main className="main-content">
+                    <Outlet />
+                </main>
+                <Footer />
+            </div>
+        </>
     );
 }
 export default AppLayout;

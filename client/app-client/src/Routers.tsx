@@ -7,6 +7,7 @@ import ClientHome from "./components/clientApp/ClientHome"
 import FilePage from "./components/manage/pages/FilePage"
 import ClientPage from "./components/manage/pages/ClientPage"
 import ProjectPage from "./components/manage/pages/ProjectPage"
+import BrandingPage from "./components/centeral/pages/branding"
 export const Router = createBrowserRouter([
     {
         path: '/', element: <AppLayout />,

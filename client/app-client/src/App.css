@@ -1,7 +1,6 @@
 #root {
   width: 100%; /* התוכן יתפרס על כל רוחב המסך */
   margin: 0; /* אין צורך למרכז אם זה 100% */
-  /* padding: 0.5rem; לשיקולך, ניתן להתאים את ה-padding */
   text-align: center;
 }
 
@@ -80,4 +79,8 @@
 .focus\:ring-2:focus {
   outline: 2px solid #1e3a8a;
 }
+
+
+
+
 

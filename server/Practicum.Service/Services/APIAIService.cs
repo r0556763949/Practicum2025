@@ -12,12 +12,12 @@ using Amazon.S3.Model;
 
 namespace Practicum.Service.Services
 {
-    public class API_AI_Service
+    public class APIAIService
     {
         private readonly string _apiKey;
         private readonly string _model;
 
-        public API_AI_Service()
+        public APIAIService()
         {
              _apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
              _model = Environment.GetEnvironmentVariable("OPENAI_MODEL");
