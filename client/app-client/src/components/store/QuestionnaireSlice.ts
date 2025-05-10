@@ -4,12 +4,15 @@ import axiosInstance from './axiosInstance';
 // הגדרת סוגי הנתונים
 export interface Questionnaire {
   id: number;
-  title: string;
-  description: string;
+  name: string;
+  sheetName: string;
+  prompt: string;
+  googleSheetId: string;
+  googleFormUrl: string;
+  isActive: boolean;
   createdAt: string;
-  updatedAt: string;
-  // הוסף כאן שדות נוספים בהתאם למודל שלך
 }
+export type QuestionnaireCreateDto = Omit<Questionnaire, 'id' | 'createdAt'>;
 
 interface QuestionnaireState {
   questionnaires: Questionnaire[];
@@ -50,29 +53,35 @@ export const fetchQuestionnaireById = createAsyncThunk<Questionnaire, number>(
 );
 
 // Add questionnaire
-export const addQuestionnaire = createAsyncThunk<Questionnaire, Omit<Questionnaire, 'id'>>(
+export const addQuestionnaire = createAsyncThunk<Questionnaire, QuestionnaireCreateDto>(
   'questionnaires/addQuestionnaire',
   async (questionnaireData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post<Questionnaire>('/questionnaire', questionnaireData, {
+      const response = await axiosInstance.post<{ id: number }>('/questionnaire', questionnaireData, {
         headers: { 'Content-Type': 'application/json' },
       });
-      return response.data;
+      const id = response.data.id;
+      // אחרי הוספה, נביא את כל הנתונים ע"י קריאה נוספת
+      const fullResponse = await axiosInstance.get<Questionnaire>(`/questionnaire/${id}`);
+      return fullResponse.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to add questionnaire.');
+      const message =
+        error.response?.data?.message ||
+        (typeof error.response?.data === 'string' ? error.response.data : 'Failed to add questionnaire.');
+      return rejectWithValue(message);
     }
   }
 );
 
 // Update questionnaire
-export const updateQuestionnaire = createAsyncThunk<Questionnaire, { id: number; questionnaireData: Partial<Questionnaire> }>(
+export const updateQuestionnaire = createAsyncThunk<number, { id: number; questionnaireData: QuestionnaireCreateDto }>(
   'questionnaires/updateQuestionnaire',
   async ({ id, questionnaireData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put<Questionnaire>(`/questionnaire/${id}`, questionnaireData, {
+      await axiosInstance.put(`/questionnaire/${id}`, questionnaireData, {
         headers: { 'Content-Type': 'application/json' },
       });
-      return response.data;
+      return id; // נחזיר רק את ה-ID
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update questionnaire.');
     }
@@ -150,22 +159,20 @@ const questionnairesSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // Update
-      .addCase(updateQuestionnaire.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateQuestionnaire.fulfilled, (state, action: PayloadAction<Questionnaire>) => {
-        const index = state.questionnaires.findIndex(q => q.id === action.payload.id);
-        if (index !== -1) {
-          state.questionnaires[index] = action.payload;
-        }
-        state.loading = false;
-      })
-      .addCase(updateQuestionnaire.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
+// Update
+.addCase(updateQuestionnaire.pending, (state) => {
+  state.loading = true;
+  state.error = null;
+})
+.addCase(updateQuestionnaire.fulfilled, (state, action: PayloadAction<number>) => {
+  const updatedId = action.payload;
+  state.questionnaires = state.questionnaires.filter(q => q.id !== updatedId);
+  state.loading = false;
+})
+.addCase(updateQuestionnaire.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload as string;
+})
 
       // Delete
       .addCase(deleteQuestionnaire.pending, (state) => {

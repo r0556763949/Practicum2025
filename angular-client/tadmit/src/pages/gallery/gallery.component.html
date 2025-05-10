@@ -1,0 +1,77 @@
+<div class="gallery-page">
+  <div class="gallery-hero">
+    <div class="gallery-hero-overlay"></div>
+    <div class="gallery-hero-content">
+      <h1 class="gallery-hero-title">גלריית פרויקטים</h1>
+    </div>
+  </div>
+
+  <section class="gallery-section">
+    <div class="container">
+      @if(loading)
+      {
+        <div  class="loading-container">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      }
+
+      @if(error)
+      {
+        <div class="error-container">
+          <p>{{error}}</p>
+        </div>
+      }
+
+      @if(!loading && !error)
+      {
+        <div >
+          @if(categories.length > 0)
+          {
+            <div class="gallery-filter" >
+              <button 
+                class="filter-button" 
+
+                (click)="filterByCategory('all')"
+              >
+              <!-- [ngClass]="{'active': activeCategory === 'all'}" / -->
+                הכל
+              </button>
+              @for(category of categories ; track category.length)
+              {
+                <button 
+                class="filter-button" 
+                
+                (click)="filterByCategory(category)"
+              >
+              <!-- [ngClass]="{'active': activeCategory === category}"  -->
+                {{category}}
+              </button>
+              }
+             
+            </div>
+          }
+          
+          <div class="gallery-grid">
+            @for(project of filteredProjects ; track project.id)
+            {
+              <app-gallery-item 
+              [project]="project"
+              (viewImage)="viewProjectDetails($event)"
+            ></app-gallery-item>
+            }
+
+          </div>
+        </div>
+      }
+
+    </div>
+  </section>
+</div>
+
+<!-- @if(selectedProject){
+  <app-image-modal  
+  [project]="selectedProject" 
+  (close)="closeProjectDetails()"
+></app-image-modal>
+} -->
+

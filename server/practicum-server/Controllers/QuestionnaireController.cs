@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Practicum.Core.DTOs;
 using Practicum.Core.Models;
 using Practicum.Service.Services;
 
@@ -32,26 +33,52 @@ namespace practicum_server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Questionnaire questionnaire)
+        public async Task<IActionResult> Post([FromBody] QuestionnaireCreateDto dto)
         {
-            await _service.AddAsync(questionnaire);
-            return CreatedAtAction(nameof(GetById), new { id = questionnaire.Id }, questionnaire);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var questionnaire = await _service.AddAsync(dto);
+                return Ok(new { id = questionnaire.Id });
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while creating the questionnaire.", detail = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Questionnaire questionnaire)
+        public async Task<IActionResult> Update(int id, [FromBody] QuestionnaireCreateDto dto)
         {
-            if (id != questionnaire.Id)
-                return BadRequest();
-            await _service.UpdateAsync(questionnaire);
-            return NoContent();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var success = await _service.UpdateAsync(id, dto);
+            if (!success)
+            {
+                return NotFound(new { message = $"Questionnaire with ID {id} not found." });
+            }
+
+            return Ok(new { message = "Questionnaire updated successfully." }); // במקום NoContent עדיף להחזיר אישור ברור
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteAsync(id);
-            return NoContent();
+            var success = await _service.DeleteAsync(id);
+            if (!success)
+            {
+                return NotFound(new { message = $"Questionnaire with ID {id} not found." });
+            }
+
+            return Ok(new { message = "Questionnaire deleted successfully." });
         }
     }
 }

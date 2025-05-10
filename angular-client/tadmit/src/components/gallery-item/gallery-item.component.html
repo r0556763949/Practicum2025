@@ -1,0 +1,9 @@
+<div class="gallery-item" (click)="onViewImage()">
+  <img [src]="project.thumbnailUrl" [alt]="project.title">
+  <div class="gallery-overlay">
+    <div class="gallery-info">
+      <h3 class="gallery-title">{{project.title}}</h3>
+      <p class="gallery-location">{{project.location}}</p>
+    </div>
+  </div>
+</div>

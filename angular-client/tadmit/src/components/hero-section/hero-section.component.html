@@ -1,0 +1,12 @@
+<section class="hero-section" [style.background-image]="'url(' + backgroundImage + ')'">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">{{title}}</h1>
+    <h2 class="hero-subtitle">{{subtitle}}</h2>
+    <p class="hero-description">{{description}}</p>
+    <button class="hero-button" (click)="navigateTo()">
+      <span>{{buttonText}}</span>
+      <i class="icon-arrow-left"></i>
+    </button>
+  </div>
+</section>

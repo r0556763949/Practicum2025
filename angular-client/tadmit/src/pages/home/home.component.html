@@ -1,0 +1,111 @@
+<app-hero-section></app-hero-section>
+
+<section class="services-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">השירותים שלנו</h2>
+      <div class="section-divider"></div>
+    </div>
+    
+    <div class="services-grid">
+      @for (service of services ; track service.title){
+        <app-service-card 
+        [icon]="service.icon"
+        [title]="service.title"
+        [description]="service.description"
+      ></app-service-card>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="featured-projects-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">פרויקטים נבחרים</h2>
+      <div class="section-divider"></div>
+    </div>
+    @if(loadingProjects){
+      <div  class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+
+    @if(errorProjects){
+      <div  class="error-container">
+        <p>{{errorProjects}}</p>
+      </div>
+    }
+
+    @if(!loadingProjects && !errorProjects){
+      <div  class="projects-grid">
+        @for(project of featuredProjects; track project.id) {
+        <app-project-card 
+          [project]="project"
+          (viewDetails)="viewProjectDetails($event)"
+        ></app-project-card>
+        }
+      </div>
+    }
+
+    
+    <div class="view-all-container">
+      <a routerLink="/gallery" class="view-all-button">לכל הפרויקטים</a>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">לקוחות ממליצים</h2>
+      <div class="section-divider"></div>
+    </div>
+    @if(loadingTestimonials)
+    {
+      <div class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+
+    @if(errorTestimonials)
+    {
+      <div class="error-container">
+        <p>{{errorTestimonials}}</p>
+      </div>
+    }
+
+    @if(!loadingTestimonials && !errorTestimonials){
+      <div  class="testimonials-grid">
+        @for(testimonial of testimonials;track testimonial.id){
+          <app-testimonial-card 
+          [testimonial]="testimonial"
+        ></app-testimonial-card>
+        }
+      </div>
+    }
+
+    <div class="view-all-container">
+      <a routerLink="/testimonials" class="view-all-button">לכל ההמלצות</a>
+    </div>
+  </div>
+</section>
+
+<section class="contact-cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 class="cta-title">מעוניינים לשמוע עוד?</h2>
+      <p class="cta-description">צרו קשר עוד היום ונשמח לענות על כל שאלה</p>
+      <a routerLink="/contact" class="cta-button">צור קשר</a>
+    </div>
+  </div>
+</section>
+
+@if(selectedProject)
+{
+  <app-image-modal 
+  [project]="selectedProject" 
+  (close)="closeProjectDetails()"
+></app-image-modal>
+}
+

@@ -1,0 +1,54 @@
+<div class="contact-page">
+  <div class="contact-hero">
+    <div class="contact-hero-overlay"></div>
+    <div class="contact-hero-content">
+      <h1 class="contact-hero-title">צור קשר</h1>
+    </div>
+  </div>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-content">
+        <div class="contact-info">
+          <h2 class="contact-title">נשמח לשמוע ממך</h2>
+          <p class="contact-description">
+            מעוניינים לשמוע עוד על השירותים שלנו? צרו איתנו קשר ונשמח לענות על כל שאלה.
+          </p>
+          
+          <div class="contact-details">
+            <div class="contact-detail">
+              <i class="icon-phone"></i>
+              <a href="tel:{{contactInfo.phone}}">{{contactInfo.phone}}</a>
+            </div>
+            
+            <div class="contact-detail">
+              <i class="icon-email"></i>
+              <a href="mailto:{{contactInfo.email}}">{{contactInfo.email}}</a>
+            </div>
+            
+            <div class="contact-detail">
+              <i class="icon-location"></i>
+              <span>{{contactInfo.address}}</span>
+            </div>
+          </div>
+          
+          <div class="contact-social">
+            <a href="#" class="social-link">
+              <i class="icon-facebook"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="icon-instagram"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="icon-linkedin"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="contact-form-container">
+          <app-contact-form></app-contact-form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

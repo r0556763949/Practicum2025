@@ -11,6 +11,7 @@
 
 import ClientList from "../home/ClientList"
 import { Users } from "lucide-react"
+import QuestionnaireManagement from "./QuestionnairePage"
 
 const ManagerHome = () => {
   return (
@@ -20,6 +21,7 @@ const ManagerHome = () => {
         <h1 className="manager-title">ניהול לקוחות</h1>
       </div>
       <ClientList />
+      <QuestionnaireManagement></QuestionnaireManagement>
     </div>
   )
 }

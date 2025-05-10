@@ -1,0 +1,78 @@
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+  <div class="form-group">
+    <label for="name">שם מלא *</label>
+    <!-- <input 
+      type="text" 
+      id="name" 
+      formControlName="name" 
+      [ngClass]="{'invalid': contactForm.get('name')?.invalid && contactForm.get('name')?.touched}"
+      placeholder="הזן את שמך המלא"
+    > -->
+    <!-- <div class="error-message" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+      שם מלא הוא שדה חובה
+    </div> -->
+  </div>
+
+  <div class="form-group">
+    <label for="email">דואר אלקטרוני *</label>
+    <!-- <input 
+      type="email" 
+      id="email" 
+      formControlName="email" 
+      [ngClass]="{'invalid': contactForm.get('email')?.invalid && contactForm.get('email')?.touched}"
+      placeholder="הזן את כתובת הדואר האלקטרוני שלך"
+    > -->
+    <!-- <div class="error-message" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+      <span *ngIf="contactForm.get('email')?.errors?.['required']">דואר אלקטרוני הוא שדה חובה</span>
+      <span *ngIf="contactForm.get('email')?.errors?.['email']">יש להזין כתובת דואר אלקטרוני תקינה</span>
+    </div> -->
+  </div>
+
+  <div class="form-group">
+    <label for="phone">טלפון *</label>
+    <!-- <input 
+      type="tel" 
+      id="phone" 
+      formControlName="phone" 
+      [ngClass]="{'invalid': contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched}"
+      placeholder="הזן את מספר הטלפון שלך"
+    >
+    <div class="error-message" *ngIf="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched">
+      <span *ngIf="contactForm.get('phone')?.errors?.['required']">מספר טלפון הוא שדה חובה</span>
+      <span *ngIf="contactForm.get('phone')?.errors?.['pattern']">יש להזין מספר טלפון תקין</span>
+    </div> -->
+  </div>
+
+  <div class="form-group">
+    <label for="message">הודעה *</label>
+    <!-- <textarea 
+      id="message" 
+      formControlName="message" 
+      [ngClass]="{'invalid': contactForm.get('message')?.invalid && contactForm.get('message')?.touched}"
+      placeholder="כתוב את הודעתך כאן"
+      rows="4"
+    ></textarea>
+    <div class="error-message" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+      <span *ngIf="contactForm.get('message')?.errors?.['required']">הודעה היא שדה חובה</span>
+      <span *ngIf="contactForm.get('message')?.errors?.['minlength']">ההודעה חייבת להכיל לפחות 10 תווים</span>
+    </div> -->
+  </div>
+
+  <div class="form-submit">
+    <!-- <button type="submit" [disabled]="isSubmitting" class="submit-button">
+      <span *ngIf="!isSubmitting">שליחה</span>
+      <span *ngIf="isSubmitting" class="loading-spinner"></span>
+    </button> -->
+  </div>
+
+  <div class="form-messages">
+    <!-- <div class="success-message" *ngIf="submitSuccess">
+      <i class="icon-check"></i>
+      <span>הטופס נשלח בהצלחה! נחזור אליך בהקדם.</span>
+    </div> -->
+    <!-- <div class="error-message" *ngIf="submitError">
+      <i class="icon-alert"></i>
+      <span>{{errorMessage}}</span>
+    </div> -->
+  </div>
+</form>

@@ -1,0 +1,47 @@
+<div class="testimonials-page">
+  <div class="testimonials-hero">
+    <div class="testimonials-hero-overlay"></div>
+    <div class="testimonials-hero-content">
+      <h1 class="testimonials-hero-title">לקוחות ממליצים</h1>
+    </div>
+  </div>
+
+  <section class="testimonials-section">
+    <div class="container">
+      @if(loading)
+      {
+        <div  class="loading-container">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      }
+
+      @if(error){
+        <div  class="error-container">
+          <p>{{error}}</p>
+        </div>
+      }
+
+      @if(!loading && !error){
+        <div  class="testimonials-grid">
+          @for(testimonial of testimonials ; track testimonial.id)
+          {
+            <app-testimonial-card 
+            [testimonial]="testimonial"
+          ></app-testimonial-card>
+          }
+        </div>
+      }
+
+    </div>
+  </section>
+
+  <section class="contact-cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">רוצים להצטרף ללקוחות המרוצים שלנו?</h2>
+        <p class="cta-description">צרו קשר עוד היום ונתחיל לעבוד על הפרויקט שלכם</p>
+        <a routerLink="/contact" class="cta-button">צור קשר</a>
+      </div>
+    </div>
+  </section>
+</div>

@@ -120,7 +120,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import type { ClientDto } from "../../store/interfaces"
 import CreateClient from "../../popaps/CreateClient"
-import { User, UserPlus, Trash2, Eye, Search, Loader, AlertCircle } from "lucide-react"
+import { User, UserPlus, Trash2, Eye, Search, Loader, AlertCircle, Users } from "lucide-react"
 
 const ClientList = () => {
   const [clients, setClients] = useState([])
@@ -217,7 +217,8 @@ const ClientList = () => {
         />
       )}
 
-      <h2 className="clients-title">רשימת לקוחות</h2>
+      <Users className="manager-icon" />
+      <h2 className="manager-title">ניהול לקוחות</h2>
 
       {loading && (
         <div className="clients-loading">
