@@ -199,7 +199,7 @@ const QuestionnaireForm = ({ questionnaire, onClose }: QuestionnaireFormProps) =
             </div>
 
             <div className="form-group">
-              <label>הנחיות למילוי השאלון</label>
+              <label>טקסט GPT</label>
               <textarea
                 id="prompt"
                 name="prompt"

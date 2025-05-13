@@ -79,7 +79,7 @@ const QuestionnaireDetails = ({ questionnaire, onClose, onEdit }: QuestionnaireD
 
           {questionnaire.prompt && (
             <div className="details-section">
-              <h3 className="section-title">הנחיות למילוי השאלון</h3>
+              <h3 className="section-title">GPT טקסט </h3>
               <div className="prompt-content">
                 <FileText className="prompt-icon" />
                 <p className="prompt-text">{questionnaire.prompt}</p>

@@ -17,40 +17,37 @@ namespace Practicum.Data.Repositories
             _context = context;
         }
 
+        public async Task<QuestionnaireFill> AddAsync(QuestionnaireFill entity)
+        {
+            _context.QuestionnaireFills.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<QuestionnaireFill?> GetByIdAsync(int id)
+        {
+            return await _context.QuestionnaireFills.FindAsync(id);
+        }
+
         public async Task<IEnumerable<QuestionnaireFill>> GetAllAsync()
         {
-            return await _context.QuestionnaireFills
-                .Include(q => q.Questionnaire)
-                .Include(q => q.Client)
-                .ToListAsync();
+            return await _context.QuestionnaireFills.ToListAsync();
         }
 
-        public async Task<QuestionnaireFill> GetByIdAsync(int id)
+        public async Task UpdateAsync(QuestionnaireFill entity)
         {
-            return await _context.QuestionnaireFills
-                .Include(q => q.Questionnaire)
-                .Include(q => q.Client)
-                .FirstOrDefaultAsync(q => q.Id == id);
-        }
-
-        public async Task AddAsync(QuestionnaireFill questionnaireFill)
-        {
-            await _context.QuestionnaireFills.AddAsync(questionnaireFill);
-        }
-
-        public void Update(QuestionnaireFill questionnaireFill)
-        {
-            _context.QuestionnaireFills.Update(questionnaireFill);
-        }
-
-        public void Delete(QuestionnaireFill questionnaireFill)
-        {
-            _context.QuestionnaireFills.Remove(questionnaireFill);
-        }
-
-        public async Task SaveChangesAsync()
-        {
+            _context.QuestionnaireFills.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var entity = await _context.QuestionnaireFills.FindAsync(id);
+            if (entity != null)
+            {
+                _context.QuestionnaireFills.Remove(entity);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -85,7 +85,7 @@ namespace practicum_server.Controllers
 הנה השאלון והתשובות:
 
 {summaryBuilder}";
-            Console.WriteLine("prompt: "+ prompt);
+            Console.WriteLine("prompt: " + prompt);
 
             // שולחים ל-AI
             var aiService = new APIAIService();

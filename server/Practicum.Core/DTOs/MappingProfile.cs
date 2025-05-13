@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Practicum.Core.IRepositories;
 using Practicum.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Practicum.Core.DTOs
             CreateMap<ReMark, AddReMarkDto>().ReverseMap();
             CreateMap<Client, ClientDto>().ReverseMap();
             CreateMap<Questionnaire,QuestionnaireCreateDto>().ReverseMap();
+            CreateMap<QuestionnaireFill, QuestionnaireFillCreateDto>().ReverseMap();
 
         }
     }

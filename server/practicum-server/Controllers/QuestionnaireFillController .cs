@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Practicum.Core.DTOs;
 using Practicum.Core.Models;
 using Practicum.Service.Services;
 
@@ -15,6 +16,21 @@ namespace practicum_server.Controllers
             _service = service;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] QuestionnaireFillCreateDto dto)
+        {
+            var result = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _service.GetByIdAsync(id);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -22,28 +38,10 @@ namespace practicum_server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpPut("summarize/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] int clientId )
         {
-            var result = await _service.GetByIdAsync(id);
-            if (result == null)
-                return NotFound();
-            return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(QuestionnaireFill fill)
-        {
-            await _service.AddAsync(fill);
-            return CreatedAtAction(nameof(GetById), new { id = fill.Id }, fill);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, QuestionnaireFill fill)
-        {
-            if (id != fill.Id)
-                return BadRequest();
-            await _service.UpdateAsync(fill);
+            await _service.UpdateAsync(id, clientId);
             return NoContent();
         }
 
