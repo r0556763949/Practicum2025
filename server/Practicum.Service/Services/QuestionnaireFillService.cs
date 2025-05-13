@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Apis.Services;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using System.Text;
 using Google.Apis.Sheets.v4.Data;
@@ -101,8 +100,18 @@ namespace Practicum.Service.Services
             if (values == null || values.Count == 0)
                 return null;
 
-            var headerRow = values[0];
-            int emailColumnIndex = headerRow.FindIndex(col => col.ToString().Trim().Contains("מייל"));
+
+            // למצוא את עמודת המייל
+            var headerRow = values[0]; // שורה ראשונה
+            int emailColumnIndex = -1;
+            for (int i = 0; i < headerRow.Count; i++)
+            {
+                if (headerRow[i].ToString().Trim().Contains("מייל")) // או שם הכותרת המדויקת
+                {
+                    emailColumnIndex = i;
+                    break;
+                }
+            }
             if (emailColumnIndex == -1)
                 return null;
 
