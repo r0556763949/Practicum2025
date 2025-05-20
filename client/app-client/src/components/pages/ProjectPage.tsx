@@ -41,11 +41,12 @@
 
 import { useState } from "react"
 import { useParams } from "react-router-dom"
-import FileList from "../project/FileList"
-import FileUpload from "../project/FileUpload"
-import decodeToken from "../../centeral/authUtils"
-import FilePreview from "../project/FilePreview"
+import FileList from "../entities/project/FileList"
+import FileUpload from "../entities/project/FileUpload"
+import decodeToken from "../centeral/authUtils"
+import FilePreview from "../entities/project/FilePreview"
 import { FileText, Upload } from "lucide-react"
+import ClientQuestionnaireList from "../entities/questionnairesFill/ClientQuestionnaireList"
 
 const ProjectPage = () => {
   const { clientId, projectId } = useParams<{ clientId: string; projectId: string }>()

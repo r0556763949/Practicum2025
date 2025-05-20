@@ -12,6 +12,7 @@ namespace Practicum.Core.IRepositories
         Task<QuestionnaireFill> AddAsync(QuestionnaireFill entity);
         Task<QuestionnaireFill?> GetByIdAsync(int id);
         Task<IEnumerable<QuestionnaireFill>> GetAllAsync();
+        Task<IEnumerable<QuestionnaireFill>> GetByClientIdAsync(int clientId);
         Task UpdateAsync(QuestionnaireFill entity);
         Task DeleteAsync(int id);
     }

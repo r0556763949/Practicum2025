@@ -1,185 +1,234 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axiosInstance from './axiosInstance';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import type { RootState } from "./Store"
 
-// סוג הנתונים של QuestionnaireFill
 export interface QuestionnaireFill {
-  id: number;
-  questionnaireId: number;
-  userId: number;
-  answers: any; // תעדכן בהתאם לסוג התשובות שלך
-  createdAt: string;
-  updatedAt: string;
+  id: number
+  questionnaireId: number
+  questionnaireName?: string
+  clientId?: number
+  projectId?: number
+  email?: string
+  getToFillAt: string
+  filledAt?: string
+  rawSummary?: string
+  aiSummary?: string
 }
 
 interface QuestionnaireFillState {
-  fills: QuestionnaireFill[];
-  loading: boolean;
-  error: string | null;
+  questionnaireFills: QuestionnaireFill[]
+  loading: boolean
+  error: string | null
+  currentQuestionnaireFill: QuestionnaireFill | null
 }
 
 const initialState: QuestionnaireFillState = {
-  fills: [],
+  questionnaireFills: [],
   loading: false,
   error: null,
-};
+  currentQuestionnaireFill: null,
+}
 
-// Fetch all questionnaire fills
-export const fetchQuestionnaireFills = createAsyncThunk<QuestionnaireFill[]>(
-  'questionnaireFills/fetchQuestionnaireFills',
+export const fetchQuestionnaireFills = createAsyncThunk(
+  "questionnaireFill/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get<QuestionnaireFill[]>('/questionnairefill');
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch questionnaire fills.');
-    }
-  }
-);
-
-// Fetch single questionnaire fill by ID
-export const fetchQuestionnaireFillById = createAsyncThunk<QuestionnaireFill, number>(
-  'questionnaireFills/fetchQuestionnaireFillById',
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get<QuestionnaireFill>(`/questionnairefill/${id}`);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch questionnaire fill.');
-    }
-  }
-);
-
-// Add questionnaire fill
-export const addQuestionnaireFill = createAsyncThunk<QuestionnaireFill, Omit<QuestionnaireFill, 'id'>>(
-  'questionnaireFills/addQuestionnaireFill',
-  async (fillData, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.post<QuestionnaireFill>('/questionnairefill', fillData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to add questionnaire fill.');
-    }
-  }
-);
-
-// Update questionnaire fill
-export const updateQuestionnaireFill = createAsyncThunk<QuestionnaireFill, { id: number; fillData: Partial<QuestionnaireFill> }>(
-  'questionnaireFills/updateQuestionnaireFill',
-  async ({ id, fillData }, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.put<QuestionnaireFill>(`/questionnairefill/${id}`, fillData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update questionnaire fill.');
-    }
-  }
-);
-
-// Delete questionnaire fill
-export const deleteQuestionnaireFill = createAsyncThunk<number, number>(
-  'questionnaireFills/deleteQuestionnaireFill',
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.delete(`/questionnairefill/${id}`);
-      if (response.status === 204) {
-        return id;
+      const response = await fetch("https://localhost:7156/api/QuestionnaireFill")
+      if (!response.ok) {
+        throw new Error("Failed to fetch questionnaire fills")
       }
-      return rejectWithValue('Failed to delete questionnaire fill.');
+      return await response.json()
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to delete questionnaire fill.');
+      return rejectWithValue(error.message)
+    }
+  },
+)
+
+export const fetchQuestionnaireFillById = createAsyncThunk(
+  "questionnaireFill/fetchById",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://localhost:7156/api/QuestionnaireFill/${id}`)
+      if (!response.ok) {
+        throw new Error("Failed to fetch questionnaire fill")
+      }
+      return await response.json()
+    } catch (error: any) {
+      return rejectWithValue(error.message)
+    }
+  },
+)
+export const fetchQuestionnaireFillsByClientId = createAsyncThunk(
+  "questionnaireFill/fetchByClientId",
+  async (clientId: number, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://localhost:7156/api/QuestionnaireFill/client/${clientId}`)
+      if (!response.ok) {
+        throw new Error("Failed to fetch questionnaire fills by client")
+      }
+      return await response.json()
+    } catch (error: any) {
+      return rejectWithValue(error.message)
     }
   }
-);
+)
 
-// Slice
-const questionnaireFillsSlice = createSlice({
-  name: 'questionnaireFills',
+export const createQuestionnaireFill = createAsyncThunk(
+  "questionnaireFill/create",
+  async (data: { questionnaireId: number; clientId?: number; projectId?: number }, { rejectWithValue }) => {
+    try {
+      const response = await fetch("https://localhost:7156/api/QuestionnaireFill", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+      if (!response.ok) {
+        throw new Error("Failed to create questionnaire fill")
+      }
+      return await response.json()
+    } catch (error: any) {
+      return rejectWithValue(error.message)
+    }
+  },
+)
+
+export const updateQuestionnaireFillSummary = createAsyncThunk(
+  "questionnaireFill/updateSummary",
+  async ({ id, clientId }: { id: number; clientId: number }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://localhost:7156/api/QuestionnaireFill/summarize/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(clientId),
+      })
+      if (!response.ok) {
+        throw new Error("Failed to update questionnaire fill summary")
+      }
+      return { id, clientId }
+    } catch (error: any) {
+      return rejectWithValue(error.message)
+    }
+  },
+)
+
+export const deleteQuestionnaireFill = createAsyncThunk(
+  "questionnaireFill/delete",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://localhost:7156/api/QuestionnaireFill/${id}`, {
+        method: "DELETE",
+      })
+      if (!response.ok) {
+        throw new Error("Failed to delete questionnaire fill")
+      }
+      return id
+    } catch (error: any) {
+      return rejectWithValue(error.message)
+    }
+  },
+)
+
+const questionnaireFillSlice = createSlice({
+  name: "questionnaireFill",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrentQuestionnaireFill: (state) => {
+      state.currentQuestionnaireFill = null
+    },
+  },
   extraReducers: (builder) => {
     builder
-      // Fetch all
+      // Fetch all questionnaire fills
       .addCase(fetchQuestionnaireFills.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
-      .addCase(fetchQuestionnaireFills.fulfilled, (state, action: PayloadAction<QuestionnaireFill[]>) => {
-        state.fills = action.payload;
-        state.loading = false;
+      .addCase(fetchQuestionnaireFills.fulfilled, (state, action) => {
+        state.loading = false
+        state.questionnaireFills = action.payload
       })
       .addCase(fetchQuestionnaireFills.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.loading = false
+        state.error = action.payload as string
       })
-
-      // Fetch by ID
+      // Fetch questionnaire fill by ID
       .addCase(fetchQuestionnaireFillById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
-      .addCase(fetchQuestionnaireFillById.fulfilled, (state, action: PayloadAction<QuestionnaireFill>) => {
-        const index = state.fills.findIndex(f => f.id === action.payload.id);
-        if (index !== -1) {
-          state.fills[index] = action.payload;
-        } else {
-          state.fills.push(action.payload);
-        }
-        state.loading = false;
+      .addCase(fetchQuestionnaireFillById.fulfilled, (state, action) => {
+        state.loading = false
+        state.currentQuestionnaireFill = action.payload
       })
       .addCase(fetchQuestionnaireFillById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+        state.loading = false
+        state.error = action.payload as string
       })
-
-      // Add
-      .addCase(addQuestionnaireFill.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+      .addCase(fetchQuestionnaireFillsByClientId.pending, (state) => {
+        state.loading = true
+        state.error = null
       })
-      .addCase(addQuestionnaireFill.fulfilled, (state, action: PayloadAction<QuestionnaireFill>) => {
-        state.fills.push(action.payload);
-        state.loading = false;
+      .addCase(fetchQuestionnaireFillsByClientId.fulfilled, (state, action) => {
+        state.loading = false
+        state.questionnaireFills = action.payload
       })
-      .addCase(addQuestionnaireFill.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+      .addCase(fetchQuestionnaireFillsByClientId.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload as string
       })
-
-      // Update
-      .addCase(updateQuestionnaireFill.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+      // Create questionnaire fill
+      .addCase(createQuestionnaireFill.pending, (state) => {
+        state.loading = true
+        state.error = null
       })
-      .addCase(updateQuestionnaireFill.fulfilled, (state, action: PayloadAction<QuestionnaireFill>) => {
-        const index = state.fills.findIndex(f => f.id === action.payload.id);
-        if (index !== -1) {
-          state.fills[index] = action.payload;
-        }
-        state.loading = false;
+      .addCase(createQuestionnaireFill.fulfilled, (state, action) => {
+        state.loading = false
+        state.questionnaireFills.push(action.payload)
+        state.currentQuestionnaireFill = action.payload
       })
-      .addCase(updateQuestionnaireFill.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+      .addCase(createQuestionnaireFill.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload as string
       })
-
-      // Delete
+      // Update questionnaire fill summary
+      .addCase(updateQuestionnaireFillSummary.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(updateQuestionnaireFillSummary.fulfilled, (state) => {
+        state.loading = false
+      })
+      .addCase(updateQuestionnaireFillSummary.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload as string
+      })
+      // Delete questionnaire fill
       .addCase(deleteQuestionnaireFill.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
-      .addCase(deleteQuestionnaireFill.fulfilled, (state, action: PayloadAction<number>) => {
-        state.fills = state.fills.filter(f => f.id !== action.payload);
-        state.loading = false;
+      .addCase(deleteQuestionnaireFill.fulfilled, (state, action) => {
+        state.loading = false
+        state.questionnaireFills = state.questionnaireFills.filter((fill) => fill.id !== action.payload)
+        if (state.currentQuestionnaireFill?.id === action.payload) {
+          state.currentQuestionnaireFill = null
+        }
       })
       .addCase(deleteQuestionnaireFill.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
+        state.loading = false
+        state.error = action.payload as string
+      })
   },
-});
+})
 
-export default questionnaireFillsSlice.reducer;
+export const { clearCurrentQuestionnaireFill } = questionnaireFillSlice.actions
+
+// export const selectQuestionnaireFills = (state: RootState) => state.questionnaireFill.questionnaireFills
+// export const selectCurrentQuestionnaireFill = (state: RootState) => state.questionnaireFill.currentQuestionnaireFill
+// export const selectQuestionnaireFillLoading = (state: RootState) => state.questionnaireFill.loading
+// export const selectQuestionnaireFillError = (state: RootState) => state.questionnaireFill.error
+
+export default questionnaireFillSlice.reducer

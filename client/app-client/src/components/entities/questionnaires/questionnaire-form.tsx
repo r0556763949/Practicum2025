@@ -6,7 +6,7 @@ import { useState } from "react"
 import { X, AlertCircle, CheckCircle, HelpCircle, Plus } from "lucide-react"
 import { useDispatch } from "react-redux"
 import type { AppDispatch } from "../../store/Store"
-import { addQuestionnaire, updateQuestionnaire, type QuestionnaireCreateDto } from "../../store/questionnaireSlice"
+import { addQuestionnaire, updateQuestionnaire, type QuestionnaireCreateDto } from "../../store/QuestionnaireSlice"
 
 interface QuestionnaireFormProps {
   questionnaire: {
@@ -214,7 +214,7 @@ const QuestionnaireForm = ({ questionnaire, onClose }: QuestionnaireFormProps) =
             <div className="form-group">
               <label>
                 מזהה גיליון Google *
-                <HelpCircle className="help-icon" title="מזהה הגיליון הוא החלק באמצע כתובת ה-URL של הגיליון" />
+                <HelpCircle className="help-icon" />
               </label>
               <input
                 type="text"

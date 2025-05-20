@@ -12,7 +12,7 @@
 "use client"
 
 import { Building2, Calendar, FileText, Info, MapPin, User } from "lucide-react"
-import QuestionnaireComponent from "../googlForm"
+import QuestionnaireComponent from "../../managerApp/googlForm"
 
 const ClientContent = () => {
   return (

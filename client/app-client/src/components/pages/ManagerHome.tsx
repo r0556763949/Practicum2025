@@ -9,7 +9,7 @@
 
 // export default ManagerHome;
 
-import ClientList from "../home/ClientList"
+import ClientList from "../managerApp/ClientList"
 import { Users } from "lucide-react"
 import QuestionnaireManagement from "./QuestionnairePage"
 

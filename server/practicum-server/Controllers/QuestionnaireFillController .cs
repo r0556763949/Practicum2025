@@ -31,6 +31,13 @@ namespace practicum_server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetByClientId(int clientId)
+        {
+            var result = await _service.GetByClientIdAsync(clientId);
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

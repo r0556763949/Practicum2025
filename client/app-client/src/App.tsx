@@ -2,6 +2,8 @@
 import './App.css'
 import './styles/new.css'
 import './styles/branding.css'
+import './styles/questionnaire-fill.css'
+import './styles/dashboard.css'
 // import "./styles/all.css"
 // import './styles/styles.css'
 // import './styles/load.css'

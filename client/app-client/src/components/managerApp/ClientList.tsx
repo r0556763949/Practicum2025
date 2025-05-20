@@ -118,8 +118,8 @@ import type React from "react"
 
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import type { ClientDto } from "../../store/interfaces"
-import CreateClient from "../../popaps/CreateClient"
+import type { ClientDto } from "../store/interfaces"
+import CreateClient from "../popaps/CreateClient"
 import { User, UserPlus, Trash2, Eye, Search, Loader, AlertCircle, Users } from "lucide-react"
 
 const ClientList = () => {

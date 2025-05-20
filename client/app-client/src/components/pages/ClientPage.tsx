@@ -34,9 +34,9 @@
 "use client"
 
 import { useParams } from "react-router-dom"
-import ProjectList from "../client/ProjectList"
-import ClientContent from "../client/ClientContent"
-import ClientOptions from "../client/ClientOptions"
+import ProjectList from "../entities/client/ProjectList"
+import ClientContent from "../entities/client/ClientContent"
+import ClientOptions from "../entities/client/ClientOptions"
 import { Folder, Settings } from "lucide-react"
 
 const ClientPage = () => {

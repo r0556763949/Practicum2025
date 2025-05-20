@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router"
 import AppLayout from "./AppLayout"
-import ClientList from "./components/manage/home/ClientList"
+import ClientList from "./components/managerApp/ClientList"
 import Home from "./components/centeral/pages/Home"
-import ManagerHome from "./components/manage/pages/ManagerHome"
+import ManagerHome from "./components/pages/ManagerHome"
 import ClientHome from "./components/clientApp/ClientHome"
-import FilePage from "./components/manage/pages/FilePage"
-import ClientPage from "./components/manage/pages/ClientPage"
-import ProjectPage from "./components/manage/pages/ProjectPage"
+import FilePage from "./components/pages/FilePage"
+import ClientPage from "./components/pages/ClientPage"
+import ProjectPage from "./components/pages/ProjectPage"
 import BrandingPage from "./components/centeral/pages/branding"
+import ClientDashboard from "./components/clientApp/client-dashboard"
 export const Router = createBrowserRouter([
     {
         path: '/', element: <AppLayout />,
@@ -21,7 +22,7 @@ export const Router = createBrowserRouter([
 
 
             
-            { path: '/Client', element: <ClientHome /> },
+            { path: '/Client', element: <ClientDashboard /> },
             { path: '/clientList', element: <ClientList /> },
         ]
 

@@ -3,7 +3,7 @@ import filesReducer from './FileSlice'; // סלאיס הקבצים
 import remarksReducer from './ReMarkSlice';
 import projectsReducer  from './ProjectSlice'
 import ClientSlice from './ClientSlice';
-import questionnaireSlice from './questionnaireSlice';
+import questionnaireSlice from './QuestionnaireSlice';
 import QuestionnaireFillSlice from './QuestionnaireFillSlice';
 
 const store = configureStore({

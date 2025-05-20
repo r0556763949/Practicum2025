@@ -33,6 +33,12 @@ namespace Practicum.Data.Repositories
         {
             return await _context.QuestionnaireFills.ToListAsync();
         }
+        public async Task<IEnumerable<QuestionnaireFill>> GetByClientIdAsync(int clientId)
+        {
+            return await _context.QuestionnaireFills
+                                 .Where(q => q.ClientId == clientId)
+                                 .ToListAsync();
+        }
 
         public async Task UpdateAsync(QuestionnaireFill entity)
         {
