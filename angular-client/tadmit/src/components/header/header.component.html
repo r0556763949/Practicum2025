@@ -1,8 +1,7 @@
 <header class="header" >
-  <!-- [ngClass]="{'scrolled': isScrolled}" -->
-  <div class="header-container">
+  <div class="header-container"   [ngClass]="{'scrolled': isScrolled}">
     <div class="logo" routerLink="/">
-      <img src="../../images/profile.jpg" alt="אסתי מונק - עיצוב ותכנון אדריכלי" class="logo-image">
+      <img src="https://ruth-katz-react-testpnoren.s3.us-east-1.amazonaws.com/practicum2025-tadmit/%D7%9C%D7%95%D7%92%D7%95+%D7%9C%D7%A4%D7%A8%D7%95%D7%A4%D7%99%D7%9C+%D7%91%D7%A2%D7%99%D7%92%D7%95%D7%9C.jpg" alt="אסתי מונק - עיצוב ותכנון אדריכלי" class="logo-image">
     </div>
 
     <nav class="nav-desktop">
@@ -24,7 +23,7 @@
     </button>
   </div>
 
-  <!-- <div class="mobile-menu" [ngClass]="{'open': isMobileMenuOpen}">
+  <div class="mobile-menu" [ngClass]="{'open': isMobileMenuOpen}">
     <ul class="mobile-nav-list">
       <li><a routerLink="/" (click)="closeMobileMenu()">בית</a></li>
       <li><a routerLink="/about" (click)="closeMobileMenu()">אודות</a></li>
@@ -33,5 +32,5 @@
       <li><a routerLink="/contact" (click)="closeMobileMenu()">צור קשר</a></li>
       <li><button class="mobile-system-button" (click)="navigateToSystem()">כניסה למערכת</button></li>
     </ul>
-  </div> -->
+  </div>
 </header>

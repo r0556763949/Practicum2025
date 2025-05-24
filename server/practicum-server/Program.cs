@@ -36,19 +36,14 @@ namespace practicum_server
             var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
             var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 
-            //Console.WriteLine("AccessKey: " + awsAccessKey);
-            //Console.WriteLine("SecretKey: " + awsSecretKey);
-            //Console.WriteLine("Region: " + awsRegion);
-            //Console.WriteLine("BucketName: " + awsBucketName);
-            //Console.WriteLine("JWT_KEY: " + jwtKey);
 
             var s3Client = new AmazonS3Client(
                 awsAccessKey,
                 awsSecretKey,
-                RegionEndpoint.GetBySystemName(awsRegion));
+                RegionEndpoint.GetBySystemName(awsRegion)
+                );
 
             Console.WriteLine($"Connected to S3 bucket: {awsBucketName} successfully!");
-
 
 
             var builder = WebApplication.CreateBuilder(args);

@@ -12,7 +12,6 @@
 "use client"
 
 import { Building2, Calendar, FileText, Info, MapPin, User } from "lucide-react"
-import QuestionnaireComponent from "../../managerApp/googlForm"
 
 const ClientContent = () => {
   return (
@@ -20,7 +19,6 @@ const ClientContent = () => {
       <div className="dashboard-header">
         <h2 className="dashboard-title">לוח בקרה</h2>
       </div>
-      <QuestionnaireComponent></QuestionnaireComponent>
       <div className="dashboard-content">
         <div className="dashboard-section">
           <div className="section-header">

@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common"
 import { Component, HostListener } from "@angular/core"
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router"
 
@@ -7,7 +8,8 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/rou
   selector: "app-header",
   imports:[RouterOutlet,
     RouterLink, 
-    RouterLinkActive,],
+    RouterLinkActive,
+    CommonModule],
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.scss"],
 })

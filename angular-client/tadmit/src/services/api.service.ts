@@ -12,110 +12,76 @@ import { log } from "console"
 })
 export class ApiService {
   private apiUrl = environment.apiUrl
+  private ProjectsheetUrl = 'https://docs.google.com/spreadsheets/d/1I95SNph73WzKNlHxrB-RwHGlxmzAKvNzJ2DXNUD3qVc/gviz/tq?tqx=out:json';
+  private testimonialSheetUrl = 'https://docs.google.com/spreadsheets/d/1O-0HN60l0oyr1mYS0KKHKcrHHoEee7u2p32j45IXxtI/gviz/tq?tqx=out:json';
 
   constructor(private http: HttpClient) {}
 
-  private mockProjects: Project[] = [
-    {
-      id: 1,
-      title: "פרויקט הדמיה 1",
-      description: "תיאור לפרויקט הדמיה ראשון",
-      location: "תל אביב",
-      year: 2022,
-      imageUrl: "assets/images/project1.jpg",
-      thumbnailUrl: "assets/images/thumb1.jpg",
-      category: "מגורים",
-    },
-    {
-      id: 2,
-      title: "פרויקט הדמיה 2",
-      description: "תיאור לפרויקט הדמיה שני",
-      location: "ירושלים",
-      year: 2021,
-      imageUrl: "assets/images/project2.jpg",
-      thumbnailUrl: "assets/images/thumb2.jpg",
-      category: "מסחרי",
-    },
-    {
-      id: 3,
-      title: "פרויקט הדמיה 2",
-      description: "תיאור לפרויקט הדמיה שני",
-      location: "ירושלים",
-      year: 2021,
-      imageUrl: "assets/images/project2.jpg",
-      thumbnailUrl: "assets/images/thumb2.jpg",
-      category: "מסחרי",
-    },
-  ];
-
-  // נתוני דמה להמלצות
-  private mockTestimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: "דני כהן",
-      project: "בניין מגורים יוקרתי",
-      content: "חוויה מדהימה! השירות והביצוע היו מעולים.iiiiiiiiii\nhhhhhhhhhhhhhh\nhh\n\nuuuuuuuuu\ngg hghj",
-      rating: 5,
-      imageUrl: "assets/images/testimonial1.jpg",
-    },
-    {
-      id: 2,
-      name: "שרה לוי",
-      project: "מרכז מסחרי מודרני",
-      content: "שירות מקצועי ויחס אישי.",
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "שרה לוי",
-      project: "מרכז מסחרי מודרני",
-      content: "שירות מקצועי ויחס אישי.",
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "שרה לוי",
-      project: "מרכז מסחרי מודרני",
-      content: "שירות מקצועי ויחס אישי.",
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "שרה לוי",
-      project: "מרכז מסחרי מודרני",
-      content: "שירות מקצועי ויחס אישי.",
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "שרה לוי",
-      project: "מרכז מסחרי מודרני",
-      content: "שירות מקצועי ויחס אישי.",
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "שרה לוי",
-      project: "מרכז מסחרי מודרני",
-      content: "שירות מקצועי ויחס אישי.",
-      rating: 4,
-    },
-  ];
-
 
   getProjects(): Observable<Project[]> {
-    // return this.http.get<Project[]>(`${this.apiUrl}/projects`)
-    return of(this.mockProjects);
+    return new Observable<Project[]>((observer) => {
+      this.http.get(this.ProjectsheetUrl, { responseType: 'text' }).subscribe({
+        next: (res) => {
+          const json = JSON.parse(res.substring(47, res.length - 2)); // הסרת עטיפת הפונקציה של Google
+          const rows = json.table.rows;
+  
+          const projects: Project[] = rows.map((row:any, index:any) => {
+            const c = row.c;
+            return {
+              id: Number(c[0]?.v) || 0,
+              title: c[1]?.v || '',
+              description: c[2]?.v || '',
+              location: c[3]?.v || '',
+              year: Number(c[4]?.v) || 0,
+              imageUrl: c[5]?.v || '',
+              thumbnailUrl: c[6]?.v || '',
+              category: c[7]?.v || '',
+            };
+          });
+          console.log("projects: "+projects[0].imageUrl);
+          
+          observer.next(projects);
+          observer.complete();
+        },
+        error: (err) => {
+          console.error('שגיאה בשליפת נתונים מגוגל שיט', err);
+          observer.error(err);
+        }
+      });
+    });
   }
 
   getTestimonials(): Observable<Testimonial[]> {
-    // return this.http.get<Testimonial[]>(`${this.apiUrl}/testimonials`)
-    return of(this.mockTestimonials);
+    return new Observable<Testimonial[]>((observer) => {
+      this.http.get(this.testimonialSheetUrl, { responseType: 'text' }).subscribe({
+        next: (res) => {
+          const json = JSON.parse(res.substring(47, res.length - 2));
+          const rows = json.table.rows;
+  
+          const testimonials: Testimonial[] = rows.map((row: any) => {
+            const c = row.c;
+            return {
+              id: Number(c[0]?.v) || 0,
+              name: c[1]?.v || '',
+              project: c[2]?.v || '',
+              content: c[3]?.v || '',
+              rating: Number(c[4]?.v) || 0,
+              imageUrl: c[5]?.v || '',
+            };
+          });
+  
+          observer.next(testimonials);
+          observer.complete();
+        },
+        error: (err) => {
+          console.error('שגיאה בשליפת המלצות מהשיט', err);
+          observer.error(err);
+        }
+      });
+    });
   }
 
-  submitContactForm(formData: ContactForm): Observable<any> {
-    return this.http.post(`${this.apiUrl}/contact`, formData)
-    console.log("submit!");
-    
+  submitContactForm(data:ContactForm):Observable<any>{
+    return this.http.post(this.apiUrl+"/Email/ContactForm",data);
   }
 }

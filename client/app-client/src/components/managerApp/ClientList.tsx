@@ -1,192 +1,44 @@
-// import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { ClientDto } from "../../store/interfaces";
-// import CreateClient from "../../popaps/CreateClient";
-
-// const ClientList = () => {
-//   const [clients, setClients] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [isPopupOpen, setIsPopupOpen] = useState(false);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     fetchClients();
-//   }, []);
-
-//   const fetchClients = async () => {
-//     try {
-//       const response = await fetch("https://localhost:7156/api/Client", {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("Failed to fetch clients");
-//       }
-
-//       const data = await response.json();
-//       setClients(data);
-//       setLoading(false);
-//     } catch (err: any) {
-//       setError(err.message);
-//       setLoading(false);
-//     }
-//   };
-
-
-//   const handleDeleteClient = async (clientId: number) => {
-//     if (window.confirm("Are you sure you want to delete this client?")) {
-//       try {
-//         const response = await fetch(`https://localhost:7156/api/Client/${clientId}`, {
-//           method: "DELETE",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         });
-
-//         if (!response.ok) {
-//           throw new Error("Failed to delete client");
-//         }
-
-//         setClients((prevClients) => prevClients.filter((client:any) => client.id !== clientId));
-//       } catch (err: any) {
-//         setError(err.message);
-//       }
-//     }
-//   };
-
-//   const handleClientClick = (client: ClientDto) => {
-//     navigate(`/ClientPage/${client.id}`);
-//   };
-
-//   if (loading) return <p>Loading clients...</p>;
-//   if (error) return <p style={{ color: "red", fontSize: "12px" }}>{error}</p>;
-
-//   return (
-//     <div className="ClientList-container">
-//       <button
-//         className="primary-button"
-//         onClick={() => setIsPopupOpen(true)}
-//         style={{ marginTop: "20px" }}
-//       >
-//         הוסף לקוח
-//       </button>
-//       {isPopupOpen && <CreateClient onClose={() => { setIsPopupOpen(false); fetchClients(); }} />}
-//       <h1 className="title">Client List</h1>
-//       <div className="listContainer">
-//         <ul className="list">
-//           {clients.map((client: ClientDto) => (
-//             <li key={client.id} className="listItem">
-//               <div className="clientInfo">
-//                 <strong className="clientName">{client.name}</strong>
-//               </div>
-//               <div>
-//                 <button onClick={() => handleDeleteClient(client.id)} className="primary-button">
-//                   Delete
-//                 </button>
-//                 <button
-//                   onClick={() => handleClientClick(client)}
-//                   className="primary-button"
-//                 >
-//                   View Client
-//                 </button>
-//               </div>
-//             </li>
-//           ))}
-//         </ul>
-//         {clients.length > 10 && (
-//           <div className="scrollContainer">
-//             <p className="scrollText">Scroll for more...</p>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-
-
-// export default ClientList;
-
-
-"use client"
 
 import type React from "react"
 
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import type { ClientDto } from "../store/interfaces"
 import CreateClient from "../popaps/CreateClient"
 import { User, UserPlus, Trash2, Eye, Search, Loader, AlertCircle, Users } from "lucide-react"
+import {
+  fetchAllClients,
+  deleteClient,
+  Client,
+} from "../store/ClientSlice";
+import { AppDispatch, RootState } from "../store/Store"
+import { useDispatch, useSelector } from "react-redux"
 
 const ClientList = () => {
-  const [clients, setClients] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>();
+  const { clients, loading, error } = useSelector((state: RootState) => state.clients);
 
   useEffect(() => {
-    fetchClients()
-  }, [])
+    dispatch(fetchAllClients())
+  }, [dispatch])
 
-  const fetchClients = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch("https://localhost:7156/api/Client", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch clients")
-      }
-
-      const data = await response.json()
-      setClients(data)
-      setError("")
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleDeleteClient = async (clientId: number, e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleDeleteClient = (clientId: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (window.confirm("האם אתה בטוח שברצונך למחוק לקוח זה?")) {
-      try {
-        const response = await fetch(`https://localhost:7156/api/Client/${clientId}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to delete client")
-        }
-
-        setClients((prevClients) => prevClients.filter((client: any) => client.id !== clientId))
-      } catch (err: any) {
-        setError(err.message)
-      }
+      dispatch(deleteClient(clientId));
     }
-  }
+  };
 
-  const handleClientClick = (client: ClientDto) => {
+
+  const handleClientClick = (client: Client) => {
     navigate(`/ClientPage/${client.id}`)
   }
 
-  const filteredClients = clients.filter((client: ClientDto) =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  const filteredClients = clients.filter(client =>
+    client.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="clients-container">
@@ -212,7 +64,7 @@ const ClientList = () => {
         <CreateClient
           onClose={() => {
             setIsPopupOpen(false)
-            fetchClients()
+            fetchAllClients()
           }}
         />
       )}
@@ -242,7 +94,7 @@ const ClientList = () => {
               <p>לא נמצאו לקוחות</p>
             </div>
           ) : (
-            filteredClients.map((client: ClientDto) => (
+            filteredClients.map((client: Client) => (
               <div key={client.id} className="client-card" onClick={() => handleClientClick(client)}>
                 <div className="client-avatar">
                   <User className="avatar-icon" />

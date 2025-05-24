@@ -78,3 +78,10 @@ dist-ssr/
 *.sln
 *.sw?
 
+# Angular extra
+.angular/cache/
+.angular/config.json
+*.tsbuildinfo
+*.tmp
+*.temp
+e2e/

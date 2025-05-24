@@ -1,23 +1,22 @@
 <div class="testimonial-card">
   <div class="testimonial-content">
     <div class="testimonial-stars">
-      <!-- *ngFor="let star of starsArray" -->
       <i class="icon-star" ></i>
       <i class="icon-star" ></i>
       <i class="icon-star" ></i>
     </div>
     <p class="testimonial-text">{{testimonial.content}}</p>
-    <div class="testimonial-author">
-      @if(testimonial.imageUrl){
-        <div class="author-image">
-          <img [src]="testimonial.imageUrl" [alt]="testimonial.name">
-        </div>
-      }
-
-      <div class="author-info">
-        <h4 class="author-name">{{testimonial.name}}</h4>
-        <p class="author-project">{{testimonial.project}}</p>
+  </div>
+  <div class="testimonial-author">
+    @if(testimonial.imageUrl){
+      <div class="author-image">
+        <img [src]="testimonial.imageUrl" [alt]="testimonial.name">
       </div>
+    }
+
+    <div class="author-info">
+      <h4 class="author-name">{{testimonial.name}}</h4>
+      <p class="author-project">{{testimonial.project}}</p>
     </div>
   </div>
 </div>

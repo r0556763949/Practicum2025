@@ -4,8 +4,11 @@
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  height: 400px;
-  
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+ padding: 30px;
   &:hover {
     transform: translateY(-10px);
     box-shadow: 0 8px 30px rgba(0, 51, 102, 0.15);
@@ -14,6 +17,7 @@
 
 .testimonial-content {
   padding: 2rem;
+  height: 200px;
 }
 
 .testimonial-stars {
@@ -35,6 +39,14 @@
   font-style: italic;
   position: relative;
   
+  max-height: 10rem; /* גובה מקסימלי לטקסט */
+  overflow-y: auto;
+  padding-right: 0.5rem;
+
+  /* הסתרת הסרגל בגלילה */
+  scrollbar-width: none; /* עבור Firefox */
+  -ms-overflow-style: none; /* עבור IE 10+ */
+  
   &::before {
     content: '"';
     font-size: 3rem;
@@ -46,6 +58,10 @@
   }
 }
 
+
+.testimonial-text::-webkit-scrollbar {
+  display: none; /* עבור Chrome, Safari */
+}
 .testimonial-author {
   display: flex;
   align-items: center;

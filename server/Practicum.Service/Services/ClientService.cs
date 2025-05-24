@@ -37,20 +37,6 @@ namespace Practicum.Service.Services
 
             return _mapper.Map<IEnumerable<ClientDto>>(clients);
         }
-        //public async Task<Client> Register(string name, string email, string password)
-        //{
-
-        //    var client = new Client
-        //    {
-        //        Name = name,
-        //        Email = email,
-        //        PasswordHash = _passwordService.SetPassword(password),
-        //        Role = "Client"
-        //    };
-
-        //    await  _clientRepository.AddAsync(client);
-        //    return client;
-        //}
 
         public string Login(string email, string password)
         {

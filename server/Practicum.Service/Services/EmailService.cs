@@ -5,37 +5,50 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Practicum.Core.DTOs;
 
 namespace Practicum.Service.Services
 {
     public class EmailService
     {
-        private readonly string _fromAddress;
-        private readonly string _fromName;
+        private readonly string _ManagerAddress;
+        private readonly string _ManagerName;
         private readonly string _appPassword;
 
         public EmailService()
         {
-            _fromAddress = Environment.GetEnvironmentVariable("EMAIL_ADDRESS");
-            _fromName = Environment.GetEnvironmentVariable("EMAIL_NAME") ?? "Architect App";
+            _ManagerAddress = Environment.GetEnvironmentVariable("EMAIL_ADDRESS");
+            _ManagerName = Environment.GetEnvironmentVariable("EMAIL_NAME") ?? "Architect App";
             _appPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
         }
-        public async Task SendWelcomeEmail(string email, string name, string password)
+        private SmtpClient CreateSmtpClient()
         {
-            var from = new MailAddress(_fromAddress, _fromName);
-            var toAddress = new MailAddress(email, name);
-            const string subject = "ברוך הבא לאתר!";
-            string body = $"שלום {name},\n\nנרשמת בהצלחה.\nמייל: {email}  \n  סיסמה: {password}   \n\nבהצלחה!";
-
-            var smtp = new SmtpClient
+            return new SmtpClient
             {
                 Host = "smtp.gmail.com",
                 Port = 587,
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(_fromAddress, _appPassword)
+                Credentials = new NetworkCredential(_ManagerAddress, _appPassword)
             };
+        }
+        public async Task SendWelcomeEmail(string email, string name, string password)
+        {
+            var from = new MailAddress(_ManagerAddress, _ManagerName);
+            var toAddress = new MailAddress(email, name);
+            const string subject = "ברוך הבא לאתר!";
+            string body = $"שלום {name},\n\nנרשמת בהצלחה.\nמייל: {email}  \n  סיסמה: {password}   \n\nבהצלחה!";
+
+            //var smtp = new SmtpClient
+            //{
+            //    Host = "smtp.gmail.com",
+            //    Port = 587,
+            //    EnableSsl = true,
+            //    DeliveryMethod = SmtpDeliveryMethod.Network,
+            //    UseDefaultCredentials = false,
+            //    Credentials = new NetworkCredential(_ManagerAddress, _appPassword)
+            //};
 
             using var message = new MailMessage(from, toAddress)
             {
@@ -43,7 +56,35 @@ namespace Practicum.Service.Services
                 Body = body
             };
 
+            using var smtp = CreateSmtpClient();
             await smtp.SendMailAsync(message);
+        }
+        public async Task SendContactForm(ContactFormDto form)
+        {
+            try
+            {
+                var from = new MailAddress(_ManagerAddress, "טופס צור קשר");
+                var to = new MailAddress(_ManagerAddress, _ManagerName);
+
+                string subject = "פנייה חדשה מהאתר";
+                string body = $"התקבלה פנייה חדשה מהאתר:\n\n" +
+                              $"שם: {form.Name}\n" +
+                              $"אימייל: {form.Email}\n" +
+                              $"טלפון: {form.Phone}\n" +
+                              $"הודעה:\n{form.Message}";
+
+                using var message = new MailMessage(from, to)
+                {
+                    Subject = subject,
+                    Body = body
+                };
+                using var smtp = CreateSmtpClient();
+                await smtp.SendMailAsync(message);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("שליחת המייל נכשלה", ex);
+            }
         }
 
     }

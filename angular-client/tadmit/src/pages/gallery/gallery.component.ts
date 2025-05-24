@@ -3,10 +3,11 @@ import  { ApiService } from "../../services/api.service"
 import  { Project } from "../../models/project.model"
 import { GalleryItemComponent } from "../../components/gallery-item/gallery-item.component"
 import { LoadingSpinnerComponent } from "../../components/loading-spinner/loading-spinner.component"
+import { ImageModalComponent } from "../../components/image-modal/image-modal.component"
 
 @Component({
   selector: "app-gallery",
-  imports:[GalleryItemComponent,LoadingSpinnerComponent],
+  imports:[GalleryItemComponent,LoadingSpinnerComponent,ImageModalComponent],
   templateUrl: "./gallery.component.html",
   styleUrls: ["./gallery.component.scss"],
 })

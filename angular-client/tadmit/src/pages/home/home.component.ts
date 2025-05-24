@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from "../../components/loading-spinner/loadin
 import { ProjectCardComponent } from "../../components/project-card/project-card.component"
 import { TestimonialCardComponent } from "../../components/testimonial-card/testimonial-card.component"
 import { ImageModalComponent } from "../../components/image-modal/image-modal.component"
+import { RouterLink, RouterLinkActive } from "@angular/router"
 
 @Component({
   selector: "app-home",
@@ -17,7 +18,9 @@ import { ImageModalComponent } from "../../components/image-modal/image-modal.co
     LoadingSpinnerComponent,
     ProjectCardComponent,
     TestimonialCardComponent,
-  ImageModalComponent],
+    ImageModalComponent,
+    RouterLink,
+    RouterLinkActive],
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })

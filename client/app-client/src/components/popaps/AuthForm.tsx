@@ -1,11 +1,9 @@
 
-
-"use client"
-
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import decodeToken from "../centeral/authUtils"
 import { Eye, EyeOff, LogIn } from "lucide-react"
+import axiosInstance from "../store/axiosInstance"
 
 const AuthForm = ({ onClose }: { onClose: any }) => {
   const navigate = useNavigate()
@@ -18,35 +16,28 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     setIsLoading(true)
-
-    const url = "https://localhost:7156/login"
+  
+    const url = "/login" 
     const payload = { email, password }
-
+  
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.Message || "An error occurred")
-      }
+      const response = await axiosInstance.post(url, payload)
+      const data = response.data
+  
       setMessage("Login successful!")
       sessionStorage.setItem("token", data.token)
+  
       const tokenPayload = decodeToken(data.token)
+  
       setTimeout(() => {
         if (!tokenPayload) {
           console.error("Invalid token payload")
           return
         }
+  
         const role = tokenPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
         onClose()
-
+  
         if (role === "Client") {
           navigate("/Client")
         } else if (role === "Manager") {
@@ -56,11 +47,13 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
         }
       }, 2000)
     } catch (error: any) {
-      setMessage(error.message)
+      const messageFromServer = error.response?.data?.message || error.message || "שגיאה לא ידועה"
+      setMessage(messageFromServer)
     } finally {
       setIsLoading(false)
     }
   }
+  
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">

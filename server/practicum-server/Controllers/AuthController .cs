@@ -5,6 +5,8 @@ using Practicum.Service.Services;
 
 namespace practicum_server.Controllers
 {
+    [ApiController]
+    [Route("api")]
     public class AuthController : Controller
     {
         private readonly ClientService _clientService;
@@ -14,32 +16,28 @@ namespace practicum_server.Controllers
             _clientService = clientService;
         }
 
-        //[HttpPost("register")]
-        //public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-        //{
-        //    var client = await _clientService.Register(request.Name, request.Email, request.Password);
-
-        //    // כעת ניתן לגשת לתכונות של client כמו Email
-        //    return Ok(new
-        //    {
-        //        Message = "User registered successfully",
-        //        Client = new
-        //        {
-        //            Email = client.Email
-        //        }
-        //    });
-        //}
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequestDto request)
         {
-            var token = _clientService.Login(request.Email, request.Password);
-            if (token == null)
+            try
             {
-                return Unauthorized(new { Message = "Invalid credentials" });
-            }
+                var token = _clientService.Login(request.Email, request.Password);
+                if (token == null)
+                {
+                    return Unauthorized(new { message = "כתובת מייל או סיסמה שגויים" });
+                }
 
-            return Ok(new { Token = token });
+                return Ok(new { token });
+            }
+            catch (Exception ex)
+            {
+                // לוג או כתיבה ליומן שגיאות
+                Console.WriteLine($"Login Error: {ex.Message}");
+
+                // שליחת תגובה מתאימה לקליינט
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "אירעה שגיאה פנימית בשרת. נסה שוב מאוחר יותר." });
+            }
         }
     }
 }
