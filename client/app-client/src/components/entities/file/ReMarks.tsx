@@ -174,10 +174,6 @@ const RemarksComponent = ({ fileId, clientId }: RemarksComponentProps) => {
 
   return (
     <div className="chat-container">
-      <div className="chat-header">
-        <MessageSquare className="chat-icon" />
-        <h3 className="chat-title">שיחה</h3>
-      </div>
 
       {statusMessage && (
         <div className={`chat-status ${statusMessage.type}`}>
@@ -222,7 +218,7 @@ const RemarksComponent = ({ fileId, clientId }: RemarksComponentProps) => {
                 className={`chat-message ${isOwner ? "architect" : "client"} ${isCurrentUser ? "current-user" : ""}`}
               >
                 <div className="message-avatar">
-                  {isOwner ? <UserCog className="avatar-icon" /> : <User className="avatar-icon" />}
+                  {isOwner ? <User className="avatar-icon" /> : <UserCog className="avatar-icon" />}
                 </div>
 
                 <div className="message-content">

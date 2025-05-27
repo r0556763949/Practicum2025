@@ -1,12 +1,13 @@
 import { CommonModule } from "@angular/common"
 import { Component, HostListener } from "@angular/core"
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router"
+import { Router, RouterLink, RouterLinkActive } from "@angular/router"
+import { environment } from "../../environments/environment.prod"
 
 
 
 @Component({
   selector: "app-header",
-  imports:[RouterOutlet,
+  imports:[
     RouterLink, 
     RouterLinkActive,
     CommonModule],
@@ -14,7 +15,8 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/rou
   styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent {
-  isScrolled = false
+  systemUrl = environment.systemUrl;
+  isScrolled=false
   isMobileMenuOpen = false
 
   constructor(private router: Router) {}

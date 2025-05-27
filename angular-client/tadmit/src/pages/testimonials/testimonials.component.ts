@@ -4,11 +4,10 @@ import  { Testimonial } from "../../models/testimonial.model"
 import { RouterLink } from "@angular/router"
 import { TestimonialCardComponent } from "../../components/testimonial-card/testimonial-card.component"
 import { LoadingSpinnerComponent } from "../../components/loading-spinner/loading-spinner.component"
-import { ContactFormComponent } from "../../components/contact-form/contact-form.component"
 
 @Component({
   selector: "app-testimonials",
-  imports:[RouterLink,TestimonialCardComponent,LoadingSpinnerComponent,ContactFormComponent],
+  imports:[RouterLink,TestimonialCardComponent,LoadingSpinnerComponent],
   templateUrl: "./testimonials.component.html",
   styleUrls: ["./testimonials.component.scss"],
 })

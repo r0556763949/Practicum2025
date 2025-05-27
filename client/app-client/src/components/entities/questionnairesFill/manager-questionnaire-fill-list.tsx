@@ -172,7 +172,7 @@ const ManagerQuestionnaireFillList = ({ clientId, projectId }: ManagerQuestionna
                   <td>
                     <div className="action-buttons">
                       <button
-                        className="action-button view"
+                        className="action-button edit"
                         onClick={() => handleViewDetails(fill)}
                         aria-label="צפה בפרטי שאלון"
                         disabled={!fill.filledAt}
@@ -180,7 +180,7 @@ const ManagerQuestionnaireFillList = ({ clientId, projectId }: ManagerQuestionna
                         <Eye className="action-icon" />
                       </button>
                       <button
-                        className="action-button delete"
+                        className="action-button edit"
                         onClick={() => handleDeleteQuestionnaireFill(fill.id)}
                         aria-label="מחק שאלון"
                       >

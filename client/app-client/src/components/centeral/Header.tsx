@@ -370,7 +370,7 @@ const Header = () => {
             ) : (
               <>
                 <User className="button-icon" />
-                <span>כניסה למערכת</span>
+                <span>התחברות</span>
               </>
             )}
           </button>

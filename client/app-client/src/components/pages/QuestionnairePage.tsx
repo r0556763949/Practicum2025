@@ -198,7 +198,7 @@ const QuestionnaireManagement = () => {
                     <td>
                       <div className="action-buttons">
                         <button
-                          className="action-button view"
+                          className="action-button edit"
                           onClick={() => handleViewDetails(questionnaire)}
                           aria-label="צפה בפרטי שאלון"
                         >
@@ -212,7 +212,7 @@ const QuestionnaireManagement = () => {
                           <Edit className="action-icon" />
                         </button>
                         <button
-                          className="action-button delete"
+                          className="action-button edit"
                           onClick={() => handleDeleteQuestionnaire(questionnaire.id)}
                           aria-label="מחק שאלון"
                         >

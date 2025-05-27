@@ -42,6 +42,10 @@ const ClientList = () => {
 
   return (
     <div className="clients-container">
+      <div className = "manager-header">
+      <Users className="manager-icon" />
+      <h2 className="manager-title">ניהול לקוחות</h2>
+      </div>
       <div className="clients-header">
         <button className="add-client-button" onClick={() => setIsPopupOpen(true)}>
           <UserPlus className="button-icon" />
@@ -69,8 +73,7 @@ const ClientList = () => {
         />
       )}
 
-      <Users className="manager-icon" />
-      <h2 className="manager-title">ניהול לקוחות</h2>
+      
 
       {loading && (
         <div className="clients-loading">

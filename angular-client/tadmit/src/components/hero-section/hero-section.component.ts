@@ -13,7 +13,7 @@ export class HeroSectionComponent {
   @Input() description = "יצירת מרחבים מעוצבים המשלבים פונקציונליות ואסתטיקה"
   @Input() buttonText = "צור קשר"
   @Input() buttonLink = "/contact"
-  @Input() backgroundImage = "../../images/image1.jpg"
+  @Input() backgroundImage = "https://ruth-katz-react-testpnoren.s3.us-east-1.amazonaws.com/practicum2025-tadmit/Salon.jpg"
 
   constructor(private router: Router) {}
 

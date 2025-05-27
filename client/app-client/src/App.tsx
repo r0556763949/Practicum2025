@@ -4,7 +4,7 @@ import './styles/new.css'
 import './styles/branding.css'
 import './styles/questionnaire-fill.css'
 import './styles/dashboard.css'
-// import "./styles/all.css"
+import "./styles/home.css"
 // import './styles/styles.css'
 // import "./styles/Popaps.css"
 // import "./styles/popapPassword.css"
@@ -20,7 +20,6 @@ function App() {
     <>
       <React.StrictMode>
         <Provider store={store}>
-
           <RouterProvider router={Router} />
         </Provider>
       </React.StrictMode>

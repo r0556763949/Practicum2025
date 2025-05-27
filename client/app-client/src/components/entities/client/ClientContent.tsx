@@ -1,34 +1,26 @@
 
-// const ClientContent = () => {
-//     return (
-//         <div >
-//             <h2 >Content goes here...</h2>
-//         </div>
-//     );
-// };
-
-
-// export default ClientContent;
 "use client"
 
 import { Building2, Calendar, FileText, Info, MapPin, User } from "lucide-react"
+import ManagerQuestionnaireFillList from "../questionnairesFill/manager-questionnaire-fill-list"
 
-const ClientContent = () => {
+const ClientContent = ({ clientId }: { clientId: number }) => {
   return (
     <div className="client-dashboard">
       <div className="dashboard-header">
-        <h2 className="dashboard-title">לוח בקרה</h2>
+        <h2 className="dashboard-title"> עמוד לקוח</h2>
       </div>
       <div className="dashboard-content">
         <div className="dashboard-section">
-          <div className="section-header">
+        <ManagerQuestionnaireFillList clientId={clientId}></ManagerQuestionnaireFillList>
+          {/* <div className="section-header">
             <Info className="section-icon" />
             <h3 className="section-title">מידע כללי</h3>
           </div>
           <p className="section-description">
             ברוכים הבאים למערכת הניהול של אסתי מונק אדריכלות. כאן תוכלו לנהל את הפרויקטים שלכם, לצפות בקבצים ולתקשר עם
             צוות האדריכלים.
-          </p>
+          </p> */}
         </div>
 
         <div className="dashboard-cards">
@@ -88,3 +80,6 @@ const ClientContent = () => {
 }
 
 export default ClientContent
+
+
+

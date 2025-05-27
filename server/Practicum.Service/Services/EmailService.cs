@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Practicum.Core.DTOs;
+using Practicum.Core.IRepositories;
 
 namespace Practicum.Service.Services
 {
@@ -14,12 +15,13 @@ namespace Practicum.Service.Services
         private readonly string _ManagerAddress;
         private readonly string _ManagerName;
         private readonly string _appPassword;
-
-        public EmailService()
+        private readonly IClientRepository _clientRepository;
+        public EmailService(IClientRepository clientRepository)
         {
             _ManagerAddress = Environment.GetEnvironmentVariable("EMAIL_ADDRESS");
             _ManagerName = Environment.GetEnvironmentVariable("EMAIL_NAME") ?? "Architect App";
             _appPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+            _clientRepository = clientRepository;
         }
         private SmtpClient CreateSmtpClient()
         {
@@ -87,5 +89,26 @@ namespace Practicum.Service.Services
             }
         }
 
+        public async Task SendEmailToClient(int userId, string subject, string body)
+        {
+
+            var user = await _clientRepository.GetByIdAsync(userId);
+            if (user == null || string.IsNullOrEmpty(user.Email))
+            {
+                throw new ArgumentException("לא נמצא משתמש עם מזהה זה או שאין לו אימייל");
+            }
+
+            var from = new MailAddress(_ManagerAddress, _ManagerName);
+            var to = new MailAddress(user.Email, user.Name); // אפשר להחליף fullName לפי הצורך
+
+            using var message = new MailMessage(from, to)
+            {
+                Subject = subject,
+                Body = body
+            };
+
+            using var smtp = CreateSmtpClient();
+            await smtp.SendMailAsync(message);
+        }
     }
 }
