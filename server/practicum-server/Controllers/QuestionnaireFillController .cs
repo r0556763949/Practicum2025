@@ -5,8 +5,8 @@ using Practicum.Service.Services;
 
 namespace practicum_server.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class QuestionnaireFillController : ControllerBase
     {
         private readonly QuestionnaireFillService _service;

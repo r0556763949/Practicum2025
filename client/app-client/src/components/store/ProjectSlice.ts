@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from "./axiosInstance"
 
 // הגדרת סוגי הנתונים
 export interface Project {
@@ -33,8 +33,8 @@ export const fetchProjectsByClientId = createAsyncThunk<ProjectDto[], number>(
   'projects/fetchProjectsByClientId',
   async (clientId, { rejectWithValue }) => {
     try {
-      const response = await axios.get<ProjectDto[]>(
-        `https://localhost:7156/api/clients/${clientId}/projects`
+      const response = await axiosInstance.get<ProjectDto[]>(
+        `/clients/${clientId}/projects`
       );
       return response.data;
     } catch (error: any) {
@@ -48,8 +48,8 @@ export const fetchProject = createAsyncThunk<ProjectDto, { clientId: number; pro
   'projects/fetchProject',
   async ({ clientId, projectId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get<ProjectDto>(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}`
+      const response = await axiosInstance.get<ProjectDto>(
+        `/clients/${clientId}/projects/${projectId}`
       );
       return response.data;
     } catch (error: any) {
@@ -63,8 +63,8 @@ export const createProject = createAsyncThunk<ProjectDto, { clientId: number; pr
   'projects/createProject',
   async ({ clientId, projectData }, { rejectWithValue }) => {
     try {
-      const response = await axios.post<ProjectDto>(
-        `https://localhost:7156/api/clients/${clientId}/projects`,
+      const response = await axiosInstance.post<ProjectDto>(
+        `/clients/${clientId}/projects`,
         projectData,
         {
           headers: { 'Content-Type': 'application/json' },
@@ -76,19 +76,21 @@ export const createProject = createAsyncThunk<ProjectDto, { clientId: number; pr
     }
   }
 );
+
 //Delete
 export const deleteProject = createAsyncThunk<void, { clientId: number; projectId: number }>(
   'projects/deleteProject',
   async ({ clientId, projectId }, { rejectWithValue }) => {
     try {
-      await axios.delete<void>(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}`
+      await axiosInstance.delete<void>(
+        `/clients/${clientId}/projects/${projectId}`
       );
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete project.');
     }
   }
 );
+
 // Slice
 const projectsSlice = createSlice({
   name: 'projects',

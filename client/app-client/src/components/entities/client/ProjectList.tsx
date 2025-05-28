@@ -1,7 +1,4 @@
 
-
-"use client"
-
 import type React from "react"
 
 import { useEffect, useState } from "react"
@@ -10,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 import type { AppDispatch, RootState } from "../../store/Store"
 import { type ProjectDto, deleteProject, fetchProjectsByClientId } from "../../store/ProjectSlice"
 import { Calendar, Folder, Loader, MapPin, Trash2, AlertCircle } from "lucide-react"
+
 
 const ProjectList = ({ clientId }: { clientId: any }) => {
   const dispatch = useDispatch<AppDispatch>()
@@ -64,8 +62,6 @@ const ProjectList = ({ clientId }: { clientId: any }) => {
 
   return (
     <div className="projects-container">
-      {/* <h3 className="projects-title">הפרויקטים שלי</h3> */}
-
       {projects.length === 0 ? (
         <div className="projects-empty">
           <Folder className="empty-icon" />

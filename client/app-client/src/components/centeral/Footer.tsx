@@ -1,28 +1,12 @@
 
-// import logo from "../../images/LOGO1.png"; // עדכני את הנתיב לתמונה שלך
-
-// const Footer = () => {
-//   return (
-//     <footer className="footer">
-//             <img src={logo} alt="Footer Logo" className="footer-image" />
-//     </footer>
-//   );
-// };
-
-// export default Footer;
-
-"use client"
-
 import { Building2, Clock, Mail, MapPin, Phone } from "lucide-react"
-import { useNavigate } from "react-router-dom"
 
 const Footer = () => {
-  const navigate = useNavigate()
 
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-brand" onClick={() => navigate("/")}>
+        <div className="footer-brand" >
           <div className="footer-logo">
             <Building2 className="footer-logo-icon" />
             <div className="footer-logo-text">

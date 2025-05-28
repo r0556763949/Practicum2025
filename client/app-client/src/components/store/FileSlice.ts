@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from "./axiosInstance"
 
-// הגדרת סוגי הנתונים
 interface File {
   id: number;
   name: string;
   description: string;
-  path: string; // שדה חדש עבור path
+  path: string; 
 }
 
 interface FileState {
@@ -17,6 +16,7 @@ interface FileState {
 }
 
 const initialState: FileState = {
+  selectedFileUrl: [],
   files: [],
   loading: false,
   error: null,
@@ -27,8 +27,8 @@ export const fetchFiles = createAsyncThunk<File[], { clientId: number; projectId
   'files/fetchFiles',
   async ({ clientId, projectId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get<File[]>(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files`
+      const response = await axiosInstance.get<File[]>(
+        `clients/${clientId}/projects/${projectId}/files`
       );
       return response.data;
     } catch (error: any) {
@@ -42,8 +42,8 @@ export const addFile = createAsyncThunk<File, { fileData: Omit<File, 'id'>; clie
   'files/addFile',
   async ({ fileData, clientId, projectId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post<File>(
-        `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/confirm-upload`,
+      const response = await axiosInstance.post<File>(
+        `/clients/${clientId}/projects/${projectId}/files/confirm-upload`,
         {
           FileName: fileData.name,
           Description: fileData.description,
@@ -69,8 +69,8 @@ export const getUploadUrl = createAsyncThunk<UploadUrlResponse, { clientId: numb
     'files/getUploadUrl',
     async ({ clientId, projectId, name }, { rejectWithValue }) => {
         try {
-            const response = await axios.post<UploadUrlResponse>(
-                `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/upload-url`,
+            const response = await axiosInstance.post<UploadUrlResponse>(
+                `/clients/${clientId}/projects/${projectId}/files/upload-url`,
                 JSON.stringify(name), // שליחה כ-string ישיר
                 {
                     headers: {
@@ -90,8 +90,8 @@ export const confirmUpload = createAsyncThunk<File, { clientId: number; projectI
     'files/confirmUpload',
     async ({ clientId, projectId, request }, { rejectWithValue }) => {
       try {
-        const response = await axios.post<File>(
-          `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/confirm-upload`,
+        const response = await axiosInstance.post<File>(
+          `/clients/${clientId}/projects/${projectId}/files/confirm-upload`,
           {
             FileName: request.fileName,
             Description: request.description,
@@ -115,7 +115,7 @@ export const deleteFile = createAsyncThunk<number, { clientId: number; projectId
   'files/deleteFile',
   async ({ clientId, projectId, id }, { rejectWithValue }) => {
     try {
-      await axios.delete(`https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${id}`);
+      await axiosInstance.delete(`/clients/${clientId}/projects/${projectId}/files/${id}`);
       return id; // מחזיר את המזהה של הקובץ שנמחק
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete file.');
@@ -128,7 +128,7 @@ export const downloadFile = createAsyncThunk<any, { clientId: number; projectId:
     'files/downloadFile',
     async ({ clientId, projectId, id }, { rejectWithValue }) => {
       try {
-        const response = await axios.get(`https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${id}/download`);
+        const response = await axiosInstance.get(`/clients/${clientId}/projects/${projectId}/files/${id}/download`);
         const downloadUrl = response.data.downloadUrl; // קבלת ה-URL להורדה
         window.location.href = downloadUrl;  // מבצע את ההורדה
         return downloadUrl;
@@ -144,7 +144,7 @@ export const viewFile = createAsyncThunk<any, { clientId: number; projectId: num
     'files/viewFile',
     async ({ clientId, projectId, id }, { rejectWithValue }) => {
       try {
-        const response = await axios.get(`https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${id}/view`);
+        const response = await axiosInstance.get(`/clients/${clientId}/projects/${projectId}/files/${id}/view`);
         const viewUrl = response.data.viewUrl; // קבלת ה-URL לצפייה
         window.open(viewUrl, "_blank"); // פותח את הקובץ בחלון חדש
         return viewUrl;
@@ -158,7 +158,7 @@ export const viewFile = createAsyncThunk<any, { clientId: number; projectId: num
     'files/viewFile',
     async ({ clientId, projectId, id }, { rejectWithValue }) => {
       try {
-        const response = await axios.get(`https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/${id}/view`);
+        const response = await axiosInstance.get(`clients/${clientId}/projects/${projectId}/files/${id}/view`);
         const viewUrl = response.data.viewUrl; // קבלת ה-URL לצפייה
         console.log(viewUrl);
         return viewUrl;
@@ -176,8 +176,8 @@ Blob,
 'files/comparePlans',
 async ({ clientId, projectId, fileId1, fileId2 }, { rejectWithValue }) => {
   try {
-    const response = await axios.get(
-      `https://localhost:7156/api/clients/${clientId}/projects/${projectId}/files/compare-plans/${fileId1}/${fileId2}`,
+    const response = await axiosInstance.get(
+      `/clients/${clientId}/projects/${projectId}/files/compare-plans/${fileId1}/${fileId2}`,
       { responseType: 'blob' } // כדי לקבל את התמונה כ-Blob
     );
     return response.data; // נחזיר Blob

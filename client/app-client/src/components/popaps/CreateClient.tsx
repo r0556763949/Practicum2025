@@ -1,102 +1,9 @@
-// import { useState } from "react";
-
-// const CreateClientPopup = ({ onClose }:{ onClose:any }) => {
-//     const [name, setName] = useState("");
-//     const [email, setEmail] = useState("");
-//     const [address, setAddress] = useState("");
-//     const [phone, setPhone] = useState("");
-//     const [message, setMessage] = useState("");
-
-//   const handleSubmit = async (e:any) => {
-//     e.preventDefault();
-
-//     try {
-//       const response = await fetch("https://localhost:7156/api/Client", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ name, address, email, phone,role: "Client"  }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("Failed to create client");
-//       }
-
-//       setMessage("Client created successfully!");
-//       setTimeout(() => {
-//         setMessage("");
-//         onClose();
-//       }, 2000);
-//     } catch (error:any) {
-//       setMessage(error.message);
-//     }
-//   };
-
- 
-//   return (
-//     <div className="popup-overlay" >
-//       <div className="popup-content" style={{ height: "450px" }}>
-//         <h1 className="big-letter-blue">Create Client</h1>
-//         <form onSubmit={handleSubmit} className="medum-form">
-//           <div className="auth-inputGroup">
-//             <label className="auth-label">Name</label>
-//             <input
-//               type="text"
-//               value={name}
-//               onChange={(e) => setName(e.target.value)}
-//               className="input"
-//               required
-//             />
-//           </div>
-
-//           <div className="auth-inputGroup">
-//             <label className="auth-label">Email</label>
-//             <input
-//               type="email"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               className="input"
-//               required
-//             />
-//           </div>
-
-//           <div className="auth-inputGroup">
-//             <label className="auth-label">Address</label>
-//             <input
-//               type="text"
-//               value={address}
-//               onChange={(e) => setAddress(e.target.value)}
-//               className="input"
-//             />
-//           </div>
-
-//           <div className="auth-inputGroup">
-//             <label className="auth-label">Phone</label>
-//             <input
-//               type="text"
-//               value={phone}
-//               onChange={(e) => setPhone(e.target.value)}
-//               className="input"
-//             />
-//           </div>
-
-//           <button type="submit" className="primary-button">Create</button>
-//           <button type="button" className="cancel-button" onClick={onClose}>Cancel</button>
-//         </form>
-
-//         {message && <p className="message-text">{message}</p>}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CreateClientPopup;
-
-"use client"
 
 import { useState } from "react"
 import { Mail, MapPin, Phone, Plus, User, X } from "lucide-react"
+import { AppDispatch } from "../store/Store"
+import { useDispatch } from "react-redux"
+import { createClient } from "../store/ClientSlice"
 
 const CreateClientPopup = ({ onClose }: { onClose: any }) => {
   const [name, setName] = useState("")
@@ -105,31 +12,33 @@ const CreateClientPopup = ({ onClose }: { onClose: any }) => {
   const [phone, setPhone] = useState("")
   const [message, setMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-
+  const dispatch = useDispatch<AppDispatch>()
+  
   const handleSubmit = async (e: any) => {
     e.preventDefault()
+    if (!name || !email) {
+      setMessage("יש להזין שם ואימייל")
+      return
+    }
+  
     setIsLoading(true)
-
+    setMessage("")
+  
     try {
-      const response = await fetch("https://localhost:7156/api/Client", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, address, email, phone, role: "Client" }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to create client")
+      const resultAction = await dispatch(
+        createClient({ name, email, address, phone, role: "Client", id: 0 })
+      )
+  
+      if (createClient.fulfilled.match(resultAction)) {
+        setMessage("הלקוח נוצר בהצלחה!")
+        setTimeout(() => {
+          onClose()
+        }, 1500)
+      } else {
+        setMessage("שגיאה ביצירת הלקוח")
       }
-
-      setMessage("הלקוח נוצר בהצלחה!")
-      setTimeout(() => {
-        setMessage("")
-        onClose()
-      }, 2000)
-    } catch (error: any) {
-      setMessage(error.message)
+    } catch (error) {
+      setMessage("אירעה שגיאה לא צפויה")
     } finally {
       setIsLoading(false)
     }

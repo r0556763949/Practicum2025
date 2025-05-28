@@ -1,11 +1,8 @@
 
-
-"use client"
-
 import { useParams } from "react-router-dom"
-import FileActionsPanel from "../entities/file/FileActionsPanelProps"
-import RemarksComponent from "../entities/file/ReMarks"
-import FilePreview from "../entities/project/FilePreview"
+import FileActionsPanel from "../../entities/file/FileActionsPanelProps"
+import RemarksComponent from "../../entities/file/ReMarks"
+import FilePreview from "../../entities/project/FilePreview"
 import { FileText, MessageSquare } from "lucide-react"
 
 const FilePage = () => {

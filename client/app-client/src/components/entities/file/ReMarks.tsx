@@ -8,19 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../../store/Store"
 import { fetchRemarksByFileId, addRemark, updateRemark, deleteRemark, fetchFileOwner } from "../../store/ReMarkSlice"
 import decodeToken from "../../centeral/authUtils"
-import {
-  MessageSquare,
-  Send,
-  MoreVertical,
-  Edit,
-  Trash2,
-  Save,
-  X,
-  Loader,
-  AlertTriangle,
-  User,
-  UserCog,
-  CheckCircle,
+import { MessageSquare,  Send,  MoreVertical,  Edit,  Trash2,  Save, X,  Loader,  AlertTriangle,  User, UserCog,  CheckCircle,
 } from "lucide-react"
 
 interface RemarksComponentProps {
@@ -28,7 +16,7 @@ interface RemarksComponentProps {
   clientId: number
 }
 
-const RemarksComponent = ({ fileId, clientId }: RemarksComponentProps) => {
+const RemarksComponent = ({ fileId }: RemarksComponentProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const { remarks, loading, error } = useSelector((state: RootState) => state.remarks)
   const [newRemark, setNewRemark] = useState("")
@@ -236,7 +224,7 @@ const RemarksComponent = ({ fileId, clientId }: RemarksComponentProps) => {
                       className="message-actions-toggle"
                       onClick={(e) => handleDropdownToggle(remark.id, e)}
                       aria-label="אפשרויות הודעה"
-                    >
+                       >
                       <MoreVertical className="actions-icon" />
                     </button>
 
@@ -281,10 +269,10 @@ const RemarksComponent = ({ fileId, clientId }: RemarksComponentProps) => {
                   onClick={handleSaveUpdate}
                   disabled={!newRemark.trim() || isSubmitting}
                 >
-                  {isSubmitting ? <span className="loading-spinner"></span> : <Save className="button-icon" />}
+                  {isSubmitting ? <span className="loading-spinner"></span> : <Save className="button-icon center" />}
                 </button>
                 <button className="chat-button cancel" onClick={handleCancelUpdate}>
-                  <X className="button-icon" />
+                  <X className="button-icon center" />
                 </button>
               </>
             ) : (
@@ -293,7 +281,7 @@ const RemarksComponent = ({ fileId, clientId }: RemarksComponentProps) => {
                 onClick={handleAddRemark}
                 disabled={!newRemark.trim() || isSubmitting}
               >
-                {isSubmitting ? <span className="loading-spinner"></span> : <Send className="button-icon" />}
+                {isSubmitting ? <span className="loading-spinner"></span> : <Send className="button-icon center" />}
               </button>
             )}
           </div>

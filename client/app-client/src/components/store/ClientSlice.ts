@@ -1,6 +1,6 @@
-// clientSlice.ts
+
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from "./axiosInstance"
 
 export interface Client {
     id: number;
@@ -30,7 +30,7 @@ export const fetchAllClients = createAsyncThunk<Client[]>(
     'client/fetchAllClients',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get<Client[]>('https://localhost:7156/api/Client');
+            const response = await axiosInstance.get<Client[]>('/Client');
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch clients');
@@ -43,7 +43,7 @@ export const fetchClientById = createAsyncThunk<Client, number>(
     'client/fetchClientById',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.get<Client>(`https://localhost:7156/api/Client/${id}`);
+            const response = await axiosInstance.get<Client>(`/Client/${id}`);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch client');
@@ -51,13 +51,13 @@ export const fetchClientById = createAsyncThunk<Client, number>(
     }
 );
 
-// עדכון פרטים כלליים
+//Update details
 export const updateClientDetails = createAsyncThunk<Client, { id: number; data: Partial<Client> }>(
     'client/updateClientDetails',
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.put<Client>(
-                `https://localhost:7156/api/Client/${id}`,
+            const response = await axiosInstance.put<Client>(
+                `/Client/${id}`,
                 data,
                 { headers: { 'Content-Type': 'application/json' } }
             );
@@ -68,13 +68,13 @@ export const updateClientDetails = createAsyncThunk<Client, { id: number; data: 
     }
 );
 
-// עדכון סיסמה בלבד
+// Update password
 export const updateClientPassword = createAsyncThunk<void, { id: number; newPassword: string }>(
     'client/updateClientPassword',
     async ({ id, newPassword }, { rejectWithValue }) => {
         try {
-            await axios.put(
-                `https://localhost:7156/api/Client/${id}/password`,
+            await axiosInstance.put(
+                `/Client/${id}/password`,
                 JSON.stringify(newPassword),
                 { headers: { 'Content-Type': 'application/json' } }
             );
@@ -89,7 +89,7 @@ export const deleteClient = createAsyncThunk<number, number>(
     'client/deleteClient',
     async (id, { rejectWithValue }) => {
         try {
-            await axios.delete(`https://localhost:7156/api/Client/${id}`);
+            await axiosInstance.delete(`/Client/${id}`);
             return id;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'Failed to delete client');
@@ -102,8 +102,8 @@ export const createClient = createAsyncThunk<Client, Client>(
     'client/createClient',
     async (clientData, { rejectWithValue }) => {
         try {
-            const response = await axios.post<Client>(
-                'https://localhost:7156/api/Client',
+            const response = await axiosInstance.post<Client>(
+                '/Client',
                 clientData,
                 { headers: { 'Content-Type': 'application/json' } }
             );

@@ -1,7 +1,4 @@
 
-
-"use client"
-
 import { useParams } from "react-router-dom"
 import ProjectList from "../entities/client/ProjectList"
 import ClientContent from "../entities/client/ClientContent"

@@ -1,7 +1,4 @@
 
-
-"use client"
-
 import { useState } from "react"
 import { deleteFile, downloadFile, viewFile } from "../../store/FileSlice"
 import type { AppDispatch } from "../../store/Store"

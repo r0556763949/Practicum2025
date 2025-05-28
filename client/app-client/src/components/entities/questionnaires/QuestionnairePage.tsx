@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react"
 import { FileText, Plus, Search, Trash2, Edit, Eye, Loader, AlertCircle, ToggleLeft, ToggleRight } from "lucide-react"
-import QuestionnaireForm from "../entities/questionnaires/questionnaire-form"
-import QuestionnaireDetails from "../entities/questionnaires/questionnaire-details"
+import QuestionnaireForm from "../../popaps/questionnaire-form"
+import QuestionnaireDetails from "../../popaps/questionnaire-details"
 import { useDispatch, useSelector } from "react-redux"
-import  { AppDispatch, RootState } from "../store/Store"
+import  { AppDispatch, RootState } from "../../store/Store"
 import {
   fetchQuestionnaires,
   deleteQuestionnaire,
   updateQuestionnaire,
    Questionnaire,
    QuestionnaireCreateDto,
-} from "../store/QuestionnaireSlice"
+} from "../../store/QuestionnaireSlice"
 
 const QuestionnaireManagement = () => {
   const [searchTerm, setSearchTerm] = useState("")

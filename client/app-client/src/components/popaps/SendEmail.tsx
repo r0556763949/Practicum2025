@@ -1,9 +1,9 @@
-"use client"
 
-import type React from "react"
+import  React from "react"
 
 import { useState } from "react"
 import { X, Mail, Send, MessageSquare, Loader } from "lucide-react"
+import axiosInstance from "../store/axiosInstance"
 
 interface SendEmailModalProps {
   clientId: number
@@ -18,38 +18,27 @@ const SendEmailModal = ({ clientId, onClose }: SendEmailModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
+  
     if (!subject.trim() || !message.trim()) {
       setStatus({ type: "error", message: "נא למלא את כל השדות" })
       return
     }
-
     setIsLoading(true)
     setStatus(null)
-
+  
     try {
-      // כאן תהיה הקריאה לשרת לשליחת המייל
-      const response = await fetch(`https://localhost:7156/api/Email/SendEmail`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          clientId,
-          subject,
-          message,
-        }),
+      await axiosInstance.post("/Email/SendEmail", {
+        clientId,
+        subject,
+        message,
       })
-
-      if (response.ok) {
-        setStatus({ type: "success", message: "המייל נשלח בהצלחה!" })
-        setTimeout(() => {
-          onClose()
-        }, 2000)
-      } else {
-        throw new Error("שגיאה בשליחת המייל")
-      }
+  
+      setStatus({ type: "success", message: "המייל נשלח בהצלחה!" })
+      setTimeout(() => {
+        onClose()
+      }, 2000)
     } catch (error) {
+      console.error("שגיאה בשליחת המייל:", error)
       setStatus({ type: "error", message: "שגיאה בשליחת המייל. נסה שוב." })
     } finally {
       setIsLoading(false)

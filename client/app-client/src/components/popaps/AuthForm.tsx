@@ -16,28 +16,21 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     setIsLoading(true)
-  
-    const url = "/login" 
+    const url = "/login"
     const payload = { email, password }
-  
     try {
       const response = await axiosInstance.post(url, payload)
       const data = response.data
-  
       setMessage("Login successful!")
       sessionStorage.setItem("token", data.token)
-  
       const tokenPayload = decodeToken(data.token)
-  
       setTimeout(() => {
         if (!tokenPayload) {
           console.error("Invalid token payload")
           return
         }
-  
         const role = tokenPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
         onClose()
-  
         if (role === "Client") {
           navigate("/Client")
         } else if (role === "Manager") {
@@ -45,7 +38,7 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
         } else {
           console.error("Unknown role:", role)
         }
-      }, 2000)
+      }, 1000)
     } catch (error: any) {
       const messageFromServer = error.response?.data?.message || error.message || "שגיאה לא ידועה"
       setMessage(messageFromServer)
@@ -53,7 +46,7 @@ const AuthForm = ({ onClose }: { onClose: any }) => {
       setIsLoading(false)
     }
   }
-  
+
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">

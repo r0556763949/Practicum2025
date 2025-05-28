@@ -1,13 +1,12 @@
-"use client"
 
-import type React from "react"
+import  React from "react"
 
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import type { AppDispatch, RootState } from "../../store/Store"
+import  { AppDispatch, RootState } from "../store/Store"
 import { AlertCircle, CheckCircle, FileText, HelpCircle, X } from "lucide-react"
-import { fetchQuestionnaires } from "../../store/QuestionnaireSlice"
-import { createQuestionnaireFill } from "../../store/QuestionnaireFillSlice"
+import { fetchQuestionnaires } from "../store/QuestionnaireSlice"
+import { createQuestionnaireFill } from "../store/QuestionnaireFillSlice"
 
 interface ManagerQuestionnaireFillFormProps {
   clientId: number
@@ -49,8 +48,6 @@ const ManagerQuestionnaireFillForm = ({ clientId, projectId, onClose }: ManagerQ
 
       await dispatch(createQuestionnaireFill(data)).unwrap()
       setStatusMessage({ type: "success", text: "השאלון נשלח בהצלחה" })
-
-      // Close the form after a short delay
       setTimeout(() => {
         onClose()
       }, 1500)
@@ -90,9 +87,8 @@ const ManagerQuestionnaireFillForm = ({ clientId, projectId, onClose }: ManagerQ
             <div className="form-group">
               <label htmlFor="questionnaireId">
                 בחר שאלון
-                <HelpCircle className="help-icon" title="בחר את השאלון שברצונך לשלוח ללקוח" />
+                <HelpCircle className="help-icon" />
               </label>
-
               {loadingQuestionnaires ? (
                 <div className="select-loading">טוען שאלונים...</div>
               ) : activeQuestionnaires.length === 0 ? (

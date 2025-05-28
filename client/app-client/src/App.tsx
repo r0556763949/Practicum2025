@@ -1,13 +1,11 @@
 //style:
 import './App.css'
 import './styles/new.css'
-import './styles/branding.css'
 import './styles/questionnaire-fill.css'
 import './styles/dashboard.css'
 import "./styles/home.css"
-// import './styles/styles.css'
-// import "./styles/Popaps.css"
-// import "./styles/popapPassword.css"
+import "./styles/header.css"
+
 import { RouterProvider } from 'react-router-dom';
 import { Router } from './Routers'
 import React from 'react';

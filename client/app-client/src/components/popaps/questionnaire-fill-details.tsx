@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import type { RootState } from "../../store/Store"
+import type { RootState } from "../store/Store"
 import { FileText, X } from "lucide-react"
-import { QuestionnaireFill } from "../../store/QuestionnaireFillSlice"
-import { formatDate } from "../../centeral/dateUtils"
+import { QuestionnaireFill } from "../store/QuestionnaireFillSlice"
+import { formatDate } from "../centeral/dateUtils"
 
 interface QuestionnaireFillDetailsProps {
   questionnaireFill: QuestionnaireFill

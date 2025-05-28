@@ -1,92 +1,20 @@
-// import  { useEffect, useState } from 'react';
-// import axios from 'axios';
 
-
-
-// const ClientDetails = ({ clientId, onClose }: { clientId:number, onClose:any }) => {
-//   const [clientData, setClientData] = useState<any | null>(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const fetchClientDetails = async () => {
-//       try {
-//         const response = await axios.get(`https://localhost:7156/api/Client/${clientId}`);
-//         setClientData(response.data);
-//         setLoading(false);
-//       } catch (err) {
-//         console.log(err);
-//         setError("Failed to load client details");
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchClientDetails();
-//   }, [clientId]);
-
-//   return (
-//     <div className="CLIENTDETAILSmodal-overlay">
-//       <div className="CLIENTDETAILSmodal-container">
-//         <h2 className="CLIENTDETAILSmodal-title">Client Details</h2>
-//         {loading && <p>Loading...</p>}
-//         {error && <p className="CLIENTDETAILSerror">{error}</p>}
-//         {clientData && (
-//           <div className="CLIENTDETAILSclient-details">
-//             <div className="CLIENTDETAILSform-group">
-//               <label>Name:</label>
-//               <p>{clientData.name}</p>
-//             </div>
-//             <div className="CLIENTDETAILSform-group">
-//               <label>Email:</label>
-//               <p>{clientData.email}</p>
-//             </div>
-//             <div className="CLIENTDETAILSform-group">
-//               <label>Address:</label>
-//               <p>{clientData.address || "N/A"}</p>
-//             </div>
-//             <div className="CLIENTDETAILSform-group">
-//               <label>Phone:</label>
-//               <p>{clientData.phone || "N/A"}</p>
-//             </div>
-
-//               <button onClick={onClose} className="save-button">
-//                 Close
-//               </button>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ClientDetails;
-
-"use client"
-
-import { useEffect, useState } from "react"
-import axios from "axios"
+import { useEffect } from "react"
 import { User, Mail, MapPin, Phone, X } from "lucide-react"
+import { AppDispatch, RootState } from "../store/Store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClientById } from "../store/ClientSlice";
 
 const ClientDetails = ({ clientId, onClose }: { clientId: number; onClose: any }) => {
-  const [clientData, setClientData] = useState<any | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { currentClient, loading, error } = useSelector((state: RootState) => state.clients)
+  const dispatch = useDispatch<AppDispatch>()
+
 
   useEffect(() => {
-    const fetchClientDetails = async () => {
-      try {
-        const response = await axios.get(`https://localhost:7156/api/Client/${clientId}`)
-        setClientData(response.data)
-        setLoading(false)
-      } catch (err) {
-        console.log(err)
-        setError("Failed to load client details")
-        setLoading(false)
-      }
+    if (clientId) {
+      dispatch(fetchClientById(clientId))
     }
-
-    fetchClientDetails()
-  }, [clientId])
+  }, [dispatch, clientId])
 
   return (
     <div className="modal-overlay">
@@ -107,7 +35,7 @@ const ClientDetails = ({ clientId, onClose }: { clientId: number; onClose: any }
 
         {error && <p className="modal-error">{error}</p>}
 
-        {clientData && (
+        {currentClient && (
           <div className="client-details">
             <div className="client-avatar">
               <User size={40} />
@@ -118,7 +46,7 @@ const ClientDetails = ({ clientId, onClose }: { clientId: number; onClose: any }
                 <User className="client-info-icon" />
                 <div className="client-info-content">
                   <label>שם:</label>
-                  <p>{clientData.name}</p>
+                  <p>{currentClient.name}</p>
                 </div>
               </div>
 
@@ -126,7 +54,7 @@ const ClientDetails = ({ clientId, onClose }: { clientId: number; onClose: any }
                 <Mail className="client-info-icon" />
                 <div className="client-info-content">
                   <label>דואר אלקטרוני:</label>
-                  <p>{clientData.email}</p>
+                  <p>{currentClient.email}</p>
                 </div>
               </div>
 
@@ -134,7 +62,7 @@ const ClientDetails = ({ clientId, onClose }: { clientId: number; onClose: any }
                 <MapPin className="client-info-icon" />
                 <div className="client-info-content">
                   <label>כתובת:</label>
-                  <p>{clientData.address || "לא צוין"}</p>
+                  <p>{currentClient.address || "לא צוין"}</p>
                 </div>
               </div>
 
@@ -142,14 +70,19 @@ const ClientDetails = ({ clientId, onClose }: { clientId: number; onClose: any }
                 <Phone className="client-info-icon" />
                 <div className="client-info-content">
                   <label>טלפון:</label>
-                  <p>{clientData.phone || "לא צוין"}</p>
+                  <p>{currentClient.phone || "לא צוין"}</p>
                 </div>
               </div>
             </div>
 
-            <button onClick={onClose} className="modal-button">
-              סגור
-            </button>
+            <div className="modal-footer">
+              <button onClick={onClose} className="modal-button secondary">
+                ביטול
+              </button>
+              <button onClick={onClose} className="modal-button primary">
+                סגור
+              </button>
+            </div>
           </div>
         )}
       </div>

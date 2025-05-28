@@ -1,12 +1,11 @@
 "use client"
 
-import type React from "react"
-
+import  React from "react"
 import { useState } from "react"
 import { X, AlertCircle, CheckCircle, HelpCircle, Plus } from "lucide-react"
 import { useDispatch } from "react-redux"
-import type { AppDispatch } from "../../store/Store"
-import { addQuestionnaire, updateQuestionnaire, type QuestionnaireCreateDto } from "../../store/QuestionnaireSlice"
+import type { AppDispatch } from "../store/Store"
+import { addQuestionnaire, updateQuestionnaire, type QuestionnaireCreateDto } from "../store/QuestionnaireSlice"
 
 interface QuestionnaireFormProps {
   questionnaire: {

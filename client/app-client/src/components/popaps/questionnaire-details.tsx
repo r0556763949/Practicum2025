@@ -1,4 +1,3 @@
-"use client"
 
 import { X, Edit, Link, FileSpreadsheet, FileText, ExternalLink } from "lucide-react"
 
@@ -103,20 +102,6 @@ const QuestionnaireDetails = ({ questionnaire, onClose, onEdit }: QuestionnaireD
                 <ExternalLink className="external-icon" />
               </button>
             </div>
-
-            {/* <div className="detail-item">
-              <div className="detail-label">כתובת הטופס:</div>
-              <div className="detail-value url-value">
-                <a href={questionnaire.googleFormUrl} target="_blank" rel="noopener noreferrer">
-                  {questionnaire.googleFormUrl}
-                </a>
-              </div>
-            </div>
-
-            <div className="detail-item">
-              <div className="detail-label">מזהה הגיליון:</div>
-              <div className="detail-value">{questionnaire.googleSheetId}</div>
-            </div> */}
           </div>
         </div>
 

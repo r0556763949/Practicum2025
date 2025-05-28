@@ -1,6 +1,5 @@
 
-import type React from "react"
-
+import  React from "react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CreateClient from "../popaps/CreateClient"
@@ -73,8 +72,6 @@ const ClientList = () => {
         />
       )}
 
-      
-
       {loading && (
         <div className="clients-loading">
           <Loader className="loading-icon" />
@@ -117,7 +114,7 @@ const ClientList = () => {
                     <Eye className="action-icon" />
                   </button>
                   <button className="client-action-button delete" onClick={(e) => handleDeleteClient(client.id, e)}>
-                    <Trash2 className="action-icon" />
+                    <Trash2 className="delete-icon" />
                   </button>
                 </div>
               </div>

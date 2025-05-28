@@ -1,7 +1,7 @@
 
-import ClientList from "../managerApp/ClientList"
+import ClientList from "./ClientList"
 import { Users } from "lucide-react"
-import QuestionnaireManagement from "./QuestionnairePage"
+import QuestionnaireManagement from "../entities/questionnaires/QuestionnairePage"
 
 const ManagerHome = () => {
   return (

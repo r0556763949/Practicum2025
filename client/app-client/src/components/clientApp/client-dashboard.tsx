@@ -3,24 +3,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  Building2,
-  Calendar,
-  ChevronRight,
-  FileText,
-  Folder,
-  Info,
-  Loader,
-  LogOut,
-  Settings,
-  User,
-  ExternalLink,
-  Home,
-  CheckSquare,
-  Clock,
-  Eye,
-  Check,
-} from "lucide-react"
+import { Building2, Calendar, ChevronRight, FileText, Folder, Info, Loader, LogOut, Settings, User, ExternalLink, Home, CheckSquare, Clock, Eye, Check, } from "lucide-react"
 import type { AppDispatch, RootState } from "../store/Store"
 import decodeToken from "../centeral/authUtils"
 import { fetchProjectsByClientId } from "../store/ProjectSlice"
@@ -33,7 +16,7 @@ import { formatDate } from "../centeral/dateUtils"
 import { fetchQuestionnaireById } from "../store/QuestionnaireSlice"
 import UpdateClientDetailsPopup from "../popaps/UpdateClient"
 import UpdatePasswordPopup from "../popaps/UpdatePasswordClient"
-import QuestionnaireFillDetails from "../entities/questionnairesFill/questionnaire-fill-details"
+import QuestionnaireFillDetails from "../popaps/questionnaire-fill-details"
 
 const ClientDashboard = () => {
   const navigate = useNavigate()
@@ -45,12 +28,11 @@ const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [selectedQuestionnaireFill, setSelectedQuestionnaireFill] = useState<QuestionnaireFill | null>(null)
 
-  // Redux selectors
   const { projects, loading: projectsLoading } = useSelector((state: RootState) => state.projects)
   const { questionnaireFills, loading: questionnairesLoading } = useSelector(
     (state: RootState) => state.questionnairesFill || { questionnaireFills: [], loading: false },
   )
-  const { files, loading: filesLoading } = useSelector(
+  const { loading: filesLoading } = useSelector(
     (state: RootState) => state.files || { files: [], loading: false },
   )
 
@@ -62,18 +44,13 @@ const ClientDashboard = () => {
       if (decoded && decoded.sub) {
         const id = Number(decoded.sub)
         setClientId(id)
-        console.log("dashboard of client: ", id)
-
-        // Fetch all client data
         dispatch(fetchProjectsByClientId(id))
         dispatch(fetchQuestionnaireFillsByClientId(id))
-        // dispatch(fetchFiles(id))
       }
     }
   }, [dispatch])
 
   useEffect(() => {
-    // Check if all data is loaded
     if (!projectsLoading && !questionnairesLoading && !filesLoading) {
       setLoading(false)
     }
@@ -82,6 +59,11 @@ const ClientDashboard = () => {
   // Filter questionnaire fills for the current client
   const clientQuestionnaireUnFills = questionnaireFills.filter((fill: QuestionnaireFill) => !fill.filledAt)
   const clientQuestionnaireFilled = questionnaireFills.filter((fill: QuestionnaireFill) => fill.filledAt)
+
+  const logOut = () => {
+    navigate("/")
+    sessionStorage.setItem("token", " ")
+  }
 
   const handleOpenForm = async (fill: QuestionnaireFill) => {
     try {
@@ -115,7 +97,6 @@ const ClientDashboard = () => {
     }
   }
 
-  // Check if there's a last visited project
   const lastVisitedProjectId = localStorage.getItem("lastVisitedProject")
   const lastVisitedProject = lastVisitedProjectId ? projects.find((p) => p.id === Number(lastVisitedProjectId)) : null
 
@@ -133,9 +114,6 @@ const ClientDashboard = () => {
 
       {/* Sidebar */}
       <aside className="dashboard-sidebar">
-        <div className="sidebar-header">
-          <h2 className="sidebar-title">אסתי מונק אדריכלות</h2>
-        </div>
         <nav className="sidebar-nav">
           <button
             className={`sidebar-nav-item ${activeTab === "dashboard" ? "active" : ""}`}
@@ -167,7 +145,7 @@ const ClientDashboard = () => {
           </button>
         </nav>
         <div className="sidebar-footer">
-          <button className="sidebar-logout" onClick={() => navigate("/logout")}>
+          <button className="sidebar-logout" onClick={() => logOut()}>
             <LogOut className="nav-icon" />
             <span>התנתק</span>
           </button>

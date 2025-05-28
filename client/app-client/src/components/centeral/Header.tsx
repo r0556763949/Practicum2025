@@ -1,255 +1,7 @@
-// import { useEffect, useState } from "react";
-// import AuthForm from "../popaps/AuthForm";
-// import UserProfile from "./UserProfile";
-// import UpdateClientDetailsPopup from "../popaps/UpdateClient";
-// import UpdatePasswordPopup from "../popaps/UpdatePasswordClient";
-// import decodeToken from "./authUtils";
-// import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "../store/Store";
-// import { fetchProjectsByClientId } from "../store/ProjectSlice";
-// import { Navigate, useNavigate } from "react-router-dom";
-
-
-// const Header = () => {
-//   const [showPopupForm, setShowPopupForm] = useState(false);
-//   const [showMenu, setShowMenu] = useState(false);
-//   const [showProjectsMenu, setShowProjectsMenu] = useState(false);
-//   const [popupType, setPopupType] = useState<"details" | "password" | null>(null);
-//   const navigate = useNavigate();
-//   const token = sessionStorage.getItem("token");
-//   const payload = token && decodeToken(token);
-//   const clientId = payload?.sub;
-
-//   const dispatch = useDispatch<AppDispatch>();
-//   const { projects, loading, error } = useSelector((state: RootState) => state.projects);
-
-//   useEffect(() => {
-//     if (clientId) {
-//       dispatch(fetchProjectsByClientId(Number(clientId))); // שליפה של פרויקטים עבור הלקוח
-//     }
-//   }, [clientId, dispatch]);
-
-//   const handleAccountClick = () => {
-//     if (token) {
-//       setShowMenu((prev) => !prev);
-//     } else {
-//       setShowPopupForm(true);
-//     }
-//   };
-
-//   const handleFormEnterClick = () => {
-//     setShowPopupForm(true);
-//   };
-
-//   const handleProjectsMenuClick = () => {
-//     setShowProjectsMenu((prev) => !prev);
-//   };
-
-//   const closePopup = () => {
-//     setPopupForm(false);
-//     setPopupType(null);
-//     setShowMenu(false);
-//   };
-
-//   const openPopup = (type: "details" | "password") => {
-//     setPopupType(type);
-//     setShowMenu(false);
-//   };
-
-//   const setPopupForm = (value: boolean) => {
-//     setShowPopupForm(value);
-//     setPopupType(null);
-//     setShowMenu(false);
-//   };
-
-//   return (
-//     <>
-//       <header className="header">
-//         <button className="login-button" onClick={handleAccountClick}>
-//           {token ? "ניהול חשבון" : "כניסה למערכת"}
-//         </button>
-//         {token && (
-//           <div>
-//             <button className="projects-button" onClick={handleProjectsMenuClick}>
-//               פרויקטים שלי
-//             </button>
-//             {showProjectsMenu && !loading && projects.length > 0 && (
-//               <div className="dropdown-menu">
-//                 {projects.map((project) => (
-//                   <div
-//                     key={project.id}
-//                     onClick={() => {
-//                       localStorage.setItem("lastVisitedProject", project.id.toString());
-//                       navigate(`ClientPage/${clientId}/ProjectPage/${project.id}`);
-//                       setShowProjectsMenu(false);
-//                     }}
-//                     style={{ cursor: 'pointer' }}
-//                   >
-//                     {project.description}
-//                   </div>
-//                 ))}
-//               </div>
-//             )}
-//             {showProjectsMenu && loading && <div>טוען פרויקטים...</div>}
-//             {showProjectsMenu && error && <div>שגיאה בהבאת הפרויקטים: {error}</div>}
-//             <UserProfile />
-//           </div>
-//         )}
-//       </header>
-//       {showMenu && (
-//         <div className="dropdown-menu">
-//           <div onClick={() => { openPopup("details"); setShowMenu(false); }}>עדכון פרטים אישיים</div>
-//           <div onClick={() => { openPopup("password"); setShowMenu(false); }}>שינוי סיסמה</div>
-//         </div>
-//       )}
-//       {showPopupForm && (
-//         <div className="popup-overlay" onClick={closePopup}>
-//           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-//             <button className="close-button" onClick={closePopup}>סגור</button>
-//             <AuthForm onClose={closePopup} />
-
-//           </div>
-//         </div>
-//       )}
-//       {popupType && (
-//         <div className="popup-overlay" onClick={closePopup}>
-//           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-//             <button className="close-button" onClick={closePopup}>סגור</button>
-//             {popupType === "details" ? (
-//               <UpdateClientDetailsPopup onClose={closePopup} />
-//             ) : (
-//               <UpdatePasswordPopup onClose={closePopup} />
-//             )}
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// };
-
-// export default Header;
-
-
-
-
-// const style = `
-// .header {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   background: linear-gradient(to right, #003366, #66ccff);
-//   height: 70px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: flex-end;
-//   padding: 0 20px;
-//   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-//   z-index: 1000;
-// }
-
-// /* Login Button */
-// .login-button {
-//   background-color: #ffffff;
-//   color: #003366;
-//   border: 2px solid #003366;
-//   border-radius: 20px;
-//   padding: 5px 15px;
-//   font-size: 16px;
-//   font-weight: bold;
-//   cursor: pointer;
-//   transition: all 0.3s ease;
-//   min-width: 120px;
-//   text-align: center;
-//   margin-right: 30px;
-// }
-
-// .login-button:hover {
-//   background-color: #003366;
-//   color: #ffffff;
-//   border-color: #ffffff;
-// }
-
-// /* Popup Overlay */
-// .popup-overlay {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   background-color: rgba(0, 0, 0, 0.5); /* רקע אפור שקוף */
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   z-index: 1000;
-// }
-
-// /* Popup Content */
-// .popup-content {
-//   position: relative;
-//   background-color: white;
-//   padding: 50px;
-//   border-radius: 8px;
-//   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-//   z-index: 1001;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-// }
-
-// /* Close Button */
-// .close-button {
-//   background-color: #ffffff;
-//   color: #003366;
-//   border: 2px solid #003366;
-//   border-radius: 20px;
-//   padding: 5px 15px;
-//   font-size: 14px;
-//   font-weight: bold;
-//   cursor: pointer;
-//   transition: all 0.3s ease;
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-// }
-
-// .close-button:hover {
-//   background-color: #003366;
-//   color: #ffffff;
-//   border-color: #ffffff;
-// }
-// .dropdown-menu {
-//   position: absolute;
-//   top: 60px;
-//   right: 30px;
-//   background: white;
-//   border: 1px solid #003366;
-//   border-radius: 10px;
-//   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-//   z-index: 1002;
-//   overflow: hidden;
-// }
-
-// .dropdown-menu div {
-//   padding: 10px 20px;
-//   font-size: 14px;
-//   cursor: pointer;
-//   color: #003366;
-// }
-
-// .dropdown-menu div:hover {
-//   background-color: #f0f8ff;
-// }
-// `;
-
-// const styleSheet = document.createElement("style");
-// styleSheet.type = "text/css";
-// styleSheet.innerText = style;
-// document.head.appendChild(styleSheet);
-
 "use client"
 
 import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import AuthForm from "../popaps/AuthForm"
 import UserProfile from "./UserProfile"
 import UpdateClientDetailsPopup from "../popaps/UpdateClient"
@@ -258,28 +10,38 @@ import decodeToken from "./authUtils"
 import { useDispatch, useSelector } from "react-redux"
 import type { AppDispatch, RootState } from "../store/Store"
 import { fetchProjectsByClientId } from "../store/ProjectSlice"
-import { useNavigate } from "react-router-dom"
-import { Building2, ChevronDown, Menu, User } from "lucide-react"
+import { Building2, ChevronDown, Menu, User, Home, Settings } from "lucide-react"
 
 const Header = () => {
+
   const [showPopupForm, setShowPopupForm] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [showProjectsMenu, setShowProjectsMenu] = useState(false)
   const [popupType, setPopupType] = useState<"details" | "password" | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   const navigate = useNavigate()
+  const location = useLocation()
   const token = sessionStorage.getItem("token")
+  const decoded = token && decodeToken(token)
+  const userRole = decoded && decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
   const payload = token && decodeToken(token)
   const clientId = payload?.sub
 
   const dispatch = useDispatch<AppDispatch>()
   const { projects, loading, error } = useSelector((state: RootState) => state.projects)
 
+  // Determine user type and current page context
+  const isManager =
+    userRole === "Manager" || location.pathname.includes("/Manager")
+  const isClient = userRole === "Client" || location.pathname.includes("/Client")
+  const isOnClientPage = location.pathname.includes("/ClientPage/")
+
   useEffect(() => {
-    if (clientId) {
+    if (clientId && (isOnClientPage || isClient)) {
       dispatch(fetchProjectsByClientId(Number(clientId)))
     }
-  }, [clientId, dispatch])
+  }, [clientId, dispatch, isOnClientPage, isClient])
 
   const handleAccountClick = () => {
     if (token) {
@@ -289,12 +51,19 @@ const Header = () => {
     }
   }
 
-  const handleFormEnterClick = () => {
-    setShowPopupForm(true)
-  }
-
   const handleProjectsMenuClick = () => {
     setShowProjectsMenu((prev) => !prev)
+  }
+
+  const handleHomeClick = () => {
+    if (isManager) {
+      navigate("/Manager")
+    } else if (isClient) {
+      navigate("/Client")
+    } else {
+      navigate("/")
+    }
+    setMobileMenuOpen(false)
   }
 
   const closePopup = () => {
@@ -308,14 +77,15 @@ const Header = () => {
     setShowMenu(false)
   }
 
-  const setPopupForm = (value: boolean) => {
-    setShowPopupForm(value)
-    setPopupType(null)
-    setShowMenu(false)
-  }
-
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen)
+  }
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token")
+    navigate("/")
+    setShowMenu(false)
+    setMobileMenuOpen(false)
   }
 
   return (
@@ -333,10 +103,19 @@ const Header = () => {
         </button>
 
         <div className={`header-controls ${mobileMenuOpen ? "mobile-open" : ""}`}>
+          {/* Home Button - Always visible when logged in */}
           {token && (
+            <button className="home-button" onClick={handleHomeClick}>
+              <Home className="button-icon" />
+              <span>דף הבית</span>
+            </button>
+          )}
+
+          {/* Projects Menu - Only for clients or when on client pages */}
+          {token && (isClient || isOnClientPage) && (
             <div className="projects-dropdown">
               <button className="projects-button" onClick={handleProjectsMenuClick}>
-                <span>הפרויקטים שלי</span>
+                <span>פרויקטים</span>
                 <ChevronDown className={`dropdown-icon ${showProjectsMenu ? "open" : ""}`} />
               </button>
               {showProjectsMenu && !loading && projects.length > 0 && (
@@ -346,7 +125,11 @@ const Header = () => {
                       key={project.id}
                       onClick={() => {
                         localStorage.setItem("lastVisitedProject", project.id.toString())
-                        navigate(`ClientPage/${clientId}/ProjectPage/${project.id}`)
+                        if (isManager) {
+                          navigate(`/ClientPage/${clientId}/ProjectPage/${project.id}`)
+                        } else {
+                          navigate(`/ClientPage/${clientId}/ProjectPage/${project.id}`)
+                        }
                         setShowProjectsMenu(false)
                         setMobileMenuOpen(false)
                       }}
@@ -358,60 +141,68 @@ const Header = () => {
                 </div>
               )}
               {showProjectsMenu && loading && <div className="dropdown-menu loading">טוען פרויקטים...</div>}
-              {showProjectsMenu && error && <div className="dropdown-menu error">שגיאה בהבאת הפרויקטים: {error}</div>}
+              {showProjectsMenu && error && <div className="dropdown-menu error">שגיאה בהבאת הפרויקטים</div>}
             </div>
           )}
-          <button className="account-button" onClick={handleAccountClick}>
-            {token ? (
-              <>
-                <span>ניהול חשבון</span>
-                <ChevronDown className={`dropdown-icon ${showMenu ? "open" : ""}`} />
-              </>
-            ) : (
-              <>
-                <User className="button-icon" />
-                <span>התחברות</span>
-              </>
+
+          {/* Account Button */}
+          <div className="account-dropdown">
+            <button className="account-button" onClick={handleAccountClick}>
+              {token ? (
+                <>
+                  <User className="button-icon" />
+                  <span>חשבון</span>
+                  <ChevronDown className={`dropdown-icon ${showMenu ? "open" : ""}`} />
+                </>
+              ) : (
+                <>
+                  <User className="button-icon" />
+                  <span>התחברות</span>
+                </>
+              )}
+            </button>
+
+            {/* Account Menu */}
+            {showMenu && token && (
+              <div className="dropdown-menu account-menu">
+                <div className="dropdown-item" onClick={() => openPopup("details")}>
+                  <Settings className="item-icon" />
+                  עדכון פרטים
+                </div>
+                <div className="dropdown-item" onClick={() => openPopup("password")}>
+                  <Settings className="item-icon" />
+                  שינוי סיסמה
+                </div>
+                <div className="dropdown-item logout" onClick={handleLogout}>
+                  <User className="item-icon" />
+                  התנתק
+                </div>
+              </div>
             )}
-          </button>
+          </div>
+
           {token && <UserProfile />}
         </div>
       </header>
-      {showMenu && (
-        <div className="dropdown-menu account-menu">
-          <div
-            className="dropdown-item"
-            onClick={() => {
-              openPopup("details")
-            }}
-          >
-            עדכון פרטים אישיים
-          </div>
-          <div
-            className="dropdown-item"
-            onClick={() => {
-              openPopup("password")
-            }}
-          >
-            שינוי סיסמה
-          </div>
-        </div>
-      )}
+
+      {/* Auth Popup */}
       {showPopupForm && (
         <div className="popup-overlay" onClick={closePopup}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-button" onClick={closePopup}>
-              סגור
+              ×
             </button>
             <AuthForm onClose={closePopup} />
           </div>
         </div>
       )}
+
+      {/* Update Popups */}
       {popupType && (
         <div className="popup-overlay" onClick={closePopup}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-button" onClick={closePopup}>
-              סגור
+              ×
             </button>
             {popupType === "details" ? (
               <UpdateClientDetailsPopup onClose={closePopup} />
@@ -426,7 +217,4 @@ const Header = () => {
 }
 
 export default Header
-
-
-
 
