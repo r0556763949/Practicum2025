@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getUploadUrl, confirmUpload } from "../../store/FileSlice"
 import type { AppDispatch, RootState } from "../../store/Store"
-import { FileUp, FileText, Upload, AlertCircle, CheckCircle } from "lucide-react"
+import {  FileText, Upload, AlertCircle, CheckCircle } from "lucide-react"
 
 const FileUpload = ({ clientId, projectId }: { clientId: number; projectId: number }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
