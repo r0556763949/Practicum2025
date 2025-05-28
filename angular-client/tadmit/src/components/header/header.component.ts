@@ -36,6 +36,6 @@ export class HeaderComponent {
 
   navigateToSystem() {
     // Navigate to your React app
-    window.location.href = "http://localhost:5173"
+    window.location.href = environment.systemUrl 
   }
 }

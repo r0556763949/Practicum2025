@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: "https://localhost:7156/api",
+  apiUrl: "https://practicum2025-server.onrender.com/api",
 }

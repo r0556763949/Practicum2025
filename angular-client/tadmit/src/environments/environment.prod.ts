@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "https://localhost:7156/api",
-  systemUrl: "http://localhost:5173"
+  apiUrl: "https://practicum2025-server.onrender.com/api",
+  systemUrl: "https://practicum2025-client.onrender.com"
 }
