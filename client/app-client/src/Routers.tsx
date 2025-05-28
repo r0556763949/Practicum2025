@@ -1,7 +1,5 @@
 import { createBrowserRouter } from "react-router"
 import AppLayout from "./AppLayout"
-import ClientList from "./components/managerApp/ClientList"
-import Home from "./components/centeral/pages/Home"
 import ManagerHome from "./components/managerApp/ManagerHome"
 import FilePage from "./components/centeral/pages/FilePage"
 import ClientPage from "./components/managerApp/ClientPage"
