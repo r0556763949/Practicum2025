@@ -86,7 +86,7 @@ const FileActionsPanel = ({ clientId, projectId, fileId }: FileActionsPanelProps
           onClick={handleViewFile}
           disabled={actionStatus.loading}
         >
-          {actionStatus.loading ? <span className="loading-spinner"></span> : <Eye className="action-icon" />}
+          {actionStatus.loading ? <span className="loading-spinner"></span> : <Eye className="button-icon" />}
           <span>צפייה בקובץ</span>
         </button>
 
@@ -95,7 +95,7 @@ const FileActionsPanel = ({ clientId, projectId, fileId }: FileActionsPanelProps
           onClick={handleDownloadFile}
           disabled={actionStatus.loading}
         >
-          {actionStatus.loading ? <span className="loading-spinner"></span> : <Download className="action-icon" />}
+          {actionStatus.loading ? <span className="loading-spinner"></span> : <Download className="button-icon" />}
           <span>הורדת קובץ</span>
         </button>
 
@@ -106,7 +106,7 @@ const FileActionsPanel = ({ clientId, projectId, fileId }: FileActionsPanelProps
               onClick={handleUpdateFile}
               disabled={actionStatus.loading}
             >
-              {actionStatus.loading ? <span className="loading-spinner"></span> : <Edit className="action-icon" />}
+              {actionStatus.loading ? <span className="loading-spinner"></span> : <Edit className="button-icon" />}
               <span>עדכון קובץ</span>
             </button>
 
@@ -115,7 +115,7 @@ const FileActionsPanel = ({ clientId, projectId, fileId }: FileActionsPanelProps
               onClick={handleDeleteFile}
               disabled={actionStatus.loading}
             >
-              {actionStatus.loading ? <span className="loading-spinner"></span> : <Trash2 className="action-icon" />}
+              {actionStatus.loading ? <span className="loading-spinner"></span> : <Trash2 className="button-icon" />}
               <span>מחיקת קובץ</span>
             </button>
           </>
