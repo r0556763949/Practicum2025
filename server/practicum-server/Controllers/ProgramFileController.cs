@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Practicum.Core.DTOs;
 using Practicum.Service;
 using Practicum.Service.Services;
@@ -81,6 +82,7 @@ namespace practicum_server.Controllers
         /// <summary>
         /// הורדת קובץ
         /// </summary>
+        [Authorize(Roles = "Manager")]
         [HttpGet("{id}/download")]
         public async Task<IActionResult> DownloadFile(int clientId, int projectId, int id)
         {
