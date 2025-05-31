@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Practicum.Core.DTOs;
 using Practicum.Service.Services;
 
@@ -16,6 +17,8 @@ namespace practicum_server.Controllers
         {
             _projectService = projectService;
         }
+
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> CreateProject(int clientId, [FromBody] CreateProjectDto projectDto)
         {
@@ -66,6 +69,8 @@ namespace practicum_server.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{projectId}")]
         public async Task<IActionResult> DeleteProject(int clientId, int projectId)
         {

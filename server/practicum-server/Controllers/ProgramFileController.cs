@@ -8,7 +8,7 @@ using Practicum.Service.Services;
 
 namespace practicum_server.Controllers
 {
-    //[Route("api/[controller]")]
+    
     [Route("api/clients/{clientId}/projects/{projectId}/files")]
     [ApiController]
     public class ProgramFileController : ControllerBase
@@ -38,6 +38,7 @@ namespace practicum_server.Controllers
             return Ok(new { UploadUrl = uploadUrl, FilePath = filePath });
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost("confirm-upload")]
         public async Task<IActionResult> ConfirmUpload(int clientId, int projectId, [FromBody] FileUploadRequestDto request)
         {
@@ -68,7 +69,9 @@ namespace practicum_server.Controllers
 
         /// <summary>
         /// מחיקת קובץ
-        /// </summary>
+        /// </summary
+        /// 
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int clientId, int projectId, int id)
         {
@@ -82,7 +85,6 @@ namespace practicum_server.Controllers
         /// <summary>
         /// הורדת קובץ
         /// </summary>
-        [Authorize(Roles = "Manager")]
         [HttpGet("{id}/download")]
         public async Task<IActionResult> DownloadFile(int clientId, int projectId, int id)
         {

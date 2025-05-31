@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
 using Practicum.Core.DTOs;
 using Practicum.Service.Services;
@@ -35,6 +36,7 @@ namespace practicum_server.Controllers
             return Ok(client);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClientDto clientDto)
         {
@@ -87,6 +89,7 @@ namespace practicum_server.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{clientId}")]
         public async Task<IActionResult> Delete(int clientId)
         {

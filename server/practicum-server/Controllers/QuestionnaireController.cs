@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Practicum.Core.DTOs;
 using Practicum.Core.Models;
 using Practicum.Service.Services;
@@ -31,7 +32,7 @@ namespace practicum_server.Controllers
                 return NotFound();
             return Ok(result);
         }
-
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] QuestionnaireCreateDto dto)
         {
@@ -52,6 +53,7 @@ namespace practicum_server.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] QuestionnaireCreateDto dto)
         {
@@ -69,6 +71,7 @@ namespace practicum_server.Controllers
             return Ok(new { message = "Questionnaire updated successfully." }); // במקום NoContent עדיף להחזיר אישור ברור
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
