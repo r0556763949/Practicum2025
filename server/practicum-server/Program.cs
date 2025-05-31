@@ -70,6 +70,18 @@ namespace practicum_server
             builder.Services.AddScoped<QuestionnaireService>();
             builder.Services.AddScoped<QuestionnaireFillService>();
             builder.Services.AddScoped<APIAIService>();
+            //s3
+            builder.Services.AddSingleton<IAmazonS3>(sp =>
+            {
+                var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
+                var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+                var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+
+                var credentials = new Amazon.Runtime.BasicAWSCredentials(awsAccessKey, awsSecretKey);
+                var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion ?? "eu-west-1");
+
+                return new AmazonS3Client(credentials, region);
+            });
             //repositories
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
             builder.Services.AddScoped<IProgramFileRepository, ProgramFileRepository>();
@@ -92,7 +104,6 @@ namespace practicum_server
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             //jwt
-
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -110,8 +121,7 @@ namespace practicum_server
                 });
 
             builder.Services.AddAuthorization();
-            //s3
-            builder.Services.AddAWSService<IAmazonS3>();
+          
             //cores
             builder.Services.AddCors(options =>
             {
