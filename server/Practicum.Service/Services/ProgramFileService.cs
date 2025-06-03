@@ -1,4 +1,5 @@
-﻿using Practicum.Core.IRepositories;
+﻿using Practicum.Core.DTOs;
+using Practicum.Core.IRepositories;
 using Practicum.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -29,33 +30,6 @@ namespace Practicum.Service.Services
             return (uploadUrl, filePath);
         }
 
-
-
-        //// יצירת קובץ מנתונים ידועים 
-        //var file = new ProgramFile
-        //{
-        //    Name = fileName,
-        //    Description = description,
-        //    CreateAt = DateOnly.FromDateTime(DateTime.UtcNow),
-        //    ClientId = clientId,
-        //};
-        ////הוספת הקובץ לטבלה
-        //await _programFileRepository.AddAsync(file);
-
-        //// יצירת ניתוב לאחר שID ידוע
-        //file.Path = $"clients/{clientId}/projects/{projectId}/files/{file.Id}/{fileName}";
-
-        //// קבלת הניתוב להעלאת קובץ
-        //string uploadUrl = _s3StorageService.GenerateUploadUrl(file.Path);
-        //if (uploadUrl == null) return (null, null);
-
-        //// עדכון הניתוב הידוע
-        //await _programFileRepository.UpdatePathAsync(file.Id, file.Path);
-
-        //return (uploadUrl, file);
-
-
-
         // שלב 2️⃣: אישור העלאה והוספה למסד הנתונים
         public async Task<ProgramFile> ConfirmUploadAsync(int clientId, int projectId, string fileName, string description, string filePath)
         {
@@ -71,7 +45,7 @@ namespace Practicum.Service.Services
             await _programFileRepository.AddAsync(file);
             return file;
         }
-        //שליפת קבצים
+        //שליפת קבצים ממסד הנתונים לפי פרויקט מסוים
         public async Task<IEnumerable<ProgramFile>> GetFilesAsync(int clientId, int projectId)
         {
             return await _programFileRepository.GetFilesByClientAndProjectAsync(clientId, projectId);
@@ -104,6 +78,29 @@ namespace Practicum.Service.Services
 
             return _s3StorageService.GenerateDownloadUrl(file.Path, true); // צפייה
         }
+        public async Task<(ProgramFile file, string uploadUrl)> UpdateFileAsync(int clientId, int projectId, int fileId, FileUpdateRequestDto request)
+        {
+            var file = await _programFileRepository.GetFileByIdAsync(fileId);
+            if (file == null || file.ClientId != clientId )
+                return (null, null);
+
+            // עדכון שדות בסיסיים
+            file.Name = request.FileName;
+            file.Description = request.Description;
+
+            await _programFileRepository.UpdateAsync(file);
+
+            // אם המשתמש רוצה להחליף את הקובץ – נחזיר URL חדש לאותו path
+            string uploadUrl = null;
+            if (request.ReplaceContent)
+            {
+                uploadUrl = _s3StorageService.GenerateUploadUrl(file.Path); // שומר על אותו path, כלומר מחליף קובץ
+            }
+
+            return (file, uploadUrl);
+        }
+
+
         public async Task<int?> GetFileOwnerIdAsync(int fileId)
         {
             return await _programFileRepository.GetFileOwnerIdAsync(fileId);

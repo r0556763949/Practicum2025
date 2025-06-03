@@ -111,6 +111,32 @@ namespace practicum_server.Controllers
 
             return Ok(new { ViewUrl = viewUrl });
         }
+        [Authorize(Roles = "Manager")]
+        [HttpPut("{id}/update")]
+        public async Task<IActionResult> UpdateFile(int clientId, int projectId, int id, [FromBody] FileUpdateRequestDto request)
+        {
+            if (string.IsNullOrEmpty(request.FileName))
+            {
+                return BadRequest("File name is required.");
+            }
+
+            var (updatedFile, uploadUrl) = await _programFileService.UpdateFileAsync(clientId, projectId, id, request);
+
+            if (updatedFile == null)
+            {
+                return NotFound("File not found or update failed.");
+            }
+
+            return Ok(new
+            {
+                updatedFile.Id,
+                updatedFile.Name,
+                updatedFile.Description,
+                updatedFile.Path,
+                updatedFile.CreateAt,
+                UploadUrl = uploadUrl // יכול להיות null אם לא ביקשו להחליף קובץ
+            });
+        }
 
         /// <summary>
         /// קבלת מזהה המשתמש של הקובץ לפי מזהה הקובץ

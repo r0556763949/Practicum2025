@@ -58,6 +58,11 @@ namespace Practicum.Data.Repositories
             var file = await _context.ProgramFiles.FindAsync(fileId);
             return file.ClientId; // הנח שיש לך שדה OwnerId במודל ProgramFile
         }
+        public async Task UpdateAsync(ProgramFile file)
+        {
+            _context.ProgramFiles.Update(file);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 

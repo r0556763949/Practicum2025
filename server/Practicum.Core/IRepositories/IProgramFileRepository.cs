@@ -17,5 +17,7 @@ namespace Practicum.Core.IRepositories
 
         Task<int?> GetFileOwnerIdAsync(int fileId);
         Task<ProgramFile> GetFileByIdAsync(int fileId);
+        Task UpdateAsync(ProgramFile file);
+
     }
 }

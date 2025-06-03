@@ -19,6 +19,7 @@ namespace Practicum.Core.DTOs
             CreateMap<Client, ClientDto>().ReverseMap();
             CreateMap<Questionnaire,QuestionnaireCreateDto>().ReverseMap();
             CreateMap<QuestionnaireFill, QuestionnaireFillCreateDto>().ReverseMap();
+            CreateMap<ProgramFile, FileUpdateRequestDto>().ReverseMap();
 
         }
     }

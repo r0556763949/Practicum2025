@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axiosInstance from "./axiosInstance"
+import axios from 'axios';
 
 interface File {
   id: number;
   name: string;
   description: string;
   path: string; 
+  type:'.pdf'| '.jpg'|'.jpeg'|'.png';
 }
 
 interface FileState {
@@ -168,6 +170,57 @@ export const viewFile = createAsyncThunk<any, { clientId: number; projectId: num
     }
   );
 
+  export const updateFile = createAsyncThunk(
+    'files/updateFile',
+    async (
+      {
+        clientId,
+        projectId,
+        fileId,
+        name,
+        description,
+        replaceContent,
+        file // קובץ חדש אם צריך
+      }: {
+        clientId: number;
+        projectId: number;
+        fileId: number;
+        name: string;
+        description: string;
+        replaceContent: boolean;
+        file?: File;
+      },
+      { rejectWithValue }
+    ) => {
+      try {
+        const response = await axiosInstance.put(
+          `/clients/${clientId}/projects/${projectId}/files/${fileId}/update`,
+          {
+            fileName: name,
+            description,
+            replaceContent
+          }
+        );
+  
+        const updatedFile = response.data;
+  
+        if (replaceContent && updatedFile.uploadUrl && file) {
+          // מעלה את הקובץ החדש ל-S3 באותו path
+          await axios.put(updatedFile.uploadUrl, file, {
+            headers: {
+              'Content-Type': file.type
+            }
+          });
+        }
+  
+        return updatedFile;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data?.message || 'Failed to update file.');
+      }
+    }
+  );
+  
+  
   // Compare two plans
 export const comparePlans = createAsyncThunk<
 Blob, 
@@ -266,7 +319,25 @@ const filesSlice = createSlice({
       .addCase(fetchFileUrl.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });;
+      })
+      
+      .addCase(updateFile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateFile.fulfilled, (state, action) => {
+        const updatedFile = action.payload;
+        const index = state.files.findIndex(file => file.id === updatedFile.id);
+        if (index !== -1) {
+          state.files[index] = updatedFile;
+        }
+        state.loading = false;
+        window.location.reload();
+      })
+      .addCase(updateFile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
