@@ -6,6 +6,7 @@ import ClientPage from "./components/managerApp/ClientPage"
 import ProjectPage from "./components/centeral/pages/ProjectPage"
 import ClientDashboard from "./components/clientApp/client-dashboard"
 import SystemHome from "./components/centeral/pages/Home"
+import ManagerCalendar from "./components/managerApp/ManagerCalendar"
 export const Router = createBrowserRouter([
     {
         path: '/', element: <AppLayout />,
@@ -13,6 +14,7 @@ export const Router = createBrowserRouter([
         children: [
             { path: '/', element: <SystemHome /> },
             { path: '/Manager', element: <ManagerHome /> },
+            { path: "/Manager/Calendar", element: <ManagerCalendar /> },
             { path: 'ClientPage/:clientId', element: <ClientPage /> },
             { path: 'ClientPage/:clientId/ProjectPage/:projectId', element: <ProjectPage /> },
             { path: 'ClientPage/:clientId/ProjectPage/:projectId/FilePage/:fileId', element: <FilePage /> },

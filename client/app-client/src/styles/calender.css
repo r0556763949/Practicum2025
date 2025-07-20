@@ -1,0 +1,214 @@
+/* Manager Header Updates */
+.manager-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .manager-icon {
+    color: #003366;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .manager-title {
+    font-size: 28px;
+    color: #003366;
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .calendar-nav-button {
+    width: auto;
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .calendar-button-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Calendar Styles */
+  .calendar-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .back-button {
+    width: auto;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .back-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .calendar-title-section {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .calendar-icon {
+    color: #003366;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .calendar-title {
+    font-size: 28px;
+    color: #003366;
+    margin: 0;
+  }
+  
+  .calendar-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #003366;
+    font-size: 14px;
+  }
+  
+  .stat-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .calendar-content {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .calendar-wrapper {
+    flex: 1;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .calendar-legend {
+    width: 200px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+  }
+  
+  .calendar-legend h3 {
+    color: #003366;
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #003366;
+  }
+  
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
+  
+  .legend-color.available {
+    background-color: #66ccff;
+  }
+  
+  .legend-color.meeting {
+    background-color: #003366;
+  }
+  
+  .plus-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* React Big Calendar Overrides */
+  .rbc-calendar {
+    font-family: Arial, sans-serif;
+  }
+  
+  .rbc-header {
+    background-color: #003366;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+  .rbc-today {
+    background-color: #f0f8ff;
+  }
+  
+  .rbc-event {
+    border-radius: 4px;
+    border: none;
+    font-size: 12px;
+  }
+  
+  .rbc-toolbar {
+    margin-bottom: 20px;
+  }
+  
+  .rbc-toolbar button {
+    background-color: #ffffff;
+    color: #003366;
+    border: 2px solid #003366;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 0 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .rbc-toolbar button:hover {
+    background-color: #003366;
+    color: #ffffff;
+  }
+  
+  .rbc-toolbar button.rbc-active {
+    background-color: #003366;
+    color: #ffffff;
+  }

@@ -5,6 +5,8 @@ import './styles/questionnaire-fill.css'
 import './styles/dashboard.css'
 import "./styles/home.css"
 import "./styles/header.css"
+import "./styles/calender.css"
+
 
 import { RouterProvider } from 'react-router-dom';
 import { Router } from './Routers'
