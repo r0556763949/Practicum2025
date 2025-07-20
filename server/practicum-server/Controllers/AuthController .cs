@@ -11,18 +11,18 @@ namespace practicum_server.Controllers
     {
         private readonly ClientService _clientService;
 
-        public AuthController(ClientService clientService)
+       public AuthController(ClientService clientService)
         {
             _clientService = clientService;
         }
 
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequestDto request)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
             try
             {
-                var token = _clientService.Login(request.Email, request.Password);
+                var token = await _clientService.Login(request.Email, request.Password);
                 if (token == null)
                 {
                     return Unauthorized(new { message = "כתובת מייל או סיסמה שגויים" });
@@ -32,13 +32,12 @@ namespace practicum_server.Controllers
             }
             catch (Exception ex)
             {
-                // לוג או כתיבה ליומן שגיאות
                 Console.WriteLine($"Login Error: {ex.Message}");
-
-                // שליחת תגובה מתאימה לקליינט
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "אירעה שגיאה פנימית בשרת. נסה שוב מאוחר יותר." });
+                Console.WriteLine(ex.StackTrace);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "אירעה שגיאה פנימית בשרת" });
             }
         }
+
     }
 }
 

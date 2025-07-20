@@ -38,16 +38,17 @@ namespace Practicum.Service.Services
             return _mapper.Map<IEnumerable<ClientDto>>(clients);
         }
 
-        public string Login(string email, string password)
+        public async Task<string> Login(string email, string password)
         {
-            var client = _clientRepository.GetByEmail(email);
+            var client = await _clientRepository.GetByEmailAsync(email);
             if (client == null || !_passwordService.VerifyPassword(password, client.PasswordHash))
             {
-                return null; // אימות נכשל
+                return null;
             }
 
             return _jwtService.GenerateToken(client.Id, client.Email, client.Role);
         }
+
         public async Task<ClientDto> GetClientByIdAsync(int id)
         {
            Client result  =  await _clientRepository.GetClientByIdAsync(id);

@@ -13,7 +13,7 @@ namespace Practicum.Core.IRepositories
         IEnumerable<Client> GetAll();
         Task AddAsync(Client client);
 
-        Client GetByEmail(string email);
+        Task<Client> GetByEmailAsync(string email);
         Task<Client> GetClientByIdAsync(int id);
 
         Task<Client> GetByIdAsync(int clientId);
