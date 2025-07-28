@@ -11,10 +11,8 @@ WORKDIR /source/practicum-server
 
 ARG TARGETARCH
 
-RUN echo "==== Files in $(pwd) ====" && ls -la && \
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     dotnet publish -c Release -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
-# RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-#     dotnet publish -c Release -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
 
 # שלב ההרצה
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final

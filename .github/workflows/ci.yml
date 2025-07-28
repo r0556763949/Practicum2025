@@ -21,13 +21,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     # Build .NET Server (using Dockerfile method)
-    # - name: Build .NET Backend using Docker
-    #   working-directory: ./server/practicum-server
-    #   run: |
-    #     docker build -t practicum-server .
     - name: Build .NET Backend using Docker
       run: |
-           docker build -t practicum-server -f server/practicum-server/Dockerfile .
+         docker build -t practicum-server -f practicum-server/Dockerfile server/
+  
 
 
     # Setup Node.js
