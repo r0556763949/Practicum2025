@@ -24,7 +24,7 @@ jobs:
     - name: Build .NET Backend using Docker
       working-directory: ./server/practicum-server
       run: |
-        docker build -t /Dockerfile .
+        docker build -t practicum-server .
 
     # Setup Node.js
     - name: Setup Node.js
