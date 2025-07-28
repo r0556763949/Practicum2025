@@ -1,0 +1,48 @@
+name: Full CI - Build All Apps
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    # Setup .NET SDK
+    - name: Setup .NET 8 SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    # Build .NET Server (using Dockerfile method)
+    - name: Build .NET Backend using Docker
+      working-directory: ./server/practicum-server
+      run: |
+        docker build -t practicum-server .
+
+    # Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+
+    # Install & Build React App
+    - name: Install & Build React
+      working-directory: ./client/app-client
+      run: |
+        npm install
+        npm run build
+
+    # Install & Build Angular App
+    - name: Install & Build Angular
+      working-directory: ./angular-client/tadmit
+      run: |
+        npm install
+        npm run build -- --configuration=production
+
