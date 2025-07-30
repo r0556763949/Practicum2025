@@ -49,3 +49,5 @@ jobs:
         npm install
         npm run build -- --configuration=production
 
+    - name: Deploy to Render
+      run: curl "https://api.render.com/deploy/srv-cvdctvd2ng1s73dsro90?key=iGgwH4VJwbE"
