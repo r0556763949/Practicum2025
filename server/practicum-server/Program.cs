@@ -135,7 +135,7 @@ namespace practicum_server
             });
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -143,6 +143,7 @@ namespace practicum_server
             }
 
             app.UseHttpsRedirection();
+            app.MapGet("/health", () => Results.Ok("Alive"));
 
             //cores
             app.UseCors("AllowAllOrigins");
