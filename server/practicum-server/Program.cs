@@ -143,7 +143,9 @@ namespace practicum_server
             }
 
             app.UseHttpsRedirection();
+            //uptimerobot
             app.MapGet("/health", () => Results.Ok("Alive"));
+            app.MapMethods("/health", new[] { "HEAD" }, () => Results.Ok());
 
             //cores
             app.UseCors("AllowAllOrigins");
