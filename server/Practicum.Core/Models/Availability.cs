@@ -9,10 +9,8 @@ namespace Practicum.Core.Models
     public class CalenderAvailability
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public TimeSpan StartTime { get; set; }
-        public TimeSpan EndTime { get; set; }
-        public int MeetingDurationMinutes { get; set; } // אורך פגישה אחת
-
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public int MeetingDurationMinutes { get; set; }
     }
 }

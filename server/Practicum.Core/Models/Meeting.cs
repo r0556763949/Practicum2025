@@ -6,19 +6,26 @@ using System.Threading.Tasks;
 
 namespace Practicum.Core.Models
 {
+    public enum MeetingStatus
+    {
+        Scheduled,
+        Canceled,
+        Completed
+    }
     public class Meeting
     {
         public int Id { get; set; }
 
+        public int CalenderAvailabilityId { get; set; }
+
         public int ClientId { get; set; }
         public Client Client { get; set; }
 
-        public DateTime Date { get; set; }
-        public TimeSpan StartTime { get; set; }
+        public DateTime StartMeeting { get; set; }
 
-        public string Status { get; set; } = "Scheduled"; // Scheduled / Canceled / Completed
+        public MeetingStatus Status { get; set; } = MeetingStatus.Scheduled;
 
-        public string? Summary { get; set; } // תקציר הפגישה
+        public string? Summary { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
